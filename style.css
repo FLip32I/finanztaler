@@ -1,0 +1,116 @@
+
+    font-size: 16px;
+  }
+
+  .site-header {
+    min-height: 70px;
+    padding: 12px 5%;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .navigation {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 16px 5% 24px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .navigation.is-open {
+    display: flex;
+  }
+
+  .navigation a {
+    padding: 12px 0;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .navigation a:last-child {
+    border-bottom: none;
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 76px 6% 84px;
+  }
+
+  h1 {
+    font-size: clamp(2.6rem, 12vw, 4rem);
+  }
+
+  h2 {
+    font-size: clamp(1.9rem, 8vw, 2.6rem);
+  }
+
+  .hero-text {
+    font-size: 1rem;
+  }
+
+  .button {
+    width: 100%;
+    min-height: 50px;
+  }
+
+  .section {
+    padding: 64px 6%;
+  }
+
+  .section-soft,
+  .planning {
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .feature-card {
+    padding: 24px;
+  }
+
+  .card-icon {
+    margin-bottom: 18px;
+  }
+
+  .about {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  .site-footer {
+    padding: 40px 6% 24px;
+  }
+
+  .footer-links {
+    gap: 12px 20px;
+  }
+}
+
+/* REDUCED MOTION ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
