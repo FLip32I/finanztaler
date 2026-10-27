@@ -1,11 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Finanztaler – Finanzwissen, Sparen, Investieren und Finanzrechner.">
-  <title>Finanztaler – Finanzen verstehen. Vermögen aufbauen.</title>
+  <meta name="theme-color" content="#102c28">
+  <meta name="description" content="Finanztaler – Geld verstehen und finanzielle Freiheit gestalten.">
+
+  <title>Finanztaler – Geld verstehen. Freiheit gestalten.</title>
 
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
@@ -13,138 +14,180 @@
 
 <body>
 
-  <header class="site-header">
-    <a class="logo" href="index.html">
-      Finanz<span>taler</span>
-    </a>
+  <!-- NAVIGATION -->
+  <header class="site-header" id="start">
+    <div class="nav-container">
 
-    <button
-      class="menu-toggle"
-      id="menu-toggle"
-      type="button"
-      aria-controls="navigation"
-      aria-expanded="false"
-      aria-label="Menü öffnen">
-      ☰
-    </button>
+      <a href="#start" class="logo">
+        <span class="logo-symbol">✦</span>
+        <span>finanz<span class="logo-accent">taler</span></span>
+      </a>
 
-    <nav class="navigation" id="navigation">
-      <a href="index.html">Startseite</a>
+      <button class="menu-toggle"
+              aria-label="Menü öffnen"
+              aria-expanded="false"
+              aria-controls="main-navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
-      <div class="nav-item">
-        <details>
-          <summary>Sparen</summary>
-          <div class="dropdown">
-            <a href="kontenmodell.html">Kontenmodell</a>
-          </div>
-        </details>
-      </div>
+      <nav class="main-nav" id="main-navigation">
+        <a href="#sparen">Sparen</a>
+        <a href="#investieren">Investieren</a>
+        <a href="#fire">FIRE-Bewegung</a>
+        <a href="#wertekompass">Wertekompass</a>
+        <a href="#buecher">Buchempfehlung</a>
+        <a href="#rechner" class="nav-button">Rechner ↗</a>
+      </nav>
 
-      <div class="nav-item">
-        <details>
-          <summary>Investieren</summary>
-          <div class="dropdown">
-            <a href="depotvergleich.html">Depotvergleich</a>
-          </div>
-        </details>
-      </div>
-
-      <div class="nav-item">
-        <details>
-          <summary>Rechner</summary>
-          <div class="dropdown">
-            <a href="zinseszins.html">Zinseszinsrechner</a>
-            <a href="sparplan.html">Sparplanrechner</a>
-            <a href="rentenluecke.html">Rentenlückenrechner</a>
-            <a href="finanzielle-freiheit.html">Finanzielle Freiheit</a>
-            <a href="coast-fire.html">Coast FIRE</a>
-          </div>
-        </details>
-      </div>
-
-      <div class="nav-item">
-        <details>
-          <summary>Finanzielle Freiheit</summary>
-          <div class="dropdown">
-            <a href="fire-bewegung.html">FIRE-Bewegung</a>
-            <a href="coast-fire.html">Coast FIRE</a>
-          </div>
-        </details>
-      </div>
-
-      <a href="buchempfehlungen.html">Buchempfehlungen</a>
-    </nav>
+    </div>
   </header>
 
-  <main id="start">
+
+  <!-- LANDINGPAGE -->
+  <main>
 
     <section class="hero">
-      <div class="hero-content">
-        <p class="eyebrow">FINANZWISSEN FÜR DEIN LEBEN</p>
+      <div class="hero-container">
 
-        <h1>
-          Finanzen verstehen.<br>
-          Vermögen aufbauen.
-        </h1>
+        <div class="hero-content">
 
-        <p>
-          Lerne, bewusster mit Geld umzugehen, sinnvoll zu investieren
-          und Schritt für Schritt finanzielle Freiheit aufzubauen.
-        </p>
+          <span class="hero-label">
+            FINANZEN EINFACH VERSTEHEN
+          </span>
 
-        <a class="button button-primary" href="rechner.html">
-          Finanzrechner entdecken
-        </a>
+          <h1>
+            Geld verstehen.<br>
+            <span>Freiheit gestalten.</span>
+          </h1>
+
+          <p>
+            Entdecke die Welt der Finanzen.
+            Verständlich, unabhängig und praxisnah.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#themen" class="btn-primary">
+              Themen entdecken ↗
+            </a>
+
+            <a href="#rechner" class="btn-secondary">
+              Zu den Rechnern →
+            </a>
+          </div>
+
+        </div>
+
+        <div class="hero-graphic">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+
+          <div class="coin">
+            <span>F</span>
+          </div>
+
+          <div class="floating-card">
+            <small>FINANZIELLE FREIHEIT</small>
+            <strong>Dein Weg.<br>Dein Tempo.</strong>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <section class="content-section">
-      <h2>Entdecke Finanztaler</h2>
 
-      <div class="topic-grid">
+    <!-- THEMEN -->
+    <section class="topics" id="themen">
 
-        <article class="topic-card">
-          <h3>Sparen &amp; Budget</h3>
-          <p>Ordne deine Finanzen und finde ein Budget, das zu deinem Leben passt.</p>
-          <a href="kontenmodell.html">Mehr erfahren →</a>
-        </article>
+      <div class="container">
 
-        <article class="topic-card">
-          <h3>Investieren</h3>
-          <p>Verstehe ETFs, Aktien und die Grundlagen des langfristigen Investierens.</p>
-          <a href="depotvergleich.html">Mehr erfahren →</a>
-        </article>
+        <div class="section-title">
+          <span>DEINE THEMENWELT</span>
 
-        <article class="topic-card">
-          <h3>Finanzrechner</h3>
-          <p>Berechne Zinseszins, Sparpläne und deinen Weg zur finanziellen Freiheit.</p>
-          <a href="rechner.html">Rechner ansehen →</a>
-        </article>
+          <h2>
+            Entdecke deine<br>
+            <em>Möglichkeiten.</em>
+          </h2>
+        </div>
 
-        <article class="topic-card">
-          <h3>Buchempfehlungen</h3>
-          <p>Entdecke hilfreiche Bücher rund um Geld, Sparen und Investieren.</p>
-          <a href="buchempfehlungen.html">Bücher ansehen →</a>
-        </article>
+        <div class="topic-grid">
+
+          <a href="#sparen" class="topic-card" id="sparen">
+            <div class="topic-icon">◎</div>
+            <h3>Sparen</h3>
+            <p>Mehr Überblick über deine Finanzen.</p>
+            <span>Entdecken ↗</span>
+          </a>
+
+          <a href="#investieren" class="topic-card" id="investieren">
+            <div class="topic-icon">↗</div>
+            <h3>Investieren</h3>
+            <p>Vermögen langfristig aufbauen.</p>
+            <span>Entdecken ↗</span>
+          </a>
+
+          <a href="#fire" class="topic-card" id="fire">
+            <div class="topic-icon">◷</div>
+            <h3>FIRE-Bewegung</h3>
+            <p>Finanzielle Unabhängigkeit verstehen.</p>
+            <span>Entdecken ↗</span>
+          </a>
+
+          <a href="#wertekompass" class="topic-card" id="wertekompass">
+            <div class="topic-icon">✳</div>
+            <h3>Wertekompass</h3>
+            <p>Was ist dir wirklich wichtig?</p>
+            <span>Entdecken ↗</span>
+          </a>
+
+          <a href="#buecher" class="topic-card" id="buecher">
+            <div class="topic-icon">▤</div>
+            <h3>Buchempfehlung</h3>
+            <p>Wissen und Inspiration entdecken.</p>
+            <span>Entdecken ↗</span>
+          </a>
+
+          <a href="#rechner" class="topic-card featured" id="rechner">
+            <div class="topic-icon">⌗</div>
+            <h3>Rechner</h3>
+            <p>Finanzielle Ziele einfach berechnen.</p>
+            <span>Entdecken ↗</span>
+          </a>
+
+        </div>
 
       </div>
+
     </section>
 
   </main>
 
-  <footer class="site-footer">
-    <a class="logo" href="index.html">Finanz<span>taler</span></a>
 
-    <p>Finanzwissen verständlich erklärt.</p>
+  <!-- FOOTER -->
+  <footer class="footer">
 
-    <div class="footer-links">
-      <a href="impressum.html">Impressum</a>
-      <a href="datenschutz.html">Datenschutz</a>
+    <div class="container footer-content">
+
+      <div class="footer-brand">
+        <h2>finanz<span>taler</span></h2>
+        <p>Geld verstehen. Freiheit gestalten.</p>
+      </div>
+
+      <nav class="footer-links">
+        <a href="#ueber-uns">Über uns</a>
+        <a href="#impressum">Impressum</a>
+        <a href="#datenschutz">Datenschutzerklärung</a>
+      </nav>
+
     </div>
 
-    <p>© <span id="current-year">2026</span> Finanztaler</p>
+    <div class="container footer-bottom">
+      <span>© <span id="year"></span> Finanztaler</span>
+      <span>Keine Anlageberatung.</span>
+    </div>
+
   </footer>
 
 </body>
 </html>
- 
