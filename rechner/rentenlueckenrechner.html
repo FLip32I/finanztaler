@@ -22,7 +22,7 @@
 <div class="rl-field"><label for="rl-need">Gewünschtes monatliches Einkommen in heutiger Kaufkraft</label><div class="rl-input"><input id="rl-need" inputmode="decimal" value="2.000,00"><span class="rl-unit">€ netto</span></div></div>
 <div class="rl-field"><label for="rl-pension">Monatliche Bruttorente laut Renteninformation</label><div class="rl-input"><input id="rl-pension" inputmode="decimal" value="2.972,00"><span class="rl-unit">€ brutto</span></div></div>
 <div class="rl-note" id="rl-pension-help">Rente mit angenommener Rentenanpassung von 2 % jährlich. Die Rentenanpassung ist bereits enthalten und wird nicht nochmals angewendet.</div>
-<div class="rl-row"><div class="rl-field"><label for="rl-inflation">Inflation pro Jahr</label><div class="rl-input"><input id="rl-inflation" inputmode="decimal" value="2,00"><span class="rl-unit">%</span></div></div></div>
+<div class="rl-row"><div class="rl-field"><label for="rl-inflation">Inflation pro Jahr</label><div class="rl-input"><input id="rl-inflation" inputmode="decimal" value="2,00"><span class="rl-unit">%</span></div></div><div class="rl-field" id="rl-pension-growth-wrap" hidden><label for="rl-pension-growth">Rentenanpassung pro Jahr</label><div class="rl-input"><input id="rl-pension-growth" inputmode="decimal" value="2,00"><span class="rl-unit">% p. a.</span></div></div></div>
 <div class="rl-field"><label for="rl-deductions">Geschätzte Abzüge von der Bruttorente</label><div class="rl-input"><input id="rl-deductions" inputmode="decimal" value="20,00"><span class="rl-unit">%</span></div><p class="rl-info">Vereinfachter Platzhalter für Steuern sowie Kranken- und Pflegeversicherung. Die tatsächlichen Abzüge sind individuell und können deutlich abweichen.</p></div>
 <button class="rl-btn" id="rl-calc-gap" type="button">Rentenlücke berechnen →</button><p class="rl-error" id="rl-error1" role="alert"></p></div>
 <div class="rl-card rl-step" id="rl-step2" hidden><div class="rl-kicker">Schritt 2 von 3</div><h2>🏦 Kapitalbedarf zum Rentenstart</h2><p class="rl-instruction">Wie soll dein Vermögen während der Rente eingesetzt werden?</p>
@@ -53,7 +53,7 @@ let state={};
 function check(items,errorId){for(const [name,n,min,max] of items){if(!Number.isFinite(n)||n<min||n>max){$(errorId).textContent=`Bitte für „${name}“ einen Wert zwischen ${min} und ${max} eingeben.`;return false}}$(errorId).textContent='';return true}
 function showStep(n){$('rl-step2').hidden=n<2;$('rl-step3').hidden=n<3;document.querySelectorAll('.rl-progress i').forEach((e,i)=>e.classList.toggle('on',i<n));}
 function invalidate(n){if(n<=1){$('rl-gap-box').hidden=true;$('rl-gap-metrics').hidden=true}if(n<=2)$('rl-capital-box').hidden=true;if(n<=3){$('rl-saving-box').hidden=true;$('rl-saving-metrics').hidden=true;$('rl-chart-wrap').hidden=true}showStep(n===1?1:n===2?2:3)}
-function gap(){const age=val('rl-age'),retire=val('rl-retire'),need=val('rl-need'),pension=val('rl-pension'),infl=val('rl-inflation'),ded=val('rl-deductions'),kind=$('rl-pension-kind').value,pGrowth=0;
+function gap(){const age=val('rl-age'),retire=val('rl-retire'),need=val('rl-need'),pension=val('rl-pension'),infl=val('rl-inflation'),ded=val('rl-deductions'),kind=$('rl-pension-kind').value,pGrowth=kind==='projected'?val('rl-pension-growth'):0;
 if(!check([['Alter',age,18,100],['Rentenalter',retire,19,100],['Bedarf',need,0,1e9],['Bruttorente',pension,0,1e9],['Inflation',infl,0,30],['Abzüge',ded,0,95],['Rentenanpassung',pGrowth,0,30]],'rl-error1'))return;
 if(retire<=age){$('rl-error1').textContent='Das Renteneintrittsalter muss über dem aktuellen Alter liegen.';return}
 const years=retire-age, futureNeed=need*Math.pow(1+infl/100,years),gross=pension*Math.pow(1+pGrowth/100,years),net=gross*(1-ded/100),shortfall=Math.max(0,futureNeed-net);
@@ -96,10 +96,10 @@ $('rl-saving-note').textContent=(noInvest?'Ohne Rendite':'Bei '+rate.toLocaleStr
 $('rl-saving-box').hidden=false;$('rl-saving-metrics').hidden=false;$('rl-chart-wrap').hidden=false;draw(rows);$('rl-status').textContent='Alle drei Schritte abgeschlossen. Du kannst Annahmen ändern und neu berechnen.';document.querySelectorAll('.rl-progress i').forEach(e=>e.classList.add('on'));
 }
 const pensionExamples={
- projected:{amount:'1.428,57',note:'Hochgerechnete Regelaltersrente bei weiteren Beiträgen wie im Durchschnitt der letzten fünf Kalenderjahre, ohne zukünftige Rentenanpassungen.'},
+ projected:{amount:'1.428,57',note:'Hochgerechnete Regelaltersrente bei weiteren Beiträgen wie im Durchschnitt der letzten fünf Kalenderjahre, ohne zukünftige Rentenanpassungen. Über das zusätzliche Feld kannst du eine jährliche Rentenanpassung bis zum Rentenbeginn annehmen.'},
  adjusted2:{amount:'2.972,00',note:'Rente mit angenommener Rentenanpassung von 2 % jährlich. Die Rentenanpassung ist bereits enthalten und wird nicht nochmals angewendet.'}
 };
-$('rl-pension-kind').addEventListener('change',()=>{const example=pensionExamples[$('rl-pension-kind').value];$('rl-pension').value=example.amount;$('rl-pension-help').textContent=example.note;invalidate(1);});
+$('rl-pension-kind').addEventListener('change',()=>{const example=pensionExamples[$('rl-pension-kind').value];$('rl-pension').value=example.amount;$('rl-pension-help').textContent=example.note;$('rl-pension-growth-wrap').hidden=$('rl-pension-kind').value!=='projected';invalidate(1);});
 $('rl-no-invest').addEventListener('change',()=>{$('rl-build-rate-wrap').hidden=$('rl-no-invest').checked});
 document.querySelectorAll('input[name="rl-strategy"]').forEach(el=>el.addEventListener('change',()=>{
 const preserve=document.querySelector('input[name="rl-strategy"]:checked').value==='preserve';
