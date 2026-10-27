@@ -17,7 +17,7 @@
 <section class="container rl-main"><div class="rl-grid"><div>
 <div class="rl-card rl-step" id="rl-step1"><div class="rl-kicker">Schritt 1 von 3</div><h2>📄 Deine Rentenlücke</h2><p class="rl-instruction">Übertrage die prognostizierte Altersrente aus deiner Renteninformation. Die Musterwerte dienen nur als Beispiel.</p>
 <figure class="rl-bescheid"><img src="../assets/img/renteninformation-muster.png" alt="Muster einer Renteninformation mit hochgerechneter Rente von 1.428,57 Euro und Rente mit Rentenanpassung von 2.972 Euro." loading="eager"><figcaption>Muster einer Renteninformation. Wähle unten den passenden Betrag aus deinem eigenen Bescheid. Die Beispielbeträge im Bild sind keine individuellen Rentenprognosen.</figcaption></figure>
-<div class="rl-field"><label for="rl-pension-kind">Welchen Rentenwert möchtest du verwenden?</label><div class="rl-input"><select id="rl-pension-kind"><option value="projected">Hochgerechnete Regelsaltersrente (heutige Kaufkraft)</option><option value="adjusted2" selected>Rente mit Rentenanpassung</option></select></div></div>
+<div class="rl-field"><label for="rl-pension-kind">Welchen Rentenwert möchtest du verwenden?</label><div class="rl-input"><select id="rl-pension-kind"><option value="projected">Hochgerechnete Regelaltersrente (heutige Kaufkraft)</option><option value="adjusted2" selected>Rente mit Rentenanpassung (2 %)</option></select></div></div>
 <div class="rl-row"><div class="rl-field"><label for="rl-age">Dein aktuelles Alter</label><div class="rl-input"><input id="rl-age" type="number" min="18" max="100" value="30"><span class="rl-unit">Jahre</span></div></div><div class="rl-field"><label for="rl-retire">Geplantes Rentenalter</label><div class="rl-input"><input id="rl-retire" type="number" min="19" max="100" value="67"><span class="rl-unit">Jahre</span></div></div></div>
 <div class="rl-field"><label for="rl-need">Gewünschtes monatliches Einkommen in heutiger Kaufkraft</label><div class="rl-input"><input id="rl-need" inputmode="decimal" value="2.000,00"><span class="rl-unit">€ netto</span></div></div>
 <div class="rl-field"><label for="rl-pension">Monatliche Bruttorente laut Renteninformation</label><div class="rl-input"><input id="rl-pension" inputmode="decimal" value="2.972,00"><span class="rl-unit">€ brutto</span></div></div>
@@ -28,8 +28,8 @@
 <div class="rl-card rl-step" id="rl-step2" hidden><div class="rl-kicker">Schritt 2 von 3</div><h2>🏦 Kapitalbedarf zum Rentenstart</h2><p class="rl-instruction">Wie soll dein Vermögen während der Rente eingesetzt werden?</p>
 <div class="rl-field"><label>Entnahmestrategie</label><div class="rl-segment"><label><input type="radio" name="rl-strategy" value="deplete" checked><span>Kapitalverzehr</span></label><label><input type="radio" name="rl-strategy" value="preserve"><span>Kapitalerhalt</span></label></div></div>
 <div class="rl-field" id="rl-preserve-wrap" hidden><label for="rl-preserve-kind">Was soll erhalten bleiben?</label><div class="rl-input"><select id="rl-preserve-kind"><option value="nominal">Nominaler Kapitalbetrag</option><option value="real">Kaufkraft des Kapitals</option></select></div></div>
-<div class="rl-row"><div class="rl-field"><label for="rl-duration">Dauer der Entnahme</label><div class="rl-input"><input id="rl-duration" type="number" min="1" max="60" value="25"><span class="rl-unit">Jahre</span></div></div><div class="rl-field"><label for="rl-withdraw-rate">Rendite während der Rente</label><div class="rl-input"><input id="rl-withdraw-rate" inputmode="decimal" value="4,00"><span class="rl-unit">% p. a.</span></div></div></div>
-<div class="rl-note">Die benötigten Ausgaben steigen während der Rente weiter mit der angenommenen Inflation. Die gesetzliche Rente wird während der Entnahmephase vorsichtshalber nominal konstant gehalten. Kapitalerhalt bezieht sich auf das Ende der gewählten Entnahmedauer.</div>
+<div class="rl-row"><div class="rl-field"><label for="rl-duration">Dauer der Entnahme</label><div class="rl-input"><input id="rl-duration" type="number" min="1" max="60" value="25"><span class="rl-unit">Jahre</span></div><p class="rl-info" id="rl-target-age">Zielalter: 92 Jahre</p></div><div class="rl-field"><label for="rl-withdraw-rate">Rendite während der Rente</label><div class="rl-input"><input id="rl-withdraw-rate" inputmode="decimal" value="6,50"><span class="rl-unit">% p. a.</span></div></div></div>
+<div class="rl-field" id="rl-withdrawal-wrap" hidden><label for="rl-withdrawal-rate">Entnahmerate (anfängliche Jahresentnahme)</label><div class="rl-input"><input id="rl-withdrawal-rate" inputmode="decimal" value="3,50"><span class="rl-unit">% p. a.</span></div><p class="rl-info">Begrenzt die anfängliche Jahresentnahme auf 3,5 % des Startkapitals. Der rechnerische Kapitalerhalt wird zusätzlich für die gewählte Entnahmedauer geprüft.</p></div><div class="rl-note">Die benötigten Ausgaben steigen während der Rente weiter mit der angenommenen Inflation. Die gesetzliche Rente wird während der Entnahmephase vorsichtshalber nominal konstant gehalten. Kapitalerhalt bezieht sich auf das Ende der gewählten Entnahmedauer.</div>
 <button class="rl-btn" id="rl-calc-capital" type="button">Benötigtes Kapital berechnen →</button><p class="rl-error" id="rl-error2" role="alert"></p></div>
 <div class="rl-card rl-step" id="rl-step3" hidden><div class="rl-kicker">Schritt 3 von 3</div><h2>📈 Rentenlücke schließen</h2><p class="rl-instruction">Berechne, wie viel du bis zum Rentenbeginn monatlich zurücklegen musst.</p>
 <div class="rl-field"><label for="rl-existing">Bereits vorhandenes Altersvorsorgekapital</label><div class="rl-input"><input id="rl-existing" inputmode="decimal" value="0,00"><span class="rl-unit">€</span></div></div>
@@ -65,7 +65,7 @@ $('rl-step2').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function capital(){if(!Number.isFinite(state.shortfall))return;
 const duration=val('rl-duration'),rate=val('rl-withdraw-rate'),strategy=document.querySelector('input[name="rl-strategy"]:checked').value,kind=$('rl-preserve-kind').value;
-if(!check([['Entnahmedauer',duration,1,60],['Rendite während der Rente',rate,0,30]],'rl-error2'))return;
+if(!check([['Entnahmedauer',duration,1,60],['Rendite während der Rente',rate,0,30],...(strategy==='preserve'?[['Entnahmerate',val('rl-withdrawal-rate'),0.01,30]]:[])],'rl-error2'))return;
 if(!Number.isInteger(duration)){$('rl-error2').textContent='Bitte eine Entnahmedauer in ganzen Jahren eingeben.';return}
 const months=duration*12,r=Math.pow(1+rate/100,1/12)-1,infl=state.infl,need0=state.futureNeed,pension=state.net;
 let pv=0;for(let m=1;m<=months;m++){const expense=need0*Math.pow(1+infl,(m-1)/12),gap=Math.max(0,expense-pension);pv+=gap/Math.pow(1+r,m)}
@@ -74,7 +74,9 @@ if(strategy==='preserve'){
 const factor=kind==='real'?Math.pow(1+infl,duration):1,denom=1-factor/Math.pow(1+r,months);
 if(denom<=1e-12&&pv>0){$('rl-error2').textContent='Mit dieser Rendite ist der gewählte Kapitalerhalt bei steigenden Entnahmen nicht dauerhaft finanzierbar. Erhöhe die Rendite oder wähle Kapitalverzehr.';return}
 capital=pv===0?0:pv/denom;
-comment=kind==='real'?`Kaufkrafterhalt: Am Ende von ${duration} Jahren soll das Startkapital einschließlich Inflationsausgleich erhalten sein.`:`Nominaler Kapitalerhalt: Am Ende von ${duration} Jahren soll der ursprüngliche Eurobetrag erhalten sein.`;
+const withdrawalRate=val('rl-withdrawal-rate')/100;
+capital=Math.max(capital,state.shortfall*12/withdrawalRate);
+comment=`Anfängliche Entnahmerate maximal ${val('rl-withdrawal-rate').toLocaleString('de-DE')} % p. a. · `+(kind==='real'?`Kaufkrafterhalt: Am Ende von ${duration} Jahren soll das Startkapital einschließlich Inflationsausgleich erhalten sein.`:`Nominaler Kapitalerhalt: Am Ende von ${duration} Jahren soll der ursprüngliche Eurobetrag erhalten sein.`);
 }
 if(!Number.isFinite(capital)||capital>1e15){$('rl-error2').textContent='Das berechnete Kapital ist zu hoch. Bitte Annahmen prüfen.';return}
 state.capital=capital;$('rl-capital').textContent=money(capital);$('rl-capital-note').textContent=comment;
@@ -99,7 +101,19 @@ const pensionExamples={
 };
 $('rl-pension-kind').addEventListener('change',()=>{const example=pensionExamples[$('rl-pension-kind').value];$('rl-pension').value=example.amount;$('rl-pension-help').textContent=example.note;invalidate(1);});
 $('rl-no-invest').addEventListener('change',()=>{$('rl-build-rate-wrap').hidden=$('rl-no-invest').checked});
-document.querySelectorAll('input[name="rl-strategy"]').forEach(el=>el.addEventListener('change',()=>{$('rl-preserve-wrap').hidden=document.querySelector('input[name="rl-strategy"]:checked').value!=='preserve'}));
+document.querySelectorAll('input[name="rl-strategy"]').forEach(el=>el.addEventListener('change',()=>{
+const preserve=document.querySelector('input[name="rl-strategy"]:checked').value==='preserve';
+$('rl-preserve-wrap').hidden=!preserve;
+$('rl-withdrawal-wrap').hidden=!preserve;
+if(!$('rl-step2').hidden)invalidate(2);
+}));
+function updateTargetAge(){
+const retire=val('rl-retire'),duration=val('rl-duration');
+$('rl-target-age').textContent=Number.isFinite(retire)&&Number.isFinite(duration)?`Zielalter: ${retire+duration} Jahre`:'Zielalter: –';
+}
+$('rl-retire').addEventListener('input',updateTargetAge);
+$('rl-duration').addEventListener('input',updateTargetAge);
+updateTargetAge();
 $('rl-calc-gap').addEventListener('click',gap);$('rl-calc-capital').addEventListener('click',capital);$('rl-calc-saving').addEventListener('click',saving);
 // Eingabeänderungen machen bereits berechnete Folgeschritte ungültig.
 for(const el of document.querySelectorAll('#rl-step1 input,#rl-step1 select'))el.addEventListener('input',()=>{invalidate(1);$('rl-status').textContent='Eingaben geändert: Bitte die Rentenlücke erneut berechnen.'});
