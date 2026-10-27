@@ -710,3 +710,37 @@ a {
     transition: none !important;
   }
 }
+
+/* =========================
+   FINANZTALER LOGO
+========================= */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.logo-image {
+  display: block;
+  width: 230px;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* TABLET */
+
+@media (max-width: 1050px) {
+  .logo-image {
+    width: 190px;
+  }
+}
+
+/* SMARTPHONE */
+
+@media (max-width: 570px) {
+  .logo-image {
+    width: 170px;
+  }
+}
+
