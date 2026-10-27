@@ -1,6 +1,6 @@
 
-const menuToggle = document.querySelector(".menu-toggle");
-const navigation = document.querySelector(".navigation");
+const menuToggle = document.getElementById("menu-toggle");
+const navigation = document.getElementById("navigation");
 
 if (menuToggle && navigation) {
   menuToggle.addEventListener("click", () => {
@@ -11,18 +11,12 @@ if (menuToggle && navigation) {
       "aria-label",
       isOpen ? "Menü schließen" : "Menü öffnen"
     );
-  });
 
-  navigation.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      navigation.classList.remove("is-open");
-      menuToggle.setAttribute("aria-expanded", "false");
-      menuToggle.setAttribute("aria-label", "Menü öffnen");
-    });
+    menuToggle.textContent = isOpen ? "✕" : "☰";
   });
 }
 
-const yearElement = document.querySelector("#current-year");
+const yearElement = document.getElementById("current-year");
 
 if (yearElement) {
   yearElement.textContent = new Date().getFullYear();
