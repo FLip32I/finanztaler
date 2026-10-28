@@ -5,3 +5,5 @@
 .hero-art.hero-art-image{height:auto;aspect-ratio:3/2;background:transparent;border-radius:26px;overflow:hidden;display:block}
 .hero-art.hero-art-image::before,.hero-art.hero-art-image::after{display:none}
 .hero-art.hero-art-image img{display:block;width:100%;height:100%;object-fit:contain;border-radius:26px}
+
+.hero-art.hero-art-image::before,.hero-art.hero-art-image::after{content:none!important;display:none!important}
