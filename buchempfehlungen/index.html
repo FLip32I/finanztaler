@@ -1,1 +1,138 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10342f"><meta name="description" content="Finanztaler – Finanzen selbst in die Hand nehmen."><title>Buchempfehlungen | Finanztaler</title><link rel="stylesheet" href="../assets/css/style.css"><script src="../assets/js/script.js" defer></script></head><body data-root="../" data-page="buchempfehlungen/"><div id="site-header"></div><main><section class="page-hero"><div class="container"><span class="eyebrow">Finanztaler / Buchempfehlungen</span><h1>Buchempfehlungen</h1><p class="lead">Dieser Bereich wird Schritt für Schritt aufgebaut.</p></div></section><section class="container"><div class="placeholder">Hier entsteht die Unterseite <strong>Buchempfehlungen</strong>. Inhalte und weitere Unterseiten folgen.<br><a class="btn" href="../index.html">← Zur Startseite</a></div></section></main><div id="site-footer"></div></body></html>
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10342f">
+<meta name="description" content="Finanztaler Buchempfehlungen: Finanzwissen, Investieren und finanzielle Freiheit.">
+<title>Buchempfehlungen | Finanztaler</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<script src="../assets/js/script.js" defer></script>
+<style>
+.books-area{padding:36px 0 76px}.books-intro{max-width:800px;margin-bottom:28px;line-height:1.7}
+.books-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.book-card{display:grid;grid-template-columns:138px minmax(0,1fr);gap:22px;padding:24px;border:1px solid #dfe9e2;border-radius:22px;background:#fff;box-shadow:0 10px 28px rgba(16,52,47,.055);min-width:0}
+.book-art{aspect-ratio:3/4;min-height:184px;display:flex;flex-direction:column;justify-content:space-between;padding:18px 14px;border-radius:7px;background:linear-gradient(145deg,#e3eee3,#c5dfcb);color:#1a503e;overflow:hidden}
+.book-art .art-symbol{font-size:40px;font-weight:750;line-height:1}.book-art .art-label{font-size:12px;letter-spacing:.07em;text-transform:uppercase;font-weight:750}.book-art .art-brand{font-size:11px;opacity:.75}
+.book-art img{display:block;width:100%;height:100%;object-fit:contain}.book-art.has-cover{background:transparent;padding:0}
+.book-tag{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#397b57;font-weight:800}
+.book-card h2{font-size:clamp(1.16rem,2vw,1.5rem);line-height:1.3;margin:8px 0}.book-author{color:#53685d;font-weight:650;margin:0 0 12px}
+.book-description{font-size:.95rem;line-height:1.65;color:#344b40;margin:0 0 16px}
+.book-link{display:inline-block;background:#176345;color:white!important;text-decoration:none;border-radius:11px;padding:11px 16px;font-weight:700;font-size:.92rem}
+.book-link:hover{background:#104b34}.book-pending{font-size:.86rem;color:#668073;font-weight:650}
+.books-note{margin-top:28px;padding:18px 20px;border-radius:14px;background:#edf4ee;color:#385447;line-height:1.6;font-size:.9rem}
+.books-back{margin-top:26px}.book-card.placeholder-card{border-style:dashed;background:#fbfdfb}
+@media(max-width:900px){.books-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.book-card{grid-template-columns:108px minmax(0,1fr);gap:14px;padding:15px}.book-art{min-height:150px;padding:12px 9px}.book-art .art-symbol{font-size:30px}}
+</style>
+</head>
+<body data-root="../" data-page="buchempfehlungen/">
+<div id="site-header"></div>
+<main>
+<section class="page-hero"><div class="container"><span class="eyebrow">Finanztaler / Wissen</span><h1>Buchempfehlungen</h1><p class="lead">Fundiertes Finanzwissen – vom ersten ETF bis zur Planung des Ruhestands.</p></div></section>
+<section class="container books-area">
+<p class="books-intro">Hier findest du Bücher, die helfen, Geldanlage und finanzielle Entscheidungen besser zu verstehen. Die Empfehlungen werden schrittweise ergänzt. Eine Empfehlung ist keine individuelle Anlageberatung.</p>
+<div id="books-grid" class="books-grid" aria-label="Empfohlene Bücher"></div>
+<div id="books-affiliate-note" class="books-note" hidden><strong>Werbung / Affiliate-Hinweis:</strong> Als Amazon-Partner verdiene ich an qualifizierten Verkäufen. Für dich entstehen durch einen Kauf über einen solchen Link keine zusätzlichen Kosten.</div>
+<div class="books-back"><a class="btn" href="../index.html">← Zur Startseite</a></div>
+</section>
+</main><div id="site-footer"></div>
+<script>
+/* =======================================================================
+   FINANZTALER – BÜCHER EINFACH VERWALTEN
+
+   1. Pro Buch einen Eintrag in BUECHER ergänzen oder bearbeiten.
+   2. aktiv: true zeigt ein Buch, aktiv: false zeigt einen Platzhalter.
+   3. link: normaler Produktlink; affiliateLink: fertiger PartnerNet-Link.
+      Solange affiliateLink leer ist, wird der normale Link verwendet.
+   4. cover: nur eigene oder ausdrücklich lizenzierte Bilddatei verwenden.
+      Leer lassen = automatisch erzeugte, neutrale Titelgrafik.
+   5. Weitere Bücher: einen bestehenden {...}-Block kopieren und anfügen.
+
+   WICHTIG: Kein Buchcover von Amazon herunterladen, wenn die
+   entsprechenden Nutzungsrechte nicht geklärt sind.
+   ======================================================================= */
+const BUECHER = [
+  {
+    aktiv: true,
+    titel: "Souverän investieren vor und im Ruhestand",
+    autor: "Gerd Kommer",
+    kategorie: "ETFs & Altersvorsorge",
+    beschreibung: "Ein fundierter Ratgeber für die langfristige Vermögensanlage und die Entnahmephase. Im Mittelpunkt stehen breit gestreute ETFs, Risiken und die Frage, wie das Ersparte im Ruhestand sinnvoll eingesetzt werden kann.",
+    link: "https://www.amazon.de/dp/3593520974",
+    affiliateLink: "", // Später den vollständigen Amazon-PartnerNet-Link eintragen
+    cover: ""          // Optional: z. B. "../assets/img/buecher/kommer.webp"
+  },
+  {
+    aktiv: false,
+    titel: "Buch 2 – Titel ergänzen",
+    autor: "Autor ergänzen",
+    kategorie: "Finanzielle Grundlagen",
+    beschreibung: "Hier kannst du später deine eigene Buchempfehlung eintragen.",
+    link: "", affiliateLink: "", cover: ""
+  },
+  {
+    aktiv: false,
+    titel: "Buch 3 – Titel ergänzen",
+    autor: "Autor ergänzen",
+    kategorie: "Investieren",
+    beschreibung: "Hier kannst du später deine eigene Buchempfehlung eintragen.",
+    link: "", affiliateLink: "", cover: ""
+  },
+  {
+    aktiv: false,
+    titel: "Buch 4 – Titel ergänzen",
+    autor: "Autor ergänzen",
+    kategorie: "Mindset & Geld",
+    beschreibung: "Hier kannst du später deine eigene Buchempfehlung eintragen.",
+    link: "", affiliateLink: "", cover: ""
+  },
+  {
+    aktiv: false,
+    titel: "Buch 5 – Titel ergänzen",
+    autor: "Autor ergänzen",
+    kategorie: "Finanzielle Freiheit",
+    beschreibung: "Hier kannst du später deine eigene Buchempfehlung eintragen.",
+    link: "", affiliateLink: "", cover: ""
+  }
+];
+
+/* Ab hier ist für neue Bücher keine Änderung erforderlich. */
+const grid = document.getElementById("books-grid");
+const note = document.getElementById("books-affiliate-note");
+function element(tag, className, value) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (value !== undefined) el.textContent = value;
+  return el;
+}
+for (const buch of BUECHER) {
+  const card = element("article", "book-card" + (buch.aktiv ? "" : " placeholder-card"));
+  const art = element("div", "book-art");
+  if (buch.aktiv && buch.cover) {
+    const img = document.createElement("img");
+    img.src = buch.cover;
+    img.alt = "Cover: " + buch.titel;
+    img.loading = "lazy";
+    img.onerror = () => { img.remove(); art.classList.remove("has-cover"); art.append(element("span", "art-symbol", "F"), element("span", "art-label", "Finanzwissen"), element("span", "art-brand", "FINANZTALER")); };
+    art.classList.add("has-cover"); art.append(img);
+  } else {
+    art.append(element("span", "art-symbol", "F"), element("span", "art-label", buch.aktiv ? "Finanzwissen" : "Bald verfügbar"), element("span", "art-brand", "FINANZTALER"));
+  }
+  const body = element("div", "book-body");
+  body.append(element("span", "book-tag", buch.kategorie), element("h2", "", buch.titel), element("p", "book-author", buch.autor), element("p", "book-description", buch.beschreibung));
+  const url = buch.affiliateLink || buch.link;
+  if (buch.aktiv && /^https:\/\//i.test(url)) {
+    const a = element("a", "book-link", buch.affiliateLink ? "Buch ansehen ↗ · Werbung" : "Buch ansehen ↗");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = (buch.affiliateLink ? "sponsored " : "") + "noopener noreferrer";
+    body.append(a);
+    if (buch.affiliateLink) note.hidden = false;
+  } else if (!buch.aktiv) {
+    body.append(element("span", "book-pending", "Weitere Empfehlung folgt"));
+  }
+  card.append(art, body);
+  grid.append(card);
+}
+</script>
+</body></html>
