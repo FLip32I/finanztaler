@@ -23,81 +23,37 @@
 .books-back{margin-top:26px}.book-card.placeholder-card{border-style:dashed;background:#fbfdfb}
 @media(max-width:900px){.books-grid{grid-template-columns:1fr}}
 @media(max-width:480px){.book-card{grid-template-columns:108px minmax(0,1fr);gap:14px;padding:15px}.book-art{min-height:150px;padding:12px 9px}.book-art .art-symbol{font-size:30px}}
+.books-categories{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 35px}.books-categories a{display:inline-block;padding:11px 17px;border-radius:999px;background:#e9f2eb;color:#176345;font-weight:750;text-decoration:none}.books-categories a:hover{background:#d6e9db}.books-section{margin:34px 0 46px;scroll-margin-top:90px}.books-section>h2{font-size:clamp(1.5rem,2.8vw,2rem);color:#10342f;margin:0 0 8px}.books-section>p{color:#53685d;line-height:1.65;margin:0 0 22px}.books-unverified{border-top:1px solid #dfe9e2;padding-top:25px}.books-unverified .book-card{background:#fbfdfb;border-style:dashed}.books-section:has(.books-grid:empty) .books-grid{display:none}
 </style>
 </head>
 <body data-root="../" data-page="buchempfehlungen/">
 <div id="site-header"></div>
 <main>
-<section class="page-hero"><div class="container"><span class="eyebrow">Finanztaler / Wissen</span><h1>Buchempfehlungen</h1><p class="lead">Fundiertes Finanzwissen – vom ersten ETF bis zur Planung des Ruhestands.</p></div></section>
+<section class="page-hero"><div class="container"><span class="eyebrow">Finanztaler / Wissen</span><h1>Buchempfehlungen</h1><p class="lead">Lesetipps zu Geldanlage, finanzieller Freiheit und persönlicher Weiterentwicklung.</p></div></section>
 <section class="container books-area">
-<p class="books-intro">Hier findest du Bücher, die helfen, Geldanlage und finanzielle Entscheidungen besser zu verstehen. Die Empfehlungen werden schrittweise ergänzt. Eine Empfehlung ist keine individuelle Anlageberatung.</p>
-<div id="books-grid" class="books-grid" aria-label="Empfohlene Bücher"></div>
+<p class="books-intro">Entdecke ausgewählte Bücher zu Geldanlage, finanzieller Freiheit und persönlicher Entwicklung. Die Kurzbeschreibungen zeigen dir, welche Themen dich erwarten. Eine Empfehlung ist keine individuelle Anlageberatung.</p>
+<nav class="books-categories" aria-label="Buchkategorien"><a href="#finanzen">Finanzen &amp; Investieren</a><a href="#persoenlichkeit">Persönlichkeitsentwicklung</a></nav>
+<section id="finanzen" class="books-section"><h2>Finanzen &amp; Investieren</h2><p>Vermögensaufbau, ETFs, finanzielle Freiheit und langfristiges Investieren.</p><div id="books-finance" class="books-grid" aria-label="Finanzbücher"></div></section>
+<section id="persoenlichkeit" class="books-section"><h2>Persönlichkeitsentwicklung</h2><p>Gewohnheiten, Selbstmanagement und die Frage, was ein erfülltes Leben ausmacht.</p><div id="books-personality" class="books-grid" aria-label="Bücher zur Persönlichkeitsentwicklung"></div></section>
+
 <div id="books-affiliate-note" class="books-note" hidden><strong>Werbung / Affiliate-Hinweis:</strong> Als Amazon-Partner verdiene ich an qualifizierten Verkäufen. Für dich entstehen durch einen Kauf über einen solchen Link keine zusätzlichen Kosten.</div>
 <div class="books-back"><a class="btn" href="../index.html">← Zur Startseite</a></div>
 </section>
 </main><div id="site-footer"></div>
 <script>
-/* =======================================================================
-   FINANZTALER – BÜCHER EINFACH VERWALTEN
-
-   1. Pro Buch einen Eintrag in BUECHER ergänzen oder bearbeiten.
-   2. aktiv: true zeigt ein Buch, aktiv: false zeigt einen Platzhalter.
-   3. link: normaler Produktlink; affiliateLink: fertiger PartnerNet-Link.
-      Solange affiliateLink leer ist, wird der normale Link verwendet.
-   4. cover: nur eigene oder ausdrücklich lizenzierte Bilddatei verwenden.
-      Leer lassen = automatisch erzeugte, neutrale Titelgrafik.
-   5. Weitere Bücher: einen bestehenden {...}-Block kopieren und anfügen.
-
-   WICHTIG: Kein Buchcover von Amazon herunterladen, wenn die
-   entsprechenden Nutzungsrechte nicht geklärt sind.
-   ======================================================================= */
+/* Neue Bücher über dieses Array ergänzen. Nur verifizierte Titel veröffentlichen.
+   cover: ausschließlich eigene/lizenzierte Bilder; ohne Bild erscheint die Finanztaler-Grafik. */
 const BUECHER = [
-  {
-    aktiv: true,
-    titel: "Souverän investieren vor und im Ruhestand",
-    autor: "Gerd Kommer",
-    kategorie: "ETFs & Altersvorsorge",
-    beschreibung: "Ein fundierter Ratgeber für die langfristige Vermögensanlage und die Entnahmephase. Im Mittelpunkt stehen breit gestreute ETFs, Risiken und die Frage, wie das Ersparte im Ruhestand sinnvoll eingesetzt werden kann.",
-    link: "https://www.amazon.de/dp/3593520974",
-    affiliateLink: "", // Später den vollständigen Amazon-PartnerNet-Link eintragen
-    cover: ""          // Optional: z. B. "../assets/img/buecher/kommer.webp"
-  },
-  {
-    aktiv: false,
-    titel: "Buch 2 – Titel ergänzen",
-    autor: "Autor ergänzen",
-    kategorie: "Finanzielle Grundlagen",
-    beschreibung: "Hier kannst du später deine eigene Buchempfehlung eintragen.",
-    link: "", affiliateLink: "", cover: ""
-  },
-  {
-    aktiv: false,
-    titel: "Buch 3 – Titel ergänzen",
-    autor: "Autor ergänzen",
-    kategorie: "Investieren",
-    beschreibung: "Hier kannst du später deine eigene Buchempfehlung eintragen.",
-    link: "", affiliateLink: "", cover: ""
-  },
-  {
-    aktiv: false,
-    titel: "Buch 4 – Titel ergänzen",
-    autor: "Autor ergänzen",
-    kategorie: "Mindset & Geld",
-    beschreibung: "Hier kannst du später deine eigene Buchempfehlung eintragen.",
-    link: "", affiliateLink: "", cover: ""
-  },
-  {
-    aktiv: false,
-    titel: "Buch 5 – Titel ergänzen",
-    autor: "Autor ergänzen",
-    kategorie: "Finanzielle Freiheit",
-    beschreibung: "Hier kannst du später deine eigene Buchempfehlung eintragen.",
-    link: "", affiliateLink: "", cover: ""
-  }
+  {aktiv:true, bereich:"finanzen", titel:"Souverän investieren vor und im Ruhestand", autor:"Gerd Kommer", kategorie:"ETFs & Altersvorsorge", beschreibung:"Ein fundierter Ratgeber zur langfristigen Vermögensanlage und Entnahmephase. Im Fokus stehen breit gestreute ETFs, Risiken und die Planung eines finanziell tragfähigen Ruhestands.", affiliateLink:"https://www.amazon.de/dp/3593520974?linkCode=ll2&tag=finanztaler09-21&linkId=4a1161780e56602d2d33964c53afdaf4&gaOptInStatus=true&ref_=as_li_ss_tl", cover:""},
+  {aktiv:true, bereich:"finanzen", titel:"Rente mit 40", autor:"Florian Wagner", kategorie:"Frugalismus & finanzielle Freiheit", beschreibung:"Wie bewusster Konsum, eine hohe Sparquote und langfristiges Investieren mehr Freiheit im Leben ermöglichen können. Ein praxisnaher Einstieg in Frugalismus und finanzielle Unabhängigkeit.", affiliateLink:"https://www.amazon.de/dp/B07QY21SK8?linkCode=ll2&tag=finanztaler09-21&linkId=6e309a1c13c4db5daf49808e6c02a454&gaOptInStatus=true&ref_=as_li_ss_tl", cover:""},
+  {aktiv:true, bereich:"finanzen", titel:"Warren Buffett: Sein Weg. Seine Methode. Seine Strategie.", autor:"Robert G. Hagstrom", kategorie:"Value Investing & Aktien", beschreibung:"Die erweiterte Jubiläumsausgabe erklärt die Denkweise und Anlageprinzipien Warren Buffetts – von der Bewertung guter Unternehmen bis zur langfristigen Portfolioführung.", affiliateLink:"https://www.amazon.de/dp/3864709946?linkCode=ll2&tag=finanztaler09-21&linkId=05655951b6000f5b23f035f70&gaOptInStatus=true&ref_=as_li_ss_tl", cover:""},
+  {aktiv:true, bereich:"persoenlichkeit", titel:"Die 7 Wege zur Effektivität", autor:"Stephen R. Covey", kategorie:"Selbstmanagement & Gewohnheiten", beschreibung:"Sieben Prinzipien für mehr Eigenverantwortung, klare Prioritäten und einen bewussten Umgang mit Beziehungen und Zielen. Ein Klassiker der persönlichen und beruflichen Weiterentwicklung.", affiliateLink:"https://www.amazon.de/dp/3869368942?linkCode=ll2&tag=finanztaler09-21&linkId=d382df1a50fa0a7c3e92c0df35063cd0&gaOptInStatus=true&ref_=as_li_ss_tl", cover:""},
+  {aktiv:true, bereich:"persoenlichkeit", titel:"Das Café am Rande der Welt", autor:"John Strelecky", kategorie:"Lebensziele & Sinn", beschreibung:"Eine kurze Erzählung über persönliche Prioritäten, den Sinn des Lebens und die Frage, wie wir unsere Zeit nutzen möchten. Ein Denkanstoß, die eigenen Ziele zu hinterfragen.", affiliateLink:"https://www.amazon.de/dp/3423209690?linkCode=ll2&tag=finanztaler09-21&linkId=764b05e307160b5d3ba4808648a9ab8a&gaOptInStatus=true&ref_=as_li_ss_tl", cover:""},
+  {aktiv:true, bereich:"persoenlichkeit", titel:"Die Gesetze der Gewinner", autor:"Bodo Schäfer", kategorie:"Motivation & persönliche Entwicklung", beschreibung:"Ein Ratgeber über Eigeninitiative, Zielsetzung und die Entwicklung hilfreicher Denk- und Verhaltensweisen. Die Anregungen lassen sich auf Beruf, Alltag und persönliche Finanzen übertragen.", affiliateLink:"https://www.amazon.de/dp/3423340487?linkCode=ll2&tag=finanztaler09-21&linkId=dffe8033a1f6faf3ac4505d7b5a0f5eb&gaOptInStatus=true&ref_=as_li_ss_tl", cover:""}
 ];
 
 /* Ab hier ist für neue Bücher keine Änderung erforderlich. */
-const grid = document.getElementById("books-grid");
+const grids = {finanzen:document.getElementById("books-finance"),persoenlichkeit:document.getElementById("books-personality")};
 const note = document.getElementById("books-affiliate-note");
 function element(tag, className, value) {
   const el = document.createElement(tag);
@@ -116,11 +72,11 @@ for (const buch of BUECHER) {
     img.onerror = () => { img.remove(); art.classList.remove("has-cover"); art.append(element("span", "art-symbol", "F"), element("span", "art-label", "Finanzwissen"), element("span", "art-brand", "FINANZTALER")); };
     art.classList.add("has-cover"); art.append(img);
   } else {
-    art.append(element("span", "art-symbol", "F"), element("span", "art-label", buch.aktiv ? "Finanzwissen" : "Bald verfügbar"), element("span", "art-brand", "FINANZTALER"));
+    art.append(element("span", "art-symbol", "F"), element("span", "art-label", buch.aktiv ? "Finanzwissen" : "In Prüfung"), element("span", "art-brand", "FINANZTALER"));
   }
   const body = element("div", "book-body");
   body.append(element("span", "book-tag", buch.kategorie), element("h2", "", buch.titel), element("p", "book-author", buch.autor), element("p", "book-description", buch.beschreibung));
-  const url = buch.affiliateLink || buch.link;
+  const url = buch.affiliateLink || buch.link || "";
   if (buch.aktiv && /^https:\/\//i.test(url)) {
     const a = element("a", "book-link", buch.affiliateLink ? "Buch ansehen ↗ · Werbung" : "Buch ansehen ↗");
     a.href = url;
@@ -129,10 +85,10 @@ for (const buch of BUECHER) {
     body.append(a);
     if (buch.affiliateLink) note.hidden = false;
   } else if (!buch.aktiv) {
-    body.append(element("span", "book-pending", "Weitere Empfehlung folgt"));
+    body.append(element("span", "book-pending", "Buchdetails noch nicht bestätigt"));
   }
   card.append(art, body);
-  grid.append(card);
+  grids[buch.bereich].append(card);
 }
 </script>
 </body></html>
