@@ -1,6 +1,7 @@
-/* Finanztaler: dezente, responsive Werbeplätze */
-.ft-ad {width:100%;max-width:100%;margin:28px auto;min-width:0;clear:both;}
-.ft-ad__label {font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#718178;text-align:center;margin-bottom:8px;}
-.ft-ad__space {min-height:100px;border:1px solid #e1eae4;border-radius:12px;background:#f7faf8;display:flex;align-items:center;justify-content:center;color:#89988e;font-size:12px;overflow:hidden;}
-.ft-ad--bottom {margin-top:40px;margin-bottom:40px;}
-@media(min-width:800px){.ft-ad__space{min-height:120px;}}
+/* Finanztaler – responsive Anzeigenflächen innerhalb der gewohnten Inhaltsbreite */
+.ft-ad{box-sizing:border-box;width:100%;margin:28px auto;padding:0 20px;clear:both}
+.ft-ad__inner{max-width:1100px;margin:auto}
+.ft-ad__label{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#718178;text-align:center;margin:0 0 8px}
+.ft-ad__space{box-sizing:border-box;min-height:105px;border:1px solid #e1eae4;border-radius:12px;background:#f7faf8;display:flex;align-items:center;justify-content:center;color:#89988e;font-size:12px;overflow:hidden}
+.ft-ad ins.adsbygoogle{width:100%;display:block}
+@media(min-width:800px){.ft-ad__space{min-height:120px}}
