@@ -10,19 +10,19 @@
 @media(max-width:900px){.about-hero-grid{grid-template-columns:1fr 1fr;min-height:390px}.about-portrait{min-height:390px}.about-portrait img{width:125%;margin-left:-15%}}
 @media(max-width:650px){.about-hero-grid{display:flex;flex-direction:column;min-height:0}.about-intro{padding:30px 0 5px}.about-portrait{width:100%;min-height:0;height:auto;display:block}.about-portrait img{width:100%;margin-left:0}.about-copy{max-width:100%}}
 
+/* Freigestellte Illustrationen für die fünf Stationen */
+.about-symbol{display:flex;align-items:center;justify-content:center;height:105px;margin-bottom:8px}
+.about-symbol img{display:block;width:100%;max-width:155px;height:100px;object-fit:contain}
+.about-step:not(:last-child):after{top:38px}
+@media(max-width:650px){.about-symbol{height:82px;grid-row:span 2;margin:0}.about-symbol img{max-width:76px;height:76px}.about-step{grid-template-columns:82px 1fr;align-items:center}}
 
-/* Überarbeiteter Hero: Originalportrait als Bild, Zitat als HTML */
-.about-hero{background:#fafbf7;overflow:visible}
-.about-hero-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:18px;align-items:center;min-height:0;padding-top:28px;padding-bottom:0}
-.about-intro{padding:38px 0 55px;align-self:center;z-index:2}
-.about-intro h1{font-size:clamp(48px,5.4vw,74px);line-height:1.04;margin:12px 0 12px}
-.about-tagline{font-size:clamp(16px,1.55vw,19px);line-height:1.5;max-width:630px}
-.about-copy{font-size:15px;line-height:1.8;max-width:510px;margin-top:22px}
-.about-portrait{position:relative;min-height:0;height:auto;aspect-ratio:1447/1087;align-self:end;display:block;overflow:hidden;border-radius:28px 28px 24px 24px;background:#edf2e9;isolation:isolate}
-.about-portrait:before,.about-portrait:after{content:none!important;display:none!important}
-.about-portrait img{display:block;width:100%;height:100%;max-width:100%;margin:0;object-fit:contain;object-position:center bottom;mask-image:none!important;filter:none!important;transform:none!important}
-.about-hero-quote{position:absolute;z-index:2;right:3.3%;bottom:4.5%;width:47%;max-width:300px;box-sizing:border-box;margin:0;padding:16px 17px 22px;background:#fffdf7;color:#143b35;border:1px solid rgba(24,62,50,.05);border-radius:16px;box-shadow:0 10px 24px #203d311c;font-size:clamp(11px,1.06vw,14px);line-height:1.48;transform:rotate(-3deg);font-style:normal}
-.about-hero-quote:after{content:'';position:absolute;right:17px;bottom:10px;width:60px;height:2px;background:#c99a35;transform:rotate(-12deg);border-radius:2px}
-.about-journey{margin-top:16px}
-@media(max-width:950px){.about-hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}.about-intro{padding:22px 0 30px}.about-hero-quote{width:50%;padding:11px 12px 16px;font-size:11px}.about-hero-quote:after{bottom:7px;width:40px}.about-copy{font-size:14px}}
-@media(max-width:650px){.about-hero-grid{display:flex;flex-direction:column;gap:12px;padding-top:8px}.about-intro{width:100%;padding:26px 0 2px}.about-intro h1{font-size:51px}.about-copy{max-width:100%}.about-portrait{display:block;width:100%;height:auto;aspect-ratio:1447/1087;min-height:0;border-radius:20px;overflow:hidden}.about-portrait img{width:100%;height:100%;margin:0}.about-hero-quote{right:3%;bottom:4%;width:47%;font-size:clamp(9px,2.5vw,12px);padding:9px 10px 16px;border-radius:11px}.about-journey{margin-top:16px}}
+/* Scharf gerenderte HTML-Zitatkarte statt Text im Bild */
+.about-portrait{position:relative}
+.about-quote-card{position:absolute;z-index:5;right:3%;bottom:5%;width:min(74%,390px);box-sizing:border-box;margin:0;padding:22px 26px 30px;background:#fffdf5;color:#073f35;border-radius:20px;box-shadow:0 12px 28px rgba(9,42,34,.17);font-size:clamp(15px,1.65vw,23px);line-height:1.46;font-weight:450;transform:rotate(-3deg);text-wrap:pretty}
+.about-quote-stroke{display:block;width:32%;height:18px;margin:5px 0 -8px auto;border-top:3px solid #dbad41;border-radius:65% 45% 0 0;transform:rotate(-9deg)}
+@media(max-width:650px){.about-quote-card{right:3%;bottom:3%;width:min(73%,300px);padding:14px 17px 18px;font-size:clamp(13px,3.6vw,17px);border-radius:15px}.about-quote-stroke{height:12px}}
+
+/* Kompaktere Zitatkarte – Gesicht bleibt frei */
+.about-quote-card{width:min(60%,300px);padding:15px 18px 19px;font-size:clamp(13px,1.15vw,17px);line-height:1.4;border-radius:15px;right:3%;bottom:4%}
+.about-quote-stroke{height:12px;margin:5px 0 -5px auto;border-top-width:2px}
+@media(max-width:650px){.about-quote-card{width:min(68%,245px);padding:12px 14px 16px;font-size:clamp(12px,3.1vw,14px);right:3%;bottom:3%}}
