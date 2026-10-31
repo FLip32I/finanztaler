@@ -12,3 +12,8 @@
 #themen .home-card-icon img{display:block;width:100%;height:100%;object-fit:contain}
 #themen .card h3{margin-top:2px}
 @media(max-width:600px){#themen .home-card-icon{height:165px}}
+
+/* Themenwelt: PNG-Icons (quadratische Dateien, z.B. 500x500) kompakt und ohne Beschnitt */
+#themen .home-card-icon{width:100%;height:170px;min-width:0;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#themen .home-card-icon img{display:block;width:160px;max-width:100%;height:160px;max-height:100%;object-fit:contain;object-position:center;flex:none}
+@media(max-width:600px){#themen .home-card-icon{height:130px}#themen .home-card-icon img{width:120px;height:120px}}
