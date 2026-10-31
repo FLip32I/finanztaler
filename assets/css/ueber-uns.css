@@ -35,31 +35,38 @@ main.about-page .about-journey{margin-top:0}
   main.about-page .about-content{margin-top:22px}
 }
 
-/* Mobile: Textkarte als eigenstaendiges HTML-Element, nicht am Bild mitskalieren. */
+/* Mobile: Die HTML-Zitatkarte bleibt kompakt und passt auch auf schmale Handys.
+   Feste CSS-Pixel statt vw: weder Text noch Karte wachsen mit breiteren Handys. */
 @media (max-width:650px) {
   .about-portrait { position:relative; }
   .about-portrait .about-quote-card {
     box-sizing:border-box;
     position:absolute;
     z-index:6;
-    right:10px;
-    bottom:12px;
-    width:280px;
-    max-width:calc(100% - 20px);
+    right:12px;
+    bottom:14px;
+    width:210px;
+    max-width:calc(100% - 24px);
     margin:0;
-    padding:16px 18px 20px;
-    font-size:15px;
-    line-height:1.42;
+    padding:10px 12px 12px;
+    border-radius:12px;
+    font-size:12px;
+    line-height:1.35;
     transform:rotate(-3deg);
     transform-origin:center;
+  }
+  .about-portrait .about-quote-stroke {
+    height:8px;
+    margin:4px 0 -3px auto;
   }
 }
 @media (max-width:360px) {
   .about-portrait .about-quote-card {
-    width:260px;
-    max-width:calc(100% - 16px);
-    right:8px;
-    font-size:14px;
+    width:195px;
+    right:10px;
+    bottom:12px;
+    padding:9px 11px 11px;
+    font-size:11.5px;
   }
 }
 
