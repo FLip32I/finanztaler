@@ -25,4 +25,40 @@
 /* Kompaktere Zitatkarte – Gesicht bleibt frei */
 .about-quote-card{width:min(60%,300px);padding:15px 18px 19px;font-size:clamp(13px,1.15vw,17px);line-height:1.4;border-radius:15px;right:3%;bottom:4%}
 .about-quote-stroke{height:12px;margin:5px 0 -5px auto;border-top-width:2px}
-@media(max-width:650px){.about-quote-card{width:min(78vw,285px);padding:14px 16px 18px;font-size:clamp(13px,3.7vw,16px);line-height:1.45;right:2%;bottom:3%}}
+@media(max-width:650px){.about-quote-card{width:min(68%,245px);padding:12px 14px 16px;font-size:clamp(12px,3.1vw,14px);right:3%;bottom:3%}}
+
+
+/* Etwas mehr Abstand zwischen Hero und erstem Content-Panel */
+main.about-page .about-content{margin-top:28px}
+main.about-page .about-journey{margin-top:0}
+@media(max-width:650px){
+  main.about-page .about-content{margin-top:22px}
+}
+
+/* Mobile: Textkarte als eigenstaendiges HTML-Element, nicht am Bild mitskalieren. */
+@media (max-width:650px) {
+  .about-portrait { position:relative; }
+  .about-portrait .about-quote-card {
+    box-sizing:border-box;
+    position:absolute;
+    z-index:6;
+    right:10px;
+    bottom:12px;
+    width:280px;
+    max-width:calc(100% - 20px);
+    margin:0;
+    padding:16px 18px 20px;
+    font-size:15px;
+    line-height:1.42;
+    transform:rotate(-3deg);
+    transform-origin:center;
+  }
+}
+@media (max-width:360px) {
+  .about-portrait .about-quote-card {
+    width:260px;
+    max-width:calc(100% - 16px);
+    right:8px;
+    font-size:14px;
+  }
+}
