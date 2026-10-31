@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10342f">
+<meta name="description" content="Finanztaler Sparrechner: Berechne Endkapital, Anfangskapital, Sparrate, Zinssatz oder Laufzeit.">
+<title>Sparrechner | Finanztaler</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script src="../../assets/js/script.js" defer></script>
+<style>
+.sc-wrap{padding-bottom:80px}.sc-layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:22px;align-items:start}
+.sc-card{background:#fff;border:1px solid #dfebe1;border-radius:19px;padding:clamp(18px,3vw,32px);box-shadow:0 10px 30px #173c3010}
+.sc-card h2{margin:0 0 23px;font-size:24px;color:#10342f}
+.sc-field{margin:0 0 20px}.sc-field>label{display:flex;gap:7px;align-items:center;margin-bottom:8px;font-weight:750;color:#143b32;font-size:15px}
+.sc-box{display:flex;align-items:center;border:1px solid #cddad1;border-radius:10px;overflow:hidden;background:white}
+.sc-box:focus-within{outline:3px solid #d8e9d9;border-color:#48865b}
+.sc-box input,.sc-box select{width:100%;min-width:0;padding:13px 14px;border:0;outline:0;background:transparent;color:#10342f;font:inherit;font-size:16px}
+.sc-box select{cursor:pointer}.sc-unit{padding:0 14px 0 0;font-weight:750;color:#6b8175;white-space:nowrap}
+.sc-help{position:relative;display:inline-flex;justify-content:center;align-items:center;width:19px;height:19px;border-radius:50%;background:#eef4f0;border:1px solid #c7d9cd;color:#426a52;font-size:12px;cursor:help}
+.sc-help:hover:after,.sc-help:focus-visible:after{content:attr(data-tip);position:absolute;left:0;bottom:25px;z-index:9;width:min(255px,70vw);padding:10px;background:#10342f;color:#fff;border-radius:8px;font-size:12px;line-height:1.45;font-weight:400;box-shadow:0 8px 18px #0002}
+.sc-check{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700;color:#143b32}
+.sc-check input{width:19px;height:19px;accent-color:#28694b}.sc-tax{padding:14px;background:#f4f8f3;border-radius:10px;margin-bottom:20px}
+.sc-tax-note{margin:9px 0 0;font-size:12px;color:#60766b;line-height:1.5}
+.sc-btn{width:100%;border:0;border-radius:10px;padding:15px;background:#10342f;color:#fff;font:inherit;font-weight:800;cursor:pointer}
+.sc-btn:hover{background:#266347}.sc-error{min-height:20px;color:#a52b2b;font-size:13px;margin:10px 0 0}
+.sc-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.sc-stat{background:#f5f9f4;border-radius:12px;padding:16px;min-width:0}
+.sc-stat.primary{grid-column:1/-1;background:#e6f1e8}
+.sc-stat span{display:block;color:#567263;font-size:13px;margin-bottom:7px}
+.sc-stat strong{font-size:clamp(18px,2.4vw,26px);overflow-wrap:anywhere;display:block}
+.sc-stat.primary strong{font-size:clamp(26px,3.1vw,37px)}
+.sc-note{color:#63796b;font-size:13px;line-height:1.65;margin:15px 0 0}
+.sc-chart{display:block;width:100%;height:auto}.sc-legend{display:flex;gap:16px;flex-wrap:wrap;color:#567263;font-size:13px;margin:0 0 10px}
+.sc-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#caa450;margin-right:5px}
+.sc-dot.green{background:#3b8866}
+.sc-details{margin-top:22px}.sc-details summary{font-weight:750;cursor:pointer}
+.sc-table-wrap{overflow:auto;margin-top:14px}.sc-table{border-collapse:collapse;width:100%;text-align:right;font-size:13px}
+.sc-table th,.sc-table td{padding:10px 8px;border-bottom:1px solid #e4ece5;white-space:nowrap}
+.sc-table th:first-child,.sc-table td:first-child{text-align:left}
+.sc-result-text{font-size:14px;color:#567263;line-height:1.55;margin:0 0 16px}
+.sc-target{background:#f4f8f3;border:1px dashed #c7dacb;border-radius:11px;padding:14px 14px 0;margin-bottom:20px}
+.sc-target[hidden],.sc-field[hidden],.sc-inflation-fields[hidden],.sc-stat[hidden]{display:none}
+@media(max-width:880px){.sc-layout{grid-template-columns:1fr}}
+@media(max-width:480px){.sc-card{padding:18px}.sc-stat{padding:12px}}
+</style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5554850334897452" crossorigin="anonymous"></script></head>
+<body data-root="../../" data-page="rechner/">
+<div id="site-header"></div>
+<main>
+<section class="page-hero"><div class="container"><span class="eyebrow"><a href="../">Rechner</a> / Sparrechner</span><h1>Sparrechner</h1><p class="lead">Wie viel musst du sparen, um dein Ziel zu erreichen? Berechne fünf Größen flexibel aus den übrigen Angaben.</p></div></section>
+<section class="container sc-wrap"><div class="sc-layout">
+<div class="sc-card">
+<h2>💰 Sparrechner</h2>
+<form id="sc-form" novalidate>
+<div class="sc-field"><label for="sc-mode">Was möchtest du berechnen?</label><div class="sc-box"><select id="sc-mode">
+<option value="end">Endkapital</option><option value="start">Anfangskapital</option><option value="rate">Zinssatz</option><option value="years">Laufzeit</option><option value="payment">Sparrate</option>
+</select></div></div>
+<div class="sc-target" id="sc-target" hidden>
+<div class="sc-field"><label for="sc-goal">Gewünschtes Endkapital <span class="sc-help" tabindex="0" data-tip="Der Betrag, den du am Ende der Sparphase erreichen möchtest.">?</span></label><div class="sc-box"><input id="sc-goal" inputmode="decimal" value="25.000,00"><span class="sc-unit">€</span></div></div>
+</div>
+<div class="sc-field" id="sc-start-wrap"><label for="sc-start">Anfangskapital <span class="sc-help" tabindex="0" data-tip="Einmaliger Betrag zu Beginn der Sparphase.">?</span></label><div class="sc-box"><input id="sc-start" inputmode="decimal" value="5.000,00"><span class="sc-unit">€</span></div></div>
+<div class="sc-field"><label for="sc-pay-interval">Sparintervall <span class="sc-help" tabindex="0" data-tip="Die Sparrate wird jeweils am Ende des gewählten Intervalls eingezahlt.">?</span></label><div class="sc-box"><select id="sc-pay-interval"><option value="1">monatlich</option><option value="3">vierteljährlich</option><option value="6">halbjährlich</option><option value="12">jährlich</option></select></div></div>
+<div class="sc-field" id="sc-payment-wrap"><label for="sc-payment">Sparrate <span class="sc-help" tabindex="0" data-tip="Betrag je Sparintervall, standardmäßig 100 € monatlich.">?</span></label><div class="sc-box"><input id="sc-payment" inputmode="decimal" value="100,00"><span class="sc-unit">€</span></div></div>
+<div class="sc-field"><label for="sc-interest-interval">Zinsintervall <span class="sc-help" tabindex="0" data-tip="Wie oft Zinsen gutgeschrieben und mitverzinst werden.">?</span></label><div class="sc-box"><select id="sc-interest-interval"><option value="1">monatlich</option><option value="3">vierteljährlich</option><option value="6">halbjährlich</option><option value="12" selected>jährlich</option></select></div></div>
+<div class="sc-field" id="sc-rate-wrap"><label for="sc-rate">Zinssatz p. a. <span class="sc-help" tabindex="0" data-tip="Angenommener nominaler Jahreszinssatz vor Steuern.">?</span></label><div class="sc-box"><input id="sc-rate" inputmode="decimal" value="2,25"><span class="sc-unit">%</span></div></div>
+<div class="sc-field" id="sc-years-wrap"><label for="sc-years">Laufzeit <span class="sc-help" tabindex="0" data-tip="Laufzeit in Jahren; bei der Berechnung der Laufzeit wird auf volle Monate aufgerundet.">?</span></label><div class="sc-box"><input id="sc-years" inputmode="decimal" value="10"><span class="sc-unit">Jahre</span></div></div>
+<div class="sc-tax"><label class="sc-check" for="sc-tax"><span>Steuern mitberechnen?</span><input type="checkbox" id="sc-tax"></label><p class="sc-tax-note">Optional: vereinfachte deutsche Kapitalertragsteuer von 26,375 % auf gutgeschriebene Zinsen (inkl. Solidaritätszuschlag). Ohne Freibetrag, Kirchensteuer und Verlustverrechnung.</p></div>
+<div class="sc-tax"><label class="sc-check" for="sc-inflation"><span>Inflationsbereinigung anzeigen?</span><input type="checkbox" id="sc-inflation"></label><div class="sc-inflation-fields" id="sc-inflation-fields" hidden><div class="sc-field" style="margin:14px 0 0"><label for="sc-inflation-rate">Angenommene Inflation p. a. <span class="sc-help" tabindex="0" data-tip="Die angenommene jährliche Teuerungsrate. Sie verändert nicht die Sparberechnung, sondern nur die Kaufkraft des Endkapitals.">?</span></label><div class="sc-box"><input id="sc-inflation-rate" inputmode="decimal" value="2,00"><span class="sc-unit">%</span></div></div></div><p class="sc-tax-note">Optional: Zeigt, wie viel das Endkapital nach der Laufzeit in heutiger Kaufkraft wert wäre.</p></div>
+<button class="sc-btn" type="submit">Berechnen →</button><p class="sc-error" id="sc-error" role="alert" aria-live="polite"></p>
+</form></div>
+<div class="sc-card" aria-live="polite">
+<h2>Dein Ergebnis</h2><p class="sc-result-text" id="sc-result-text">Deine Berechnung erscheint hier.</p>
+<div class="sc-stats"><div class="sc-stat primary"><span id="sc-main-label">Endkapital</span><strong id="sc-main">–</strong></div>
+<div class="sc-stat" id="sc-real-stat" hidden><span>Endkapital in heutiger Kaufkraft</span><strong id="sc-real">–</strong></div><div class="sc-stat"><span>Eigene Einzahlungen</span><strong id="sc-paid">–</strong></div>
+<div class="sc-stat"><span>Zinserträge nach ggf. Steuern</span><strong id="sc-earned">–</strong></div></div>
+<div class="sc-legend"><span><i class="sc-dot"></i>Einzahlungen</span><span><i class="sc-dot green"></i>Vermögen</span></div>
+<svg id="sc-chart" class="sc-chart" viewBox="0 0 560 260" role="img" aria-label="Vermögensentwicklung nach Jahren"></svg>
+<details class="sc-details"><summary>Entwicklung nach Jahren anzeigen</summary><div class="sc-table-wrap"><table class="sc-table"><thead><tr><th>Jahr</th><th>Einzahlungen</th><th>Erträge</th><th>Vermögen</th></tr></thead><tbody id="sc-rows"></tbody></table></div></details>
+<p class="sc-note">Modellrechnung mit konstantem Zinssatz, Einzahlungen am Intervallende und Zinsgutschrift zum Intervallende. Zinsen werden unterjährig einfach abgegrenzt und bei Gutschrift kapitalisiert. Keine Gebühren oder Inflation. Keine Renditegarantie.</p>
+</div></div><p class="sc-note" style="margin-top:22px">← <a href="../">Zurück zur Rechnerübersicht</a></p></section>
+</main><div id="site-footer"></div>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const eur=new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'});
+const dec=new Intl.NumberFormat('de-DE',{maximumFractionDigits:2});
+const compact=new Intl.NumberFormat('de-DE',{notation:'compact',maximumFractionDigits:1});
+function parse(s){s=String(s).trim().replace(/[\s€%]/g,'');if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');return s===''?NaN:Number(s)}
+function model(start,payment,rate,months,payInterval,interestInterval,tax,withRows=false){
+let capital=start,accrued=0,paid=start,rows=[{year:0,paid,total:start}],netRate=rate/1200;
+for(let m=1;m<=months;m++){
+accrued+=capital*netRate;
+if(m%payInterval===0){capital+=payment;paid+=payment}
+if(m%interestInterval===0){capital+=accrued*(tax?0.73625:1);accrued=0}
+if(withRows&&(m%12===0||m===months)){
+let total=capital+accrued*(tax?0.73625:1);
+rows.push({year:m/12,paid,total});
+}
+if(!Number.isFinite(capital)||capital>1e20)return {total:Infinity,paid,rows};
+}
+return {total:capital+accrued*(tax?0.73625:1),paid,rows};
+}
+function findMinimum(target,fn,lo,hi,integer=false){
+if(fn(lo)>=target)return lo;
+if(fn(hi)<target)return null;
+if(integer){let a=lo,b=hi;while(a<b){const mid=Math.floor((a+b)/2);if(fn(mid)>=target)b=mid;else a=mid+1}return a}
+for(let i=0;i<85;i++){const mid=(lo+hi)/2;if(fn(mid)>=target)hi=mid;else lo=mid}return hi;
+}
+function chart(rows){
+const svg=$('sc-chart'),W=560,H=260,L=70,R=16,T=14,B=37,w=W-L-R,h=H-T-B;
+const max=Math.max(1,...rows.map(r=>r.total))*1.08,x=i=>L+i/Math.max(1,rows.length-1)*w,y=v=>T+h-v/max*h;
+let s='';
+for(let i=0;i<=4;i++){const v=max*i/4,yy=y(v);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#e2ece3"/><text x="${L-9}" y="${yy+4}" font-size="11" text-anchor="end" fill="#678273">${compact.format(v)} €</text>`}
+for(const [key,color] of [['paid','#caa450'],['total','#3b8866']]){s+=`<polyline points="${rows.map((r,i)=>`${x(i)},${y(r[key])}`).join(' ')}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>`}
+for(const i of [...new Set([0,Math.floor((rows.length-1)/2),rows.length-1])])s+=`<text x="${x(i)}" y="${H-10}" font-size="12" text-anchor="middle" fill="#678273">${dec.format(rows[i].year)} J.</text>`;
+svg.innerHTML=s;
+}
+function updateMode(){
+const mode=$('sc-mode').value;
+$('sc-target').hidden=mode==='end';
+for(const [name,id] of [['start','sc-start-wrap'],['payment','sc-payment-wrap'],['rate','sc-rate-wrap'],['years','sc-years-wrap']])$(id).hidden=mode===name;
+$('sc-error').textContent='';
+}
+function calculate(e){
+if(e)e.preventDefault();
+const mode=$('sc-mode').value,inputs={
+start:parse($('sc-start').value),payment:parse($('sc-payment').value),
+rate:parse($('sc-rate').value),years:parse($('sc-years').value),goal:parse($('sc-goal').value)
+};
+const pI=Number($('sc-pay-interval').value),iI=Number($('sc-interest-interval').value),tax=$('sc-tax').checked;
+const err=$('sc-error');err.textContent='';
+const inflationOn=$('sc-inflation').checked, inflationRate=parse($('sc-inflation-rate').value);
+if(inflationOn&&(!Number.isFinite(inflationRate)||inflationRate<=-100||inflationRate>100)){err.textContent='Bitte eine gültige Inflationsrate zwischen -100 % und 100 % eingeben.';return;}
+for(const [k,max] of [['start',1e12],['payment',1e10],['rate',100],['years',100],['goal',1e14]]){
+if(k===mode||(k==='goal'&&mode==='end'))continue;
+if(!Number.isFinite(inputs[k])||inputs[k]<0||inputs[k]>max||(k==='years'&&inputs[k]<1)){
+err.textContent='Bitte gültige, nicht negative Werte eingeben (Laufzeit mindestens 1 Jahr, Zinssatz maximal 100 %).';return;
+}}
+let {start,payment,rate,years,goal}=inputs,months=Math.round(years*12),resultLabel='Endkapital',answer;
+const run=(s,p,r,m)=>model(s,p,r,m,pI,iI,tax).total;
+if(mode==='start'){
+answer=findMinimum(goal,s=>run(s,payment,rate,months),0,1e12);
+if(answer===null){err.textContent='Das Sparziel kann mit diesen Einstellungen nicht erreicht werden.';return}
+start=answer;resultLabel='Benötigtes Anfangskapital';
+}else if(mode==='payment'){
+answer=findMinimum(goal,p=>run(start,p,rate,months),0,1e10);
+if(answer===null){err.textContent='Das Sparziel ist mit der maximalen Sparrate nicht erreichbar.';return}
+payment=answer;resultLabel='Benötigte Sparrate je Intervall';
+}else if(mode==='rate'){
+answer=findMinimum(goal,r=>run(start,payment,r,months),0,100);
+if(answer===null){err.textContent='Das Sparziel ist mit einem Zinssatz bis 100 % p. a. nicht erreichbar.';return}
+rate=answer;resultLabel='Benötigter Zinssatz p. a.';
+}else if(mode==='years'){
+answer=findMinimum(goal,m=>run(start,payment,rate,m),0,1200,true);
+if(answer===null){err.textContent='Das Sparziel ist innerhalb von 100 Jahren nicht erreichbar.';return}
+months=answer;resultLabel='Benötigte Laufzeit';
+}
+const result=model(start,payment,rate,months,pI,iI,tax,true);
+if(!Number.isFinite(result.total)){err.textContent='Die Berechnung überschreitet den darstellbaren Wertebereich.';return}
+const computed=mode==='end'?eur.format(result.total):mode==='rate'?dec.format(rate)+' %':mode==='years'?dec.format(months/12)+' Jahre ('+months+' Monate)':eur.format(answer);
+$('sc-main-label').textContent=resultLabel;
+$('sc-main').textContent=computed;
+$('sc-real-stat').hidden=!inflationOn;
+if(inflationOn)$('sc-real').textContent=eur.format(result.total/Math.pow(1+inflationRate/100,months/12));
+$('sc-paid').textContent=eur.format(result.paid);
+$('sc-earned').textContent=eur.format(result.total-result.paid);
+$('sc-result-text').textContent=mode==='end'?'So könnte sich dein Kapital entwickeln.':`Für dein Sparziel von ${eur.format(goal)} ergibt sich folgende benötigte Größe. Das tatsächliche Endkapital beträgt ${eur.format(result.total)}.`;
+$('sc-rows').innerHTML=result.rows.slice(1).map(r=>`<tr><td>${dec.format(r.year)}</td><td>${eur.format(r.paid)}</td><td>${eur.format(r.total-r.paid)}</td><td>${eur.format(r.total)}</td></tr>`).join('');
+chart(result.rows);
+}
+$('sc-mode').addEventListener('change',()=>{updateMode();calculate()});
+$('sc-form').addEventListener('submit',calculate);
+$('sc-inflation').addEventListener('change',()=>{$('sc-inflation-fields').hidden=!$('sc-inflation').checked;calculate()});
+$('sc-inflation-rate').addEventListener('change',calculate);
+updateMode();calculate();
+})();
+</script>
+</body></html>
