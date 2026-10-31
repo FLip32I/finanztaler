@@ -5,3 +5,10 @@
 .hero-art.hero-art-image{height:auto;aspect-ratio:3/2;background:transparent;border-radius:26px;overflow:hidden;display:block}
 .hero-art.hero-art-image::before,.hero-art.hero-art-image::after{display:none}
 .hero-art.hero-art-image img{display:block;width:100%;height:100%;object-fit:contain;border-radius:26px}
+
+/* Startseite: Themenwelt-Illustrationen */
+#themen .card{padding:22px 28px 28px;gap:12px}
+#themen .home-card-icon{display:flex;align-items:center;justify-content:center;width:100%;height:175px;flex-shrink:0}
+#themen .home-card-icon img{display:block;width:100%;height:100%;object-fit:contain}
+#themen .card h3{margin-top:2px}
+@media(max-width:600px){#themen .home-card-icon{height:165px}}
