@@ -67,11 +67,13 @@
     .bond-table th{background:#eef5ef;color:#1e5a43;font-weight:800;white-space:nowrap}
     .bond-table tr:last-child td{border-bottom:none}
     .bond-rating{display:inline-flex;align-items:center;justify-content:center;min-width:59px;font-size:.83rem;font-weight:800;border-radius:9px;padding:6px 9px;white-space:nowrap}
-    .bond-rating.best{background:#e0efe3;color:#1b6546}
-    .bond-rating.good{background:#edf4e3;color:#4d7440}
-    .bond-rating.mid{background:#f6eed4;color:#8c712e}
-    .bond-rating.high{background:#f8e8d9;color:#a36e27}
-    .bond-rating.bad{background:#fae7e4;color:#ae4e45}
+    /* Durchgängige Finanztaler-Palette: Tannengrün, Salbei und Taler-Gold. */
+    .bond-rating.best{background:#dcecdf;color:#15553d}
+    .bond-rating.good{background:#e8f1e7;color:#295e48}
+    .bond-rating.mid{background:#f7edcc;color:#765a16}
+    .bond-rating.high{background:#f3e1ae;color:#705114}
+    .bond-rating.bad{background:#e8dbb9;color:#59471e}
+    .bond-rating.default{background:var(--dark,#10342f);color:#fff}
     .bond-market{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:18px;align-items:start;margin:24px 0}
     .bond-market-card{background:#f8faf6;border:1px solid #e0e9df;border-radius:18px;padding:24px;min-width:0}
     .bond-market-card h3{margin:0 0 8px;font-size:1.18rem}
@@ -113,14 +115,17 @@
     .bond-point b{display:block;color:#1a6447;font-size:1.12rem;margin-bottom:8px}
     .bond-point p{margin:0;font-size:.93rem}
     .bond-factors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:23px 0 0}
-    .bond-factor{border:1px solid #e1eae0;border-radius:16px;padding:18px;background:#f8faf6}
-    .bond-factor .bond-factor-number{font-size:.8rem;color:#bb902f;font-weight:850;letter-spacing:.08em}
-    .bond-factor h3{font-size:1rem;margin:7px 0 8px}
+    .bond-factor{border:1px solid #dce8dd;border-top:3px solid var(--sage,#82ad8e);border-radius:16px;padding:18px;background:#f7faf5}
+    .bond-factor .bond-factor-number{font-size:.8rem;color:#ab8121;font-weight:850;letter-spacing:.08em}
+    .bond-factor h3{font-size:1rem;margin:7px 0 8px;color:var(--dark,#10342f)}
     .bond-factor p{margin:0;font-size:.89rem;line-height:1.65}
+    #einflussfaktoren>.bond-kicker{color:#43805a}
+    #einflussfaktoren .bond-highlight{background:#f7f3e8;border-left-color:var(--gold,#d8ad45)}
+    .bond-market-explainer{margin:16px 0 8px;padding:14px 16px;border-left:3px solid var(--gold,#d8ad45);background:#fffdf4;border-radius:0 12px 12px 0}
+    .bond-market-explainer>strong{display:block;color:var(--dark,#10342f);font-size:.92rem;margin-bottom:4px}
+    .bond-market-explainer p{margin:0;font-size:.86rem;line-height:1.58}
     .bond-footer-note{background:#edf5ee;border-radius:15px;padding:17px 20px;color:#546d5f;margin:26px 0;font-size:.93rem;line-height:1.68}
     .bond-back{display:inline-flex;align-items:center;margin:3px 0 15px;color:#226b4e;font-weight:750;font-size:.95rem;text-decoration:none}
-    .bond-sources{margin:16px 0 0;padding-left:19px;color:#4c6658;line-height:1.75;font-size:.9rem}
-    .bond-sources li{margin:7px 0}
     .bond-check{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .bond-check li{position:relative;background:#f8faf6;border:1px solid #e1eae0;border-radius:13px;padding:15px 15px 15px 42px;color:#466252;line-height:1.55;font-size:.92rem}
     .bond-check li::before{content:'✓';position:absolute;left:16px;top:15px;color:#287b55;font-weight:850}
@@ -236,6 +241,10 @@
         <div class="bond-market-card">
           <h3>Marktzins verändern</h3>
           <p>Was verlangen Anleger jetzt für eine vergleichbare Anleihe?</p>
+          <div class="bond-market-explainer">
+            <strong>Was bedeutet Marktrendite?</strong>
+            <p>Die Marktrendite ist die <strong>jährliche Gesamtrendite</strong>, die Käufer aktuell für eine Anleihe mit vergleichbarer Bonität und Restlaufzeit verlangen. Sie berücksichtigt sowohl die Kuponzahlungen als auch den Unterschied zwischen Kaufpreis und Rückzahlung bei Fälligkeit. <strong>Sie ist nicht dasselbe wie der feste Kupon oder der EZB-Leitzins.</strong> Der Regler zeigt, wie sich ein veränderter Renditeanspruch auf den heutigen Anleihekurs auswirkt.</p>
+          </div>
           <label class="bond-slider-label" for="bond-market-yield"><span>Aktuelle Marktrendite</span><output id="bond-market-yield-display" class="bond-rate-value" for="bond-market-yield">5,0 %</output></label>
           <input type="range" id="bond-market-yield" min="1" max="7" step="0.5" value="5" aria-describedby="bond-example-notes">
           <div class="bond-slider-ends"><span>1 %</span><span>7 %</span></div>
@@ -284,7 +293,7 @@
           <tr><td><span class="bond-rating mid">BBB−</span></td><td>Baa3</td><td><strong>Unterste Stufe Investment Grade</strong></td><td>Risiken sind bereits empfindlicher gegenüber Krisen</td></tr>
           <tr><td><span class="bond-rating high">BB+</span></td><td>Ba1</td><td><strong>Beginn spekulativer Bereich</strong></td><td>Erhöhtes Ausfallrisiko, oft höhere Renditen</td></tr>
           <tr><td><span class="bond-rating bad">B / CCC</span></td><td>B / Caa</td><td>Deutlich spekulativ</td><td>Hohe Abhängigkeit von Wirtschaft und Finanzierung</td></tr>
-          <tr><td><span class="bond-rating bad">D</span></td><td>–</td><td>Zahlungsausfall (S&amp;P / Fitch)</td><td>Schuldner kommt Verpflichtungen nicht nach</td></tr>
+          <tr><td><span class="bond-rating default">D</span></td><td>–</td><td>Zahlungsausfall (S&amp;P / Fitch)</td><td>Schuldner kommt Verpflichtungen nicht nach</td></tr>
         </tbody>
       </table></div>
       <p class="bond-small">Die Tabelle fasst Ratingklassen zusammen. Innerhalb der Gruppen gibt es Abstufungen (+/− bzw. 1–3). Einzelne Anleihen können anders bewertet sein als ihr Herausgeber, etwa aufgrund von Rang oder Sicherheiten.</p>
@@ -332,18 +341,6 @@
       <div class="bond-note"><span class="bond-note-icon" aria-hidden="true">✓</span><p><strong>Fazit:</strong> Anleihen können Erträge planbarer machen und ein Portfolio ergänzen. Aber <strong>„festverzinslich“ bedeutet nicht „kurssicher“</strong>. Für die Risikobeurteilung zählen Bonität, Laufzeit, Marktzinsen und die konkreten Anleihebedingungen zusammen.</p></div>
     </section>
 
-    <section class="bond-section" id="quellen">
-      <span class="bond-kicker">Weiterlesen</span>
-      <h2>Quellen und Grundlagen</h2>
-      <p>Die Einordnungen stützen sich unter anderem auf folgende Fachquellen. Das Rechenbeispiel ist eine eigene, bewusst vereinfachte Modellrechnung.</p>
-      <ul class="bond-sources">
-        <li><a href="https://www.deutsche-finanzagentur.de/bundeswertpapiere/bundeswertpapierarten/ueberblick-bundeswertpapiere" target="_blank" rel="noopener noreferrer">Deutsche Finanzagentur – Bundeswertpapiere, Zinsänderungs- und Emittentenrisiko</a></li>
-        <li><a href="https://www.deutsche-finanzagentur.de/finanzierung-des-bundes/der-bund-als-emittent/ratings" target="_blank" rel="noopener noreferrer">Deutsche Finanzagentur – Aktuelle Ratings der Bundesrepublik Deutschland</a></li>
-        <li><a href="https://www.spglobal.com/ratings/_division-assets/pdfs/guide-to-credit-rating-essentials.pdf" target="_blank" rel="noopener noreferrer">S&amp;P Global Ratings – Guide to Credit Rating Essentials (PDF)</a></li>
-        <li><a href="https://www.imf.org/en/blogs/articles/2024/03/28/the-fiscal-and-financial-risks-of-a-high-debt-slow-growth-world" target="_blank" rel="noopener noreferrer">Internationaler Währungsfonds – Faktoren staatlicher Schuldentragfähigkeit</a></li>
-        <li><a href="https://bafin.de/DE/verbraucherinnen-verbraucher/themen-finanzprodukte/geldanlage/einlagensicherung-anlegerentschaedigung/einlagensicherung-anlegerentschaedigung.html" target="_blank" rel="noopener noreferrer">BaFin – Einlagensicherung und Anlegerentschädigung</a></li>
-      </ul>
-    </section>
     <div class="bond-footer-note"><strong>Hinweis:</strong> Diese Seite dient der allgemeinen Finanzbildung und stellt keine individuelle Anlage-, Rechts- oder Steuerberatung dar. Anleihen unterliegen Kurs- und Ausfallrisiken und sind nicht durch die gesetzliche Einlagensicherung geschützt.</div>
     <a class="bond-back" href="../">← Zurück zur Übersicht Investieren</a>
   </div>
