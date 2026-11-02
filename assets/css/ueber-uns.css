@@ -102,3 +102,9 @@ main.about-page .about-journey{margin-top:0}
     justify-self: center;
   }
 }
+
+/* Reise-Illustration: Desktop und Mobil sichtbar */
+.about-outro .about-plant{display:block;width:145px;max-width:100%;height:auto;aspect-ratio:1;object-fit:contain;font-size:initial}
+@media(max-width:900px){.about-outro .about-plant{width:90px}}
+@media(max-width:650px){.about-outro{grid-template-columns:82px minmax(0,1fr);column-gap:14px;row-gap:12px;align-items:center}.about-outro .about-plant{display:block;width:82px;grid-column:1;grid-row:1}.about-outro>div{grid-column:2;grid-row:1}.about-outro .about-cta{grid-column:1/-1;justify-self:start}.about-outro h2{font-size:clamp(21px,5vw,25px)}.about-outro p{font-size:13px}}
+@media(max-width:420px){.about-outro{grid-template-columns:1fr}.about-outro .about-plant{grid-column:1;grid-row:auto;width:110px;justify-self:center}.about-outro>div{grid-column:1;grid-row:auto}.about-outro .about-cta{grid-column:1}}
