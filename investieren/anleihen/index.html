@@ -1,4 +1,402 @@
 <!DOCTYPE html>
-<html lang="de"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="#10342f" name="theme-color"/><meta content="Zinsen, Liquidität und planbare Bausteine." name="description"/><title>Anleihen | Finanztaler</title><link href="../../assets/css/style.css" rel="stylesheet"/><style>
-.inv-shell{padding:24px 0 90px}.inv-intro{max-width:850px;color:#526c60;line-height:1.8;font-size:1.08rem}.inv-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:30px 0}.inv-card{display:flex;flex-direction:column;gap:12px;background:#fff;border:1px solid #d9e7dc;border-radius:22px;padding:27px;min-height:210px;transition:transform .18s,box-shadow .18s}.inv-card:hover{transform:translateY(-3px);box-shadow:0 14px 25px #143a2e14}.inv-icon{font-size:30px}.inv-card h2{font-size:1.36rem;margin:0;color:#123e33}.inv-card p{color:#50685c;line-height:1.6;margin:0}.inv-more{margin-top:auto;color:#246b4e;font-weight:750}.inv-section{margin:45px 0;padding:28px;background:#fff;border:1px solid #dce8df;border-radius:20px}.inv-section h2{color:#123e33;margin:0 0 15px;font-size:1.65rem}.inv-section h3{color:#174737;margin:25px 0 8px}.inv-section p,.inv-section li{line-height:1.75;color:#405b4f}.inv-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.inv-note{background:#edf6ee;border-radius:14px;padding:18px 22px;line-height:1.7;margin:22px 0}.inv-breadcrumb{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.91rem;color:#537467;margin-bottom:20px}.inv-back{display:inline-block;margin-top:18px;font-weight:700;color:#246b4e}.inv-table-scroll{overflow-x:auto}.inv-table,.tax-table{border-collapse:collapse;width:100%;background:#fff}.inv-table th,.inv-table td,.tax-table th,.tax-table td{padding:13px 15px;border-bottom:1px solid #dce8df;text-align:left;vertical-align:top}.inv-table th,.tax-table th{background:#edf5ef}.inv-risk{max-width:100%;width:100%;border-radius:18px;display:block}.inv-cta{display:inline-block;background:#10342f;color:white;padding:12px 19px;border-radius:12px;margin-top:12px;font-weight:700}.tax-grid,.depot-visual{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:20px 0}.tax-card,.tax-example,.depot-visual-card{background:#fff;border:1px solid #dce8df;border-radius:18px;padding:24px;margin:18px 0}.tax-note{background:#edf6ee;padding:22px;border-radius:16px;line-height:1.7}.depot-bar{display:flex;height:48px;border-radius:10px;overflow:hidden}.depot-paid{background:#226448}.depot-gain{background:#d6a33a}.depot-bar-legend{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}.depot-legend-item{display:flex;gap:8px;align-items:flex-start}.depot-swatch{display:inline-block;width:13px;height:13px;flex:none;margin-top:4px;border-radius:3px}.depot-legend-item strong{display:block}.depot-total{font-size:1.5rem;font-weight:800;margin:10px 0}.tax-small{font-size:.9rem;color:#60766b}.tax-actions{display:flex;gap:12px;flex-wrap:wrap}.tax-actions .btn{margin-top:12px}@media(max-width:850px){.inv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.inv-grid,.inv-columns,.tax-grid,.depot-visual{grid-template-columns:1fr}.inv-section{padding:20px}.inv-card{min-height:170px}}
-</style><script defer="" src="../../assets/js/script.js"></script><script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5554850334897452"></script></head><body data-page="investieren/" data-root="../../"><div id="site-header"></div><main><section class="page-hero"><div class="container"><span class="eyebrow">Finanztaler / Investieren</span><h1>Anleihen</h1><p class="lead">Staats- und Unternehmensanleihen als Zinsbaustein verstehen.</p></div></section><div class="container inv-shell"><div class="inv-breadcrumb"><a href="../">← Investieren</a> / Anleihen</div><section class="inv-section"><h2>Was sind Anleihen?</h2><p>Mit einer Anleihe stellst du einem Staat oder Unternehmen Kapital zur Verfügung. Je nach Ausgestaltung erhältst du Kupons und bei Fälligkeit den Rückzahlungsbetrag – vorausgesetzt, der Emittent kann zahlen.</p></section><section class="inv-section"><h2>Zinsänderungsrisiko</h2><p>Steigen die Marktzinsen, fallen üblicherweise die Kurse bereits ausgegebener festverzinslicher Anleihen. Längere Duration bedeutet meist höhere Zinssensitivität.</p></section><section class="inv-section"><h2>Bonitäts- und Ausfallrisiko</h2><p>Höhere versprochene Renditen gehen häufig mit höheren Risiken einher. Eine Anleihe ist keine Bankeinlage und unterliegt nicht der gesetzlichen Einlagensicherung.</p></section><section class="inv-section"><h2>Einzelanleihen oder Anleihen-ETFs?</h2><p>Einzelanleihen haben eine bestimmte Fälligkeit. Anleihen-ETFs streuen über mehrere Emittenten, haben jedoch in der Regel keinen festen Rückzahlungstermin für das investierte Kapital.</p></section><p class="inv-note">Hinweis: Allgemeine Informationen, keine individuelle Anlage- oder Steuerberatung.</p><a class="inv-back" href="../">← Zurück zur Übersicht</a></div></main><div id="site-footer"></div></body></html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10342f">
+  <meta name="description" content="Anleihen verstehen: Staatsanleihen und Unternehmensanleihen, Zinsen und Kursentwicklung, Bonitätsratings, Ausfallrisiko und die Rolle im Portfolio – mit interaktivem Zinsbeispiel.">
+  <link rel="canonical" href="https://www.finanztaler.de/investieren/anleihen/">
+  <title>Anleihen verstehen: Staatsanleihen, Zinsen &amp; Ratings | Finanztaler</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    /* Seitenbezogene Gestaltung – andere Bereiche von Finanztaler bleiben unverändert. */
+    .bond-shell{padding:22px 0 86px}
+    .bond-shell *, .bond-shell *::before, .bond-shell *::after{box-sizing:border-box}
+    .bond-shell p{line-height:1.75;color:#435f51}
+    .bond-shell h2{color:#143d32;letter-spacing:-.026em;line-height:1.22;font-size:clamp(1.55rem,2.8vw,2.05rem);margin:0 0 18px}
+    .bond-shell h3{color:#164437;letter-spacing:-.012em}
+    .bond-shell a:not(.bond-back):not(.bond-nav a){color:#246e50;text-decoration:underline;text-underline-offset:3px}
+    .bond-shell a:hover{color:#164437}
+    .bond-breadcrumb{font-size:.93rem;color:#5b7668;margin:0 0 25px}
+    .bond-breadcrumb a{font-weight:700;text-decoration:none!important;color:#27684e!important}
+    .bond-nav{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0 27px}
+    .bond-nav a{display:inline-flex;align-items:center;border:1px solid #dce8de;background:#fff;border-radius:999px;color:#245b47;font-size:.86rem;font-weight:650;padding:10px 14px;text-decoration:none;transition:background .15s,transform .15s}
+    .bond-nav a:hover{background:#edf6ee;transform:translateY(-1px)}
+    .bond-section{background:#fff;border:1px solid #dce9df;border-radius:22px;padding:clamp(22px,4vw,36px);margin:0 0 25px;box-shadow:0 6px 20px rgba(16,52,47,.025);scroll-margin-top:95px}
+    .bond-section>p:first-of-type{margin-top:0}
+    .bond-section>p:last-child{margin-bottom:0}
+    .bond-kicker{display:inline-block;color:#649275;text-transform:uppercase;letter-spacing:.16em;font-weight:800;font-size:.73rem;margin-bottom:12px}
+    .bond-section-lead{font-size:1.035rem;max-width:900px}
+    .bond-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:22px 0}
+    .bond-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .bond-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .bond-tile{min-width:0;border:1px solid #e0e9df;background:#f8faf6;border-radius:17px;padding:21px}
+    .bond-tile h3{font-size:1.13rem;margin:0 0 10px}
+    .bond-tile p{font-size:.96rem;line-height:1.66;margin:0}
+    .bond-symbol{display:grid;place-items:center;width:45px;height:45px;border-radius:13px;background:#e2eee3;color:#226c4c;font-size:1.32rem;margin-bottom:14px}
+    .bond-symbol.gold{background:#f7edcb;color:#9b7023}
+    .bond-term strong{font-size:.94rem;color:#123d32;display:block;margin-bottom:7px}
+    .bond-term p{font-size:.88rem}
+    .bond-note{display:flex;align-items:flex-start;gap:13px;background:#edf5ef;border:1px solid #dbe9dd;border-radius:15px;padding:18px 19px;margin:20px 0 0}
+    .bond-note .bond-note-icon{font-size:1.2rem;color:#287653;font-weight:800;line-height:1.35;flex:0 0 auto}
+    .bond-note p{margin:0;font-size:.97rem;line-height:1.65}
+    .bond-note strong{color:#164735}
+    .bond-note.warn{background:#fff9ea;border-color:#eee0bb}
+    .bond-note.warn .bond-note-icon{color:#a97828}
+    .bond-cashflow{margin:26px 0 5px;background:#f8faf6;border:1px solid #e1eadf;border-radius:18px;padding:24px}
+    .bond-flow-grid{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;align-items:stretch;gap:10px}
+    .bond-flow-step{min-width:0;text-align:center;border:1px solid #e0e9df;background:#fff;border-radius:15px;padding:19px 10px 16px}
+    .bond-flow-step small{display:block;color:#698376;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .bond-flow-step strong{display:block;color:#1b664b;font-size:clamp(1.18rem,2.7vw,1.65rem);margin:11px 0 5px}
+    .bond-flow-step p{margin:0;color:#526b5e;font-size:.87rem;line-height:1.45}
+    .bond-flow-arrow{display:grid;place-items:center;color:#88ad91;font-size:1.6rem}
+    .bond-small{font-size:.86rem;color:#698174!important;line-height:1.6!important}
+    .bond-side-heading{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+    .bond-side-heading .bond-symbol{margin:0;flex:none}
+    .bond-side-heading h3{font-size:1.3rem;margin:0}
+    .bond-list{margin:11px 0 0;padding-left:19px;color:#435f51;line-height:1.7}
+    .bond-list li{margin:8px 0;padding-left:2px}
+    .bond-risk-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:20px 0}
+    .bond-risk{background:#f8faf6;border:1px solid #e0e9df;border-radius:15px;padding:17px 18px;min-width:0}
+    .bond-risk strong{display:block;color:#1c5943;font-size:.98rem;margin-bottom:5px}
+    .bond-risk p{font-size:.91rem;margin:0;line-height:1.64}
+    .bond-highlight{background:#f7f3e8;border-left:4px solid #d8ad45;border-radius:0 14px 14px 0;padding:17px 20px;margin:22px 0;color:#435f51;line-height:1.7}
+    .bond-table-wrap{overflow-x:auto;margin:19px 0 4px;border:1px solid #dfebdf;border-radius:15px}
+    .bond-table{border-collapse:collapse;width:100%;min-width:605px;font-size:.91rem}
+    .bond-table th,.bond-table td{text-align:left;padding:14px 16px;border-bottom:1px solid #e4ece4;vertical-align:top;line-height:1.55}
+    .bond-table th{background:#eef5ef;color:#1e5a43;font-weight:800;white-space:nowrap}
+    .bond-table tr:last-child td{border-bottom:none}
+    .bond-rating{display:inline-flex;align-items:center;justify-content:center;min-width:59px;font-size:.83rem;font-weight:800;border-radius:9px;padding:6px 9px;white-space:nowrap}
+    .bond-rating.best{background:#e0efe3;color:#1b6546}
+    .bond-rating.good{background:#edf4e3;color:#4d7440}
+    .bond-rating.mid{background:#f6eed4;color:#8c712e}
+    .bond-rating.high{background:#f8e8d9;color:#a36e27}
+    .bond-rating.bad{background:#fae7e4;color:#ae4e45}
+    .bond-market{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:18px;align-items:start;margin:24px 0}
+    .bond-market-card{background:#f8faf6;border:1px solid #e0e9df;border-radius:18px;padding:24px;min-width:0}
+    .bond-market-card h3{margin:0 0 8px;font-size:1.18rem}
+    .bond-market-card p{font-size:.95rem;line-height:1.65}
+    .bond-market-card .bond-big{font-size:clamp(1.65rem,4vw,2.5rem);font-weight:800;letter-spacing:-.04em;color:#15553d;margin:12px 0 0;line-height:1.1}
+    .bond-market-card .bond-big-label{font-size:.82rem;color:#5f786c;margin:5px 0 12px}
+    .bond-slider-label{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#174c3b;font-weight:750;font-size:.93rem;margin:26px 0 10px}
+    .bond-rate-value{color:#1d6b4b;background:#e1efe2;border-radius:9px;padding:7px 11px;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .bond-market-card input[type=range]{width:100%;accent-color:#277450;cursor:pointer;min-height:24px}
+    .bond-slider-ends{display:flex;justify-content:space-between;color:#789082;font-size:.79rem;margin-top:1px}
+    .bond-pricebar{height:22px;position:relative;background:#e3eae2;border-radius:99px;overflow:hidden;margin:24px 0 7px}
+    .bond-pricefill{background:linear-gradient(90deg,#9fbea4,#2d805a);height:100%;width:79.42%;transition:width .17s ease}
+    .bond-par-marker{position:absolute;left:86.957%;top:0;height:100%;border-left:3px dashed #d3a33c;z-index:1}
+    .bond-pricebar-legend{display:flex;justify-content:space-between;gap:9px;font-size:.79rem;color:#6c8174}
+    .bond-dynamic-summary{margin-top:20px!important;padding-top:15px;border-top:1px solid #dce7dd;min-height:80px}
+    .bond-chart-card{background:#f8faf6;border:1px solid #e0e9df;border-radius:18px;padding:23px;min-width:0}
+    .bond-chart-card h3{font-size:1.12rem;margin:0 0 7px}
+    .bond-chart-card p{font-size:.88rem;line-height:1.55;margin:0 0 9px}
+    .bond-chart{width:100%;height:auto;display:block;overflow:visible}
+    .bond-chart .axis{stroke:#b6c8b9;stroke-width:1}
+    .bond-chart .gridline{stroke:#dee8df;stroke-width:1;stroke-dasharray:4 5}
+    .bond-chart text{fill:#6c8477;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;font-size:14px}
+    .bond-chart #bond-curve-area{fill:#cae2d0;opacity:.55}
+    .bond-chart #bond-curve-line{fill:none;stroke:#277450;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+    .bond-chart #bond-curve-start{fill:#277450;stroke:white;stroke-width:3}
+    .bond-chart #bond-curve-end{fill:#d0a03e;stroke:white;stroke-width:3}
+    .bond-chart .parline{stroke:#d4a642;stroke-width:1.7;stroke-dasharray:6 5}
+    .bond-chart-legend{display:flex;flex-wrap:wrap;gap:10px 19px;font-size:.8rem;color:#667f70;margin-top:7px}
+    .bond-dot{width:10px;height:10px;display:inline-block;border-radius:99px;margin-right:6px;vertical-align:middle}
+    .bond-dot.green{background:#277450}.bond-dot.gold{background:#d4a642}
+    .bond-compare{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:14px 0 23px}
+    .bond-scenario{border:1px solid #e0e9df;background:#f8faf6;border-radius:16px;padding:16px;min-width:0}
+    .bond-scenario .bond-scenario-arrow{font-size:1.3rem;font-weight:850;line-height:1.2}
+    .bond-scenario .bond-scenario-title{color:#476454;font-weight:750;margin:9px 0 4px;font-size:.9rem}
+    .bond-scenario strong{color:#174e3b;font-size:1.24rem;white-space:nowrap}
+    .bond-scenario p{font-size:.84rem;line-height:1.45;margin:5px 0 0}
+    .bond-points{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:22px 0}
+    .bond-point{padding:0 6px}
+    .bond-point b{display:block;color:#1a6447;font-size:1.12rem;margin-bottom:8px}
+    .bond-point p{margin:0;font-size:.93rem}
+    .bond-factors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:23px 0 0}
+    .bond-factor{border:1px solid #e1eae0;border-radius:16px;padding:18px;background:#f8faf6}
+    .bond-factor .bond-factor-number{font-size:.8rem;color:#bb902f;font-weight:850;letter-spacing:.08em}
+    .bond-factor h3{font-size:1rem;margin:7px 0 8px}
+    .bond-factor p{margin:0;font-size:.89rem;line-height:1.65}
+    .bond-footer-note{background:#edf5ee;border-radius:15px;padding:17px 20px;color:#546d5f;margin:26px 0;font-size:.93rem;line-height:1.68}
+    .bond-back{display:inline-flex;align-items:center;margin:3px 0 15px;color:#226b4e;font-weight:750;font-size:.95rem;text-decoration:none}
+    .bond-sources{margin:16px 0 0;padding-left:19px;color:#4c6658;line-height:1.75;font-size:.9rem}
+    .bond-sources li{margin:7px 0}
+    .bond-check{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .bond-check li{position:relative;background:#f8faf6;border:1px solid #e1eae0;border-radius:13px;padding:15px 15px 15px 42px;color:#466252;line-height:1.55;font-size:.92rem}
+    .bond-check li::before{content:'✓';position:absolute;left:16px;top:15px;color:#287b55;font-weight:850}
+    @media(max-width:970px){.bond-grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}.bond-factors{grid-template-columns:repeat(2,minmax(0,1fr))}.bond-market{grid-template-columns:1fr}}
+    @media(max-width:680px){.bond-section{padding:21px 18px;border-radius:18px}.bond-nav{gap:8px;margin:10px 0 22px}.bond-nav a{padding:9px 12px;font-size:.8rem}.bond-grid,.bond-grid-3,.bond-grid-4,.bond-risk-list,.bond-factors,.bond-check,.bond-compare{grid-template-columns:1fr}.bond-grid{gap:12px}.bond-grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}.bond-grid-4 .bond-tile{padding:15px}.bond-flow-grid{grid-template-columns:1fr;gap:8px}.bond-flow-arrow{transform:rotate(90deg);height:20px}.bond-cashflow{padding:14px}.bond-flow-step{padding:13px}.bond-market-card,.bond-chart-card{padding:17px}.bond-points{grid-template-columns:1fr;gap:14px}.bond-pricebar-legend{font-size:.72rem}}
+    @media(prefers-reduced-motion:reduce){.bond-pricefill,.bond-nav a{transition:none}}
+  </style>
+  <script defer src="../../assets/js/script.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5554850334897452" crossorigin="anonymous"></script>
+</head>
+<body data-page="investieren/" data-root="../../">
+<div id="site-header"></div>
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Finanztaler / Investieren</span>
+      <h1>Anleihen verstehen</h1>
+      <p class="lead">Wie Staats- und Unternehmensanleihen funktionieren, warum sich ihre Kurse verändern und was Bonität wirklich über die Sicherheit aussagt.</p>
+    </div>
+  </section>
+  <div class="container bond-shell">
+    <div class="bond-breadcrumb"><a href="../">← Investieren</a> &nbsp;/&nbsp; Anleihen</div>
+    <nav class="bond-nav" aria-label="Themen auf dieser Seite">
+      <a href="#grundlagen">Grundlagen</a>
+      <a href="#arten">Staats- &amp; Unternehmensanleihen</a>
+      <a href="#sicherheit">Sicherheit</a>
+      <a href="#kursentwicklung">Zinsen &amp; Kurse</a>
+      <a href="#ratings">Ratings</a>
+      <a href="#einflussfaktoren">Einflussfaktoren</a>
+      <a href="#praxis">Praxis</a>
+    </nav>
+
+    <section class="bond-section" id="grundlagen">
+      <span class="bond-kicker">01 / Grundlagen</span>
+      <h2>Was sind Anleihen?</h2>
+      <p class="bond-section-lead">Eine Anleihe ist ein handelbares Schuldpapier: <strong>Du leihst einem Staat oder Unternehmen Geld.</strong> Dafür erhältst du bei einer klassischen festverzinslichen Anleihe regelmäßig Zinsen und am Ende der Laufzeit den vereinbarten Nennwert zurück – vorausgesetzt, der Herausgeber kann zahlen.</p>
+      <div class="bond-grid bond-grid-4">
+        <div class="bond-tile bond-term"><strong>Nennwert</strong><p>Der Betrag, der regulär bei Fälligkeit zurückgezahlt wird, z. B. 1.000 €.</p></div>
+        <div class="bond-tile bond-term"><strong>Kupon</strong><p>Der vertraglich feste Zinssatz auf den Nennwert, z. B. 3 % pro Jahr.</p></div>
+        <div class="bond-tile bond-term"><strong>Marktkurs</strong><p>Der Preis, zu dem die Anleihe heute gekauft oder verkauft werden kann.</p></div>
+        <div class="bond-tile bond-term"><strong>Rendite</strong><p>Berücksichtigt Kaufkurs, Zinsen und Rückzahlung – nicht nur den Kupon.</p></div>
+      </div>
+      <div class="bond-cashflow" aria-label="Beispiel einer klassischen festverzinslichen Anleihe">
+        <div class="bond-flow-grid">
+          <div class="bond-flow-step"><small>Heute</small><strong>1.000 €</strong><p>Du kaufst die Anleihe zum Nennwert.</p></div>
+          <div class="bond-flow-arrow" aria-hidden="true">→</div>
+          <div class="bond-flow-step"><small>Jedes Jahr</small><strong>30 €</strong><p>3 % fester Kupon auf 1.000 €.</p></div>
+          <div class="bond-flow-arrow" aria-hidden="true">→</div>
+          <div class="bond-flow-step"><small>Bei Fälligkeit</small><strong>1.000 €</strong><p>Rückzahlung des Nennwerts.</p></div>
+        </div>
+        <p class="bond-small" style="margin:14px 2px 0">Vereinfachtes Beispiel ohne Gebühren, Steuern und Ausfall; dargestellt ist eine nicht vorzeitig kündbare Anleihe mit jährlichem Kupon und Rückzahlung zu 100 %.</p>
+      </div>
+      <div class="bond-note"><span class="bond-note-icon" aria-hidden="true">↗</span><p><strong>Wichtig:</strong> Ein Kupon von 3 % bedeutet nicht automatisch 3 % Rendite. Kaufst du dieselbe Anleihe über 100 % des Nennwerts, ist deine Rendite bis zur Fälligkeit geringer; bei einem Kauf darunter ist sie höher – sofern alle Zahlungen erfolgen.</p></div>
+    </section>
+
+    <section class="bond-section" id="arten">
+      <span class="bond-kicker">02 / Anleihearten</span>
+      <h2>Staatsanleihen und Unternehmensanleihen</h2>
+      <p>Beide funktionieren nach demselben Grundprinzip. Der entscheidende Unterschied liegt darin, <strong>wer dir das Geld schuldet</strong> und wie zuverlässig dieser Schuldner zahlen kann.</p>
+      <div class="bond-grid">
+        <article class="bond-tile">
+          <div class="bond-side-heading"><span class="bond-symbol" aria-hidden="true">♜</span><h3>Staatsanleihen</h3></div>
+          <p>Mit dem Kauf einer Staatsanleihe finanzierst du einen Staat. Er bedient Zinsen und Tilgungen beispielsweise aus Steuereinnahmen oder durch neue Kreditaufnahme.</p>
+          <ul class="bond-list">
+            <li><strong>Beispiele:</strong> Bundesanleihen, französische Staatsanleihen, US-Treasuries.</li>
+            <li><strong>Vorteil:</strong> Finanziell stabile Staaten können sehr kreditwürdig sein; große Anleihemärkte sind oft gut handelbar.</li>
+            <li><strong>Risiko:</strong> Staatliche Zahlungsausfälle, Umschuldungen und starke Kursverluste sind trotzdem möglich.</li>
+            <li><strong>Zusätzlich:</strong> Bei Anleihen in Fremdwährung besteht ein Wechselkursrisiko.</li>
+          </ul>
+        </article>
+        <article class="bond-tile">
+          <div class="bond-side-heading"><span class="bond-symbol gold" aria-hidden="true">▥</span><h3>Unternehmensanleihen</h3></div>
+          <p>Hier erhält ein Unternehmen Fremdkapital von Anlegern. Die Rückzahlung hängt unter anderem von seinen Gewinnen, freien Mitteln und der Verschuldung ab.</p>
+          <ul class="bond-list">
+            <li><strong>Beispiele:</strong> Anleihen von Industrieunternehmen, Banken oder Versorgern.</li>
+            <li><strong>Vorteil:</strong> Häufig höhere Renditen als bei sehr sicheren Staatsanleihen gleicher Laufzeit.</li>
+            <li><strong>Risiko:</strong> Geschäftsprobleme, sinkende Bonität oder Insolvenz können den Kurs stark belasten.</li>
+            <li><strong>Zusätzlich:</strong> Rangfolge, Sicherheiten und Kündigungsrechte der Anleihe sind wichtig.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="bond-highlight"><strong>Renditeaufschlag (Credit Spread):</strong> Verlangt der Markt für eine Unternehmensanleihe beispielsweise 4,5 % und für eine vergleichbare Bundesanleihe 3,0 % Rendite, beträgt der Spread <strong>1,5 Prozentpunkte</strong>. Dieser Aufschlag kann unter anderem Kredit-, Liquiditäts- und andere Risiken widerspiegeln.</div>
+    </section>
+
+    <section class="bond-section" id="sicherheit">
+      <span class="bond-kicker">03 / Staatliche Kreditwürdigkeit</span>
+      <h2>Was macht eine Staatsanleihe sicher?</h2>
+      <p class="bond-section-lead">Nicht jede Staatsanleihe ist automatisch sicher. Entscheidend ist, ob der Staat <strong>seine Zinsen und Schulden dauerhaft bedienen kann und will</strong>. Deshalb werden wirtschaftliche und politische Faktoren gemeinsam betrachtet.</p>
+      <div class="bond-risk-list">
+        <div class="bond-risk"><strong>Steuereinnahmen &amp; Wirtschaftskraft</strong><p>Eine tragfähige Wirtschaftsstruktur schafft Einnahmen, mit denen Schulden bedient werden können.</p></div>
+        <div class="bond-risk"><strong>Schuldenstand &amp; Zinslast</strong><p>Nicht nur die Schuldenquote zählt: Wichtig ist auch, wie teuer die Finanzierung im Verhältnis zum Wachstum wird.</p></div>
+        <div class="bond-risk"><strong>Politische &amp; rechtliche Stabilität</strong><p>Verlässliche Institutionen, Haushaltsführung und Zahlungsbereitschaft stärken das Vertrauen von Gläubigern.</p></div>
+        <div class="bond-risk"><strong>Währung &amp; Finanzierungsspielraum</strong><p>Schulden in eigener Währung unterscheiden sich von Fremdwährungsschulden. Euro-Staaten kontrollieren die Geldschöpfung nicht einzeln.</p></div>
+        <div class="bond-risk"><strong>Wirtschaftswachstum &amp; Inflation</strong><p>Wachstum kann Schuldentragfähigkeit verbessern; hohe Inflation kann Kaufkraft und Finanzierungskosten belasten.</p></div>
+        <div class="bond-risk"><strong>Marktzugang &amp; Liquidität</strong><p>Eine breite Investorenbasis und ein gut handelbarer Anleihemarkt erleichtern die laufende Refinanzierung.</p></div>
+      </div>
+      <div class="bond-note"><span class="bond-note-icon" aria-hidden="true">★</span><p><strong>Beispiel Deutschland:</strong> Bundesanleihen gelten wegen der sehr hohen Kreditwürdigkeit des Bundes als besonders ausfallarm. Die Bundesrepublik trägt bei S&amp;P, Fitch und weiteren Agenturen die Bestnote <strong>AAA</strong> (Stand: Oktober 2026). <strong>Das schützt jedoch nicht vor Kursverlusten oder Inflation.</strong></p></div>
+    </section>
+
+    <section class="bond-section" id="kursentwicklung">
+      <span class="bond-kicker">04 / Kurs &amp; Laufzeit</span>
+      <h2>Warum ändern sich Anleihekurse während der Laufzeit?</h2>
+      <p>Bei einer klassischen festverzinslichen Anleihe bleibt der <strong>vereinbarte Kupon gleich</strong>. Ihr <strong>Börsenkurs</strong> bewegt sich dagegen täglich. Das liegt vor allem daran, dass neue Anleihen mit veränderten Marktzinsen angeboten werden.</p>
+      <div class="bond-compare">
+        <div class="bond-scenario"><span class="bond-scenario-arrow" style="color:#287553" aria-hidden="true">↓ Zinsen</span><div class="bond-scenario-title">Neue Anleihen bieten weniger</div><strong>Alter Kurs steigt</strong><p>Der bisherige feste Kupon wird attraktiver.</p></div>
+        <div class="bond-scenario"><span class="bond-scenario-arrow" style="color:#b88d30" aria-hidden="true">→ Zinsen</span><div class="bond-scenario-title">Gleiches Zinsniveau</div><strong>Nahe am Nennwert*</strong><p>Bei einer Anleihe mit Kupon gleich Marktrendite.</p></div>
+        <div class="bond-scenario"><span class="bond-scenario-arrow" style="color:#aa6250" aria-hidden="true">↑ Zinsen</span><div class="bond-scenario-title">Neue Anleihen bieten mehr</div><strong>Alter Kurs fällt</strong><p>Der bisherige feste Kupon wird weniger attraktiv.</p></div>
+      </div>
+      <p class="bond-small">* Bei vergleichbarer Bonität, gleichbleibenden Bedingungen und einem Marktzins in Höhe des Kupons.</p>
+      <h3 style="margin:26px 0 9px;font-size:1.28rem">Interaktives Beispiel: Was passiert mit einer 3-%-Anleihe?</h3>
+      <p>Unsere Beispielanleihe hat <strong>1.000 € Nennwert, 3 % Kupon (30 € jährlich)</strong> und noch <strong>fünf Jahre Restlaufzeit</strong>. Verschiebe den Marktzins und beobachte den theoretischen Kurs. Die Zahlung am Laufzeitende bleibt bei 1.000 € – sofern kein Ausfall eintritt.</p>
+      <div class="bond-market">
+        <div class="bond-market-card">
+          <h3>Marktzins verändern</h3>
+          <p>Was verlangen Anleger jetzt für eine vergleichbare Anleihe?</p>
+          <label class="bond-slider-label" for="bond-market-yield"><span>Aktuelle Marktrendite</span><output id="bond-market-yield-display" class="bond-rate-value" for="bond-market-yield">5,0 %</output></label>
+          <input type="range" id="bond-market-yield" min="1" max="7" step="0.5" value="5" aria-describedby="bond-example-notes">
+          <div class="bond-slider-ends"><span>1 %</span><span>7 %</span></div>
+          <div class="bond-big" id="bond-price-result" aria-live="polite" aria-atomic="true">913,41 €</div>
+          <div class="bond-big-label">Theoretischer Kurs · <span id="bond-price-percent">91,34 %</span> des Nennwerts</div>
+          <div class="bond-pricebar" aria-hidden="true"><div class="bond-pricefill" id="bond-pricefill"></div><div class="bond-par-marker"></div></div>
+          <div class="bond-pricebar-legend"><span>Heutiger Kurs</span><span>Markierung: Nennwert 1.000 €</span></div>
+          <p class="bond-dynamic-summary" id="bond-dynamic-summary">Der Marktzins liegt über dem Kupon. Damit die bestehende Anleihe konkurrenzfähig bleibt, sinkt ihr Kaufpreis unter 1.000 €.</p>
+        </div>
+        <div class="bond-chart-card">
+          <h3>Bis zur Fälligkeit: Kurs nähert sich 100 %</h3>
+          <p>Modellverlauf, <strong>wenn der eingestellte Marktzins danach konstant bleibt</strong>. Bereits ausgezahlte Kupons sind nicht im Kurs enthalten.</p>
+          <svg class="bond-chart" id="bond-price-chart" viewBox="0 0 690 255" role="img" aria-labelledby="bond-chart-title bond-chart-desc">
+            <title id="bond-chart-title">Illustrativer Kursverlauf der Anleihe bis zur Fälligkeit</title>
+            <desc id="bond-chart-desc">Bei konstanter Marktrendite nähert sich der theoretische Kurs der Anleihe ihrem Rückzahlungswert von 1.000 Euro an.</desc>
+            <line class="gridline" x1="65" y1="36" x2="665" y2="36"/><line class="gridline" x1="65" y1="80" x2="665" y2="80"/><line class="gridline" x1="65" y1="124" x2="665" y2="124"/><line class="gridline" x1="65" y1="168" x2="665" y2="168"/><line class="gridline" x1="65" y1="212" x2="665" y2="212"/>
+            <text x="4" y="41">1.100 €</text><text x="5" y="85">1.025 €</text><text x="20" y="129">950 €</text><text x="20" y="173">875 €</text><text x="20" y="217">800 €</text>
+            <line class="parline" x1="65" y1="95" x2="665" y2="95"/>
+            <path id="bond-curve-area" d="M 70 0 L 670 0 L 670 212 L 70 212 Z"/>
+            <path id="bond-curve-line" d="M 70 0 L 670 0"/>
+            <circle id="bond-curve-start" r="7" cx="70" cy="0"/><circle id="bond-curve-end" r="7" cx="660" cy="95"/>
+            <line class="axis" x1="65" y1="212" x2="665" y2="212"/>
+            <text text-anchor="middle" x="70" y="235">5 J.</text><text text-anchor="middle" x="188" y="235">4 J.</text><text text-anchor="middle" x="306" y="235">3 J.</text><text text-anchor="middle" x="424" y="235">2 J.</text><text text-anchor="middle" x="542" y="235">1 J.</text><text text-anchor="middle" x="660" y="235">0 J.</text>
+          </svg>
+          <div class="bond-chart-legend"><span><i class="bond-dot green"></i>Modellkurs</span><span><i class="bond-dot gold"></i>Rückzahlung 1.000 €</span></div>
+          <p class="bond-small" id="bond-example-notes" style="margin-top:16px">Vereinfachtes Rechenmodell: feste jährliche Zahlungen, konstante Rendite, keine Bonitätsänderung, keine vorzeitige Kündigung; ohne Stückzinsen, Gebühren und Steuern. Keine Prognose.</p>
+        </div>
+      </div>
+      <div class="bond-points">
+        <div class="bond-point"><b>Hältst du bis zur Fälligkeit?</b><p>Bei einer regulär rückzahlbaren Einzelanleihe erhältst du den Nennwert, wenn der Emittent zahlt. Zwischenzeitliche Kursschwankungen musst du dann nicht durch Verkauf realisieren. Allerdings lassen sich ausgezahlte Kupons möglicherweise nur zu anderen Zinsen wiederanlegen.</p></div>
+        <div class="bond-point"><b>Verkaufst du vorzeitig?</b><p>Du erhältst den aktuellen Börsenkurs. Er kann deutlich über oder unter deinem Kaufpreis liegen – selbst bei einem sehr kreditwürdigen Schuldner.</p></div>
+        <div class="bond-point"><b>Je länger, desto empfindlicher</b><p>Lang laufende Anleihen reagieren meist stärker auf Zinsänderungen als kurz laufende. Maßgeblich ist unter anderem die <strong>Duration</strong>. Beispiel: Bei einer modifizierten Duration von 8 bedeutet ein Renditeanstieg um 1 Prozentpunkt näherungsweise 8 % Kursverlust – bei Duration 2 etwa 2 % (sonst gleiche Bedingungen).</p></div>
+      </div>
+      <div class="bond-note warn"><span class="bond-note-icon" aria-hidden="true">!</span><p><strong>Merke:</strong> „Am Ende wieder 100 %“ gilt nur für die vereinbarte Rückzahlung einer geeigneten Einzelanleihe bei Zahlungsfähigkeit des Emittenten – nicht für jeden Anleihe-ETF und nicht automatisch für deine gesamte Rendite. Wer über 100 % kauft, bekommt bei Fälligkeit trotzdem nur den vereinbarten Nennwert zurück.</p></div>
+    </section>
+
+    <section class="bond-section" id="ratings">
+      <span class="bond-kicker">05 / Bonität</span>
+      <h2>Ratings: Wie kreditwürdig ist der Herausgeber?</h2>
+      <p>Ratingagenturen wie <strong>Standard &amp; Poor’s (S&amp;P), Fitch und Moody’s</strong> bewerten die Fähigkeit und Bereitschaft, Schulden zu bedienen. Die Buchstabennoten helfen beim Vergleich von Risiken – sie sind jedoch <strong>keine Garantie</strong> und können sich ändern.</p>
+      <div class="bond-table-wrap"><table class="bond-table">
+        <thead><tr><th>S&amp;P / Fitch</th><th>Moody’s</th><th>Einordnung</th><th>Typisches Risiko</th></tr></thead>
+        <tbody>
+          <tr><td><span class="bond-rating best">AAA</span></td><td>Aaa</td><td>Höchste Bonität</td><td>Sehr geringes geschätztes Ausfallrisiko</td></tr>
+          <tr><td><span class="bond-rating good">AA / A</span></td><td>Aa / A</td><td>Hohe bis gute Bonität</td><td>Vergleichsweise geringe Ausfallrisiken</td></tr>
+          <tr><td><span class="bond-rating mid">BBB−</span></td><td>Baa3</td><td><strong>Unterste Stufe Investment Grade</strong></td><td>Risiken sind bereits empfindlicher gegenüber Krisen</td></tr>
+          <tr><td><span class="bond-rating high">BB+</span></td><td>Ba1</td><td><strong>Beginn spekulativer Bereich</strong></td><td>Erhöhtes Ausfallrisiko, oft höhere Renditen</td></tr>
+          <tr><td><span class="bond-rating bad">B / CCC</span></td><td>B / Caa</td><td>Deutlich spekulativ</td><td>Hohe Abhängigkeit von Wirtschaft und Finanzierung</td></tr>
+          <tr><td><span class="bond-rating bad">D</span></td><td>–</td><td>Zahlungsausfall (S&amp;P / Fitch)</td><td>Schuldner kommt Verpflichtungen nicht nach</td></tr>
+        </tbody>
+      </table></div>
+      <p class="bond-small">Die Tabelle fasst Ratingklassen zusammen. Innerhalb der Gruppen gibt es Abstufungen (+/− bzw. 1–3). Einzelne Anleihen können anders bewertet sein als ihr Herausgeber, etwa aufgrund von Rang oder Sicherheiten.</p>
+      <div class="bond-note"><span class="bond-note-icon" aria-hidden="true">◎</span><p><strong>Investment Grade</strong> bedeutet mindestens BBB− (S&amp;P/Fitch) bzw. Baa3 (Moody’s). Darunter spricht man von <strong>High Yield oder Speculative Grade</strong>. Höhere Renditen sind keine kostenlose Zusatzverzinsung, sondern häufig eine Entschädigung für zusätzliche Risiken.</p></div>
+    </section>
+
+    <section class="bond-section" id="einflussfaktoren">
+      <span class="bond-kicker">06 / Marktmechanik</span>
+      <h2>Was beeinflusst Anleihekurse und Renditen?</h2>
+      <p>Eine Anleihe kann an Wert verlieren, obwohl alle Zinsen pünktlich gezahlt werden. Ihr Kurs wird nicht nur durch die Bonität, sondern auch durch das gesamte Marktumfeld bestimmt.</p>
+      <div class="bond-factors">
+        <div class="bond-factor"><span class="bond-factor-number">01</span><h3>Marktzinsen &amp; Geldpolitik</h3><p>Steigende Renditen für vergleichbare Anleihen drücken meist die Kurse bestehender Festzinsanleihen. Zentralbankentscheidungen beeinflussen Erwartungen, aber nicht jede Laufzeit gleich.</p></div>
+        <div class="bond-factor"><span class="bond-factor-number">02</span><h3>Inflation &amp; Realzins</h3><p>Höhere erwartete Inflation führt häufig zu höheren verlangten Nominalrenditen. Feste Kupons verlieren bei steigenden Preisen außerdem an Kaufkraft.</p></div>
+        <div class="bond-factor"><span class="bond-factor-number">03</span><h3>Bonität &amp; Risikoaufschläge</h3><p>Verschlechtert sich die Zahlungsfähigkeit eines Staates oder Unternehmens, steigen häufig die Risikoprämien – und der Kurs sinkt, auch ohne Leitzinsänderung.</p></div>
+        <div class="bond-factor"><span class="bond-factor-number">04</span><h3>Konjunktur &amp; Krisen</h3><p>Rezessionssorgen können sichere Staatsanleihen stützen, während risikoreichere Unternehmensanleihen durch steigende Ausfallängste unter Druck geraten.</p></div>
+        <div class="bond-factor"><span class="bond-factor-number">05</span><h3>Restlaufzeit &amp; Duration</h3><p>Je länger die Zinsbindung bzw. Duration, desto stärker kann der Preis auf Renditeänderungen reagieren. Kurze Restlaufzeiten sind meist weniger zinssensitiv.</p></div>
+        <div class="bond-factor"><span class="bond-factor-number">06</span><h3>Angebot, Nachfrage &amp; Handelbarkeit</h3><p>Große Neuemissionen, Nachfrage institutioneller Anleger und geringe Liquidität verändern Preise und die Spanne zwischen Kauf- und Verkaufskurs.</p></div>
+      </div>
+      <div class="bond-highlight"><strong>Zusätzlich bei Fremdwährungsanleihen:</strong> Ein US-Dollar-Bond kann in Dollar eine positive Rendite erzielen und für Anleger in Euro trotzdem Verlust bringen, wenn der Dollar gegenüber dem Euro fällt. Währungsrisiken müssen separat betrachtet werden.</div>
+    </section>
+
+    <section class="bond-section" id="praxis">
+      <span class="bond-kicker">07 / Umsetzung</span>
+      <h2>Einzelanleihe oder Anleihen-ETF?</h2>
+      <p>Beide ermöglichen es, in Anleihemärkte zu investieren. Für die Planung ist entscheidend, ob du eine <strong>konkrete Rückzahlung zu einem bestimmten Datum</strong> oder eine <strong>dauerhaft gestreute Anlage</strong> möchtest.</p>
+      <div class="bond-table-wrap"><table class="bond-table">
+        <thead><tr><th>Eigenschaft</th><th>Einzelanleihe</th><th>Klassischer Anleihen-ETF</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Fälligkeit</strong></td><td>Bekanntes Datum und vertraglich geregelte Rückzahlung</td><td>In der Regel kein fester Rückzahlungstermin für deinen ETF-Anteil</td></tr>
+          <tr><td><strong>Streuung</strong></td><td>Ein Emittent / eine Anleihe; mehrere Käufe nötig</td><td>Viele Anleihen und oft mehrere Emittenten</td></tr>
+          <tr><td><strong>Kursrisiko</strong></td><td>Bis zum Ende schwankend; bei Zahlung zu pari zum Nennwert rückzahlbar</td><td>Schwankend; Duration bleibt bei vielen ETFs durch laufende Umschichtung erhalten</td></tr>
+          <tr><td><strong>Aufwand &amp; Kosten</strong></td><td>Auswahl, Stückelung, Handelskosten und Liquidität beachten</td><td>Einfachere Streuung, dafür laufende Fondskosten</td></tr>
+        </tbody>
+      </table></div>
+      <p class="bond-small">Sonderfall: Laufzeit-Anleihen-ETFs besitzen ein geplantes Enddatum. Ihre Rückzahlung ist dennoch keine garantierte Nennwerterstattung für den Anleger.</p>
+      <h3 style="margin:30px 0 8px">Checkliste vor dem Kauf</h3>
+      <ul class="bond-check">
+        <li>Wer ist der Emittent und wie sieht seine aktuelle Bonität aus?</li>
+        <li>Wie hoch sind <strong>Rendite bis Fälligkeit</strong> und Kaufkurs – nicht nur der Kupon?</li>
+        <li>Wann ist die Fälligkeit? Wie hoch sind Restlaufzeit und Zinssensitivität?</li>
+        <li>Ist die Anleihe vorrangig oder nachrangig, besichert oder kündbar?</li>
+        <li>In welcher Währung erfolgen die Zahlungen?</li>
+        <li>Welche Kauf-/Verkaufsspanne, Gebühren und Steuern fallen an?</li>
+      </ul>
+      <div class="bond-note"><span class="bond-note-icon" aria-hidden="true">✓</span><p><strong>Fazit:</strong> Anleihen können Erträge planbarer machen und ein Portfolio ergänzen. Aber <strong>„festverzinslich“ bedeutet nicht „kurssicher“</strong>. Für die Risikobeurteilung zählen Bonität, Laufzeit, Marktzinsen und die konkreten Anleihebedingungen zusammen.</p></div>
+    </section>
+
+    <section class="bond-section" id="quellen">
+      <span class="bond-kicker">Weiterlesen</span>
+      <h2>Quellen und Grundlagen</h2>
+      <p>Die Einordnungen stützen sich unter anderem auf folgende Fachquellen. Das Rechenbeispiel ist eine eigene, bewusst vereinfachte Modellrechnung.</p>
+      <ul class="bond-sources">
+        <li><a href="https://www.deutsche-finanzagentur.de/bundeswertpapiere/bundeswertpapierarten/ueberblick-bundeswertpapiere" target="_blank" rel="noopener noreferrer">Deutsche Finanzagentur – Bundeswertpapiere, Zinsänderungs- und Emittentenrisiko</a></li>
+        <li><a href="https://www.deutsche-finanzagentur.de/finanzierung-des-bundes/der-bund-als-emittent/ratings" target="_blank" rel="noopener noreferrer">Deutsche Finanzagentur – Aktuelle Ratings der Bundesrepublik Deutschland</a></li>
+        <li><a href="https://www.spglobal.com/ratings/_division-assets/pdfs/guide-to-credit-rating-essentials.pdf" target="_blank" rel="noopener noreferrer">S&amp;P Global Ratings – Guide to Credit Rating Essentials (PDF)</a></li>
+        <li><a href="https://www.imf.org/en/blogs/articles/2024/03/28/the-fiscal-and-financial-risks-of-a-high-debt-slow-growth-world" target="_blank" rel="noopener noreferrer">Internationaler Währungsfonds – Faktoren staatlicher Schuldentragfähigkeit</a></li>
+        <li><a href="https://bafin.de/DE/verbraucherinnen-verbraucher/themen-finanzprodukte/geldanlage/einlagensicherung-anlegerentschaedigung/einlagensicherung-anlegerentschaedigung.html" target="_blank" rel="noopener noreferrer">BaFin – Einlagensicherung und Anlegerentschädigung</a></li>
+      </ul>
+    </section>
+    <div class="bond-footer-note"><strong>Hinweis:</strong> Diese Seite dient der allgemeinen Finanzbildung und stellt keine individuelle Anlage-, Rechts- oder Steuerberatung dar. Anleihen unterliegen Kurs- und Ausfallrisiken und sind nicht durch die gesetzliche Einlagensicherung geschützt.</div>
+    <a class="bond-back" href="../">← Zurück zur Übersicht Investieren</a>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script>
+(function(){
+  'use strict';
+  var input=document.getElementById('bond-market-yield');
+  if(!input)return;
+  var rateOut=document.getElementById('bond-market-yield-display');
+  var priceOut=document.getElementById('bond-price-result');
+  var percentOut=document.getElementById('bond-price-percent');
+  var fill=document.getElementById('bond-pricefill');
+  var summary=document.getElementById('bond-dynamic-summary');
+  var curve=document.getElementById('bond-curve-line');
+  var area=document.getElementById('bond-curve-area');
+  var dotStart=document.getElementById('bond-curve-start');
+  var dotEnd=document.getElementById('bond-curve-end');
+  var fmt=new Intl.NumberFormat('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2});
+  var fmtRate=new Intl.NumberFormat('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1});
+  function price(rate,years){
+    if(years===0)return 1000;
+    var amount=1000/Math.pow(1+rate,years);
+    for(var i=1;i<=years;i++)amount+=30/Math.pow(1+rate,i);
+    return amount;
+  }
+  function update(){
+    var raw=Number(input.value), rate=raw/100, current=price(rate,5);
+    rateOut.textContent=fmtRate.format(raw)+' %';
+    priceOut.textContent=fmt.format(current)+' €';
+    percentOut.textContent=fmt.format(current/10)+' %';
+    fill.style.width=(Math.min(100,Math.max(0,current/1150*100)))+'%';
+    if(raw>3){summary.textContent='Der Marktzins liegt über dem festen 3-%-Kupon. Der Kurs sinkt unter 1.000 €, damit die Rendite für neue Käufer konkurrenzfähig wird.';}
+    else if(raw<3){summary.textContent='Der Marktzins liegt unter dem festen 3-%-Kupon. Die alten Zinszahlungen sind attraktiver und der Kurs steigt über 1.000 €.';}
+    else{summary.textContent='Marktrendite und Kupon sind gleich hoch. Bei sonst unveränderten Bedingungen liegt der theoretische Kurs genau beim Nennwert.';}
+    var pts=[];
+    for(var years=5;years>=0;years--){
+      var x=70+(5-years)*118;
+      var value=price(rate,years);
+      // Darstellungsskala: 800 € bis 1.100 € auf 176 Pixel.
+      var y=212-(value-800)*176/300;
+      pts.push([x,y]);
+    }
+    var path=pts.map(function(pt,i){return (i===0?'M ':'L ')+pt[0].toFixed(2)+' '+pt[1].toFixed(2);}).join(' ');
+    curve.setAttribute('d',path);
+    area.setAttribute('d',path+' L 660 212 L 70 212 Z');
+    dotStart.setAttribute('cx',pts[0][0]);dotStart.setAttribute('cy',pts[0][1]);
+    dotEnd.setAttribute('cx',pts[5][0]);dotEnd.setAttribute('cy',pts[5][1]);
+  }
+  input.addEventListener('input',update);
+  update();
+})();
+</script>
+</body>
+</html>
