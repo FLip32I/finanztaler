@@ -11,7 +11,7 @@ function optimize(target){let v=mu.map(()=>1/mu.length),max= Math.max(...cov.map
 function emptyState(message){
  rows=[];curve=[];mu=[];cov=[];
  $('coverage').textContent=message;
- for(const id of ['weights','frontier','growth','metrics'])$(id).innerHTML='';
+ for(const id of ['weights','frontier','growth','metrics','risk-return','asset-legend'])$(id).innerHTML='';
  $('targetvalue').textContent='';
  for(const id of ['equal','min','target'])$(id).disabled=true;
 }
@@ -48,26 +48,42 @@ function recalc(){
  for(const id of ['equal','min','target'])$(id).disabled=false;
  draw();
 }
-function draw(){ $('weights').innerHTML=selected.map((j,i)=>`<div class="weight"><label for="w${i}">${names[j]} <span>${pct(w[i])}</span></label><input id="w${i}" type="range" min="0" max="100" step="0.1" value="${w[i]*100}" data-i="${i}"></div>`).join('');$('weights').querySelectorAll('input').forEach(el=>el.oninput=()=>{let i=+el.dataset.i,v=+el.value/100,rest=1-w[i];w=w.map((x,j)=>j===i?v:rest>1e-10?x*(1-v)/rest:(1-v)/(w.length-1));if(w.length===1)w=[1];draw()});let maxX=Math.max(.001,...selected.map((_,i)=>Math.sqrt(cov[i][i]*12)),risk(w)) *1.16,minY=Math.min(0,...mu.map(x=>x*12)),maxY=Math.max(...mu.map(x=>x*12),.01)*1.15;const X=x=>65+x/maxX*600,Y=y=>330-(y-minY)/(maxY-minY)*290;let svg='';for(let i=0;i<=4;i++){let x=maxX*i/4,y=minY+(maxY-minY)*i/4;svg+=`<path d="M65 ${Y(y)}H665 M${X(x)} 40V330" stroke="#e8ede5"/><text x="55" y="${Y(y)+4}" text-anchor="end">${pct(y)}</text><text x="${X(x)}" y="352" text-anchor="middle">${pct(x)}</text>`}svg+='<text x="365" y="383" text-anchor="middle">Risiko / Schwankung p. a. →</text><text x="65" y="20">Rendite p. a.</text>';svg+=`<path d="${curve.map((p,i)=>(i?'L':'M')+X(p.s)+','+Y(p.r)).join(' ')}" fill="none" stroke="#237c55" stroke-width="4"/>`;selected.forEach((j,i)=>svg+=`<circle cx="${X(Math.sqrt(cov[i][i]*12))}" cy="${Y(mu[i]*12)}" r="5" fill="white" stroke="#7b9185"/><text x="${X(Math.sqrt(cov[i][i]*12))-7}" y="${Y(mu[i]*12)-10}" text-anchor="end">${names[j]}</text>`);curve.forEach((p,i)=>svg+=`<circle data-p="${i}" cx="${X(p.s)}" cy="${Y(p.r)}" r="9" fill="transparent" style="cursor:pointer"><title>${pct(p.r)} Rendite · ${pct(p.s)} Risiko</title></circle>`);svg+=`<circle cx="${X(risk(w))}" cy="${Y(dot(w,mu)*12)}" r="8" fill="#d4ad48" stroke="white" stroke-width="3"/>`;$('frontier').innerHTML=svg;$('frontier').querySelectorAll('[data-p]').forEach(e=>e.onclick=()=>{w=[...curve[+e.dataset.p].w];$('target').value=+e.dataset.p*2;draw()});let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(curve[Math.round(+$('target').value/2)].r)}
+function draw(){ $('weights').innerHTML=selected.map((j,i)=>`<div class="weight"><label for="w${i}">${names[j]} <span>${pct(w[i])}</span></label><input id="w${i}" type="range" min="0" max="100" step="0.1" value="${w[i]*100}" data-i="${i}"></div>`).join('');$('weights').querySelectorAll('input').forEach(el=>el.oninput=()=>{let i=+el.dataset.i,v=+el.value/100,rest=1-w[i];w=w.map((x,j)=>j===i?v:rest>1e-10?x*(1-v)/rest:(1-v)/(w.length-1));if(w.length===1)w=[1];draw()});let maxX=Math.max(.001,...selected.map((_,i)=>Math.sqrt(cov[i][i]*12)),risk(w)) *1.16,minY=Math.min(0,...mu.map(x=>x*12)),maxY=Math.max(...mu.map(x=>x*12),.01)*1.15;const X=x=>65+x/maxX*600,Y=y=>330-(y-minY)/(maxY-minY)*290;let svg='';for(let i=0;i<=4;i++){let x=maxX*i/4,y=minY+(maxY-minY)*i/4;svg+=`<path d="M65 ${Y(y)}H665 M${X(x)} 40V330" stroke="#e8ede5"/><text x="55" y="${Y(y)+4}" text-anchor="end">${pct(y)}</text><text x="${X(x)}" y="352" text-anchor="middle">${pct(x)}</text>`}svg+='<text x="365" y="383" text-anchor="middle">Risiko / Schwankung p. a. →</text><text x="65" y="20">Rendite p. a.</text>';svg+=`<path d="${curve.map((p,i)=>(i?'L':'M')+X(p.s)+','+Y(p.r)).join(' ')}" fill="none" stroke="#237c55" stroke-width="4"/>`;selected.forEach((j,i)=>svg+=`<circle cx="${X(Math.sqrt(cov[i][i]*12))}" cy="${Y(mu[i]*12)}" r="5" fill="white" stroke="#7b9185"/><text x="${X(Math.sqrt(cov[i][i]*12))-7}" y="${Y(mu[i]*12)-10}" text-anchor="end">${names[j]}</text>`);curve.forEach((p,i)=>svg+=`<circle data-p="${i}" cx="${X(p.s)}" cy="${Y(p.r)}" r="9" fill="transparent" style="cursor:pointer"><title>${pct(p.r)} Rendite · ${pct(p.s)} Risiko</title></circle>`);svg+=`<circle cx="${X(risk(w))}" cy="${Y(dot(w,mu)*12)}" r="8" fill="#d4ad48" stroke="white" stroke-width="3"/>`;$('frontier').innerHTML=svg;$('frontier').querySelectorAll('[data-p]').forEach(e=>e.onclick=()=>{w=[...curve[+e.dataset.p].w];$('target').value=+e.dataset.p*2;draw()});let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(curve[Math.round(+$('target').value/2)].r);drawRiskReturn();}
 $('periods').innerHTML=[['5','5 Jahre'],['10','10 Jahre'],['15','15 Jahre'],['20','20 Jahre'],['max','Maximal'],['custom','Eigener Zeitraum']].map(([v,l])=>`<button data-v="${v}" class="${v===period?'active':''}">${l}</button>`).join('');$('periods').querySelectorAll('button').forEach(b=>b.onclick=()=>{period=b.dataset.v;$('periods').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));recalc()});$('start').onchange=$('end').onchange=recalc;$('equal').onclick=()=>{w=selected.map(()=>1/selected.length);draw()};$('min').onclick=()=>{w=[...curve[0].w];$('target').value=0;draw()};$('target').oninput=()=>{w=[...curve[Math.round(+$('target').value/2)].w];draw()};tiles();recalc();
 initializeExcel();
 
 async function applyExcel(buffer,label){
  const imported=await readPortfolioExcel(buffer,names);
  dataset=imported;
- $('source-status').textContent=label+' · '+dataset.length+' Monate mit mindestens einem Renditewert.';
+
  if(dataset.length){for(const id of ['start','end']){$(id).min=dataset[0].month;$(id).max=dataset.at(-1).month;} $('start').value=dataset[0].month;$('end').value=dataset.at(-1).month;}
  recalc();
 }
 async function initializeExcel(){
- $('excel-file').onchange=async event=>{
-  const file=event.target.files[0];if(!file)return;
-  if(!/\.xlsx$/i.test(file.name)){$('source-status').textContent='Bitte eine .xlsx-Datei auswählen.';return;}
-  $('source-status').textContent='Excel-Datei wird gelesen …';
-  try{await applyExcel(await file.arrayBuffer(),'Lokal geladen: '+file.name);}
-  catch(error){$('source-status').textContent='Import fehlgeschlagen: '+error.message+(dataset.length?' Die bisherige Datenbasis bleibt aktiv.':'');}
-  event.target.value='';
- };
- try{const response=await fetch('pfmxdaten.xlsx',{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);await applyExcel(await response.arrayBuffer(),'Website-Datei: pfmxdaten.xlsx');}
- catch(error){$('source-status').textContent='pfmxdaten.xlsx konnte nicht geladen werden: '+error.message+'. Alternativ Excel-Datei unten auswählen.';}
+ try{const response=await fetch('pfmxdaten.xlsx',{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);await applyExcel(await response.arrayBuffer(),'');}
+ catch(error){emptyState('Die Daten konnten nicht geladen werden: '+error.message);}
+}
+function drawRiskReturn(){
+ const colors=['#3775a0','#985b9c','#d7893d','#698242','#a35460'];
+ let seed=9371;const random=()=>{seed=(1664525*seed+1013904223)>>>0;return (seed+.5)/4294967296;};
+ const mixes=selected.length===1?[[1]]:Array.from({length:280},()=>{
+  const values=selected.map(()=>-Math.log(random())),sum=values.reduce((a,b)=>a+b,0);return values.map(v=>v/sum);
+ });
+ const points=mixes.map(v=>({w:v,s:risk(v),r:dot(v,mu)*12}));
+ const assets=selected.map((j,i)=>({s:Math.sqrt(cov[i][i]*12),r:mu[i]*12,name:names[j]}));
+ const all=[...points,...assets,...curve,{s:risk(w),r:dot(w,mu)*12}];
+ const maxX=Math.max(.01,...all.map(p=>p.s))*1.12,minY=Math.min(0,...all.map(p=>p.r))-.01,maxY=Math.max(.01,...all.map(p=>p.r))+.02;
+ const X=x=>85+x/maxX*865,Y=y=>385-(y-minY)/(maxY-minY)*335;
+ let svg='<text x="85" y="24">Historische Rendite p. a.</text>';
+ for(let i=0;i<=5;i++){
+  const x=maxX*i/5,y=minY+(maxY-minY)*i/5;
+  svg+=`<path d="M85 ${Y(y)}H950 M${X(x)} 50V385" stroke="#e8ede5"/><text x="75" y="${Y(y)+4}" text-anchor="end">${pct(y)}</text><text x="${X(x)}" y="410" text-anchor="middle">${pct(x)}</text>`;
+ }
+ points.forEach((p,i)=>{svg+=`<circle data-mix="${i}" cx="${X(p.s)}" cy="${Y(p.r)}" r="4" fill="#a9c8b6" opacity=".7" style="cursor:pointer"><title>${pct(p.r)} Rendite · ${pct(p.s)} Risiko</title></circle>`;});
+ svg+=`<path d="${curve.map((p,i)=>(i?'L':'M')+X(p.s)+','+Y(p.r)).join(' ')}" fill="none" stroke="#237c55" stroke-width="3"/>`;
+ assets.forEach((p,i)=>{svg+=`<circle cx="${X(p.s)}" cy="${Y(p.r)}" r="7" fill="${colors[i]}" stroke="white" stroke-width="2"><title>${p.name}: ${pct(p.r)} Rendite · ${pct(p.s)} Risiko</title></circle><text x="${X(p.s)}" y="${Y(p.r)-13}" text-anchor="middle">${i+1}</text>`;});
+ svg+=`<circle cx="${X(risk(w))}" cy="${Y(dot(w,mu)*12)}" r="9" fill="#d4ad48" stroke="#fff" stroke-width="3"><title>Deine Mischung</title></circle><text x="520" y="443" text-anchor="middle">Risiko / Schwankung p. a. →</text>`;
+ $('risk-return').innerHTML=svg;
+ $('asset-legend').innerHTML=assets.map((p,i)=>`<span style="color:${colors[i]}">● ${i+1} · ${p.name}</span>`).join('');
+ $('risk-return').querySelectorAll('[data-mix]').forEach(el=>el.onclick=()=>{w=[...points[+el.dataset.mix].w];draw();});
 }
