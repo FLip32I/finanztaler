@@ -1,1 +1,321 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10342f"><meta name="description" content="Finanztaler – Finanzen selbst in die Hand nehmen."><title>Sparen | Finanztaler</title><link rel="stylesheet" href="../assets/css/style.css"><script src="../assets/js/script.js" defer></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5554850334897452" crossorigin="anonymous"></script></head><body data-root="../" data-page="sparen/"><div id="site-header"></div><main><section class="page-hero"><div class="container"><span class="eyebrow">Finanztaler / Sparen</span><h1>Sparen</h1><p class="lead">Dieser Bereich wird Schritt für Schritt aufgebaut.</p></div></section><section class="container"><div class="placeholder">Hier entsteht die Unterseite <strong>Sparen</strong>. Inhalte und weitere Unterseiten folgen.<br><a class="btn" href="../">← Zur Startseite</a></div></section></main><div id="site-footer"></div></body></html>
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10342f">
+  <meta name="description" content="Sparen verstehen: Einnahmen, Ausgaben, Kontenmodell, 50-30-20-Regel, bezahle dich zuerst und Lifestyle-Inflation. Mit Budgetrechner und dem Weg vom Sparen zum Investieren.">
+  <title>Sparen lernen: Geld bewusst einsetzen | Finanztaler</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/script.js" defer></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5554850334897452" crossorigin="anonymous"></script>
+  <style>
+    /* Nur für die Sparen-Seite: bestehende globale Gestaltung bleibt unberührt. */
+    .sp-hero{padding:62px 0 48px;background:radial-gradient(ellipse at 85% 35%,#e1f0e4 0,transparent 46%),linear-gradient(115deg,#fafbf7 52%,#faf5e8)}
+    .sp-hero-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:52px;align-items:center}
+    .sp-hero .eyebrow{display:block;letter-spacing:.11em}
+    .sp-hero h1{font-size:clamp(40px,5.3vw,66px);letter-spacing:-.045em;line-height:1.1;margin:19px 0 20px}
+    .sp-hero h1 span{color:#3e8a62}
+    .sp-hero .lead{max-width:670px;margin:0;color:#4f675c;line-height:1.78;font-size:clamp(16px,1.5vw,19px)}
+    .sp-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:25px}
+    .sp-actions .btn{margin:0;padding:13px 19px}
+    .sp-btn-alt{display:inline-flex;align-items:center;justify-content:center;border:1px solid #c8dbc9;border-radius:12px;padding:12px 19px;background:#fff;color:#184b39;font-weight:750;transition:background .16s}
+    .sp-btn-alt:hover{background:#eaf5ec}
+    .sp-hero-panel{padding:27px;background:#fff;border:1px solid #deebdf;border-radius:25px;box-shadow:0 18px 45px #173d3210}
+    .sp-mini-label,.sp-kicker{font-size:.77rem;letter-spacing:.12em;text-transform:uppercase;color:#58816c;font-weight:850}
+    .sp-hero-panel h2{font-size:1.32rem;letter-spacing:-.02em;margin:10px 0 20px;color:#143e32}
+    .sp-hero-wheel{display:grid;place-items:center;width:min(230px,80%);aspect-ratio:1;border-radius:50%;background:conic-gradient(#1f674a 0 50%,#e2b34c 50% 80%,#a7ceb2 80% 100%);margin:4px auto 20px;box-shadow:0 15px 25px #285a4b12}
+    .sp-hero-wheel strong{display:grid;place-content:center;width:74%;aspect-ratio:1;background:#fff;border-radius:50%;font-size:1.58rem;letter-spacing:-.035em;color:#123d31;text-align:center}
+    .sp-hero-wheel strong small{font-size:.75rem;font-weight:600;color:#718078;letter-spacing:0;margin-top:5px}
+    .sp-legend{display:flex;justify-content:center;gap:17px;flex-wrap:wrap;color:#52675d;font-size:.83rem;font-weight:650}
+    .sp-legend span{display:flex;align-items:center;gap:6px}
+    .sp-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+    .sp-hero-footnote{text-align:center;color:#75847b;font-size:.78rem;line-height:1.5;margin:14px 0 0}
+    .sp-shell{padding:44px 0 95px}
+    .sp-intro{max-width:910px;margin:0 0 32px}
+    .sp-intro h2{font-size:clamp(25px,3vw,36px);letter-spacing:-.035em;margin:8px 0 12px}
+    .sp-intro p{line-height:1.8;color:#4e6659;font-size:1.04rem;margin:0}
+    .sp-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:25px;align-items:start}
+    .sp-toc{position:sticky;top:100px;align-self:start;padding:21px 16px 17px;border:1px solid #dce7db;background:#f2f7f1;border-radius:21px;max-height:calc(100vh - 112px);overflow-y:auto}
+    .sp-toc h2{font-size:.92rem;letter-spacing:.02em;margin:0 8px 14px;color:#184e39}
+    .sp-toc-list{display:flex;flex-direction:column;gap:5px}
+    .sp-toc a{display:flex;align-items:center;gap:10px;padding:10px 9px;border:1px solid transparent;border-radius:10px;color:#315e4d;font-size:.91rem;font-weight:680;line-height:1.28;transition:background .15s,border-color .15s}
+    .sp-toc a:hover,.sp-toc a:focus-visible{background:#fff;border-color:#dbe7dc;outline-offset:2px}
+    .sp-toc a span{font-size:.76rem;font-weight:850;letter-spacing:.06em;color:#8cae92;min-width:20px}
+    .sp-toc-note{font-size:.76rem;line-height:1.6;margin:17px 8px 0;color:#6d8174;border-top:1px solid #d9e6d9;padding-top:13px}
+    .sp-content{display:grid;gap:22px;min-width:0}
+    .sp-section{scroll-margin-top:105px;background:#fff;border:1px solid #dce7df;border-radius:22px;padding:clamp(22px,3.2vw,38px);box-shadow:0 3px 16px #1d4b3105}
+    .sp-section h2{font-size:clamp(25px,2.6vw,34px);line-height:1.2;letter-spacing:-.032em;margin:7px 0 15px;color:#113e32}
+    .sp-section h3{font-size:1.12rem;line-height:1.35;color:#174737;margin:0 0 9px}
+    .sp-section p,.sp-section li{color:#456052;line-height:1.78}
+    .sp-section p{margin:0 0 15px}
+    .sp-section p:last-child{margin-bottom:0}
+    .sp-section a:not(.sp-inline-cta){color:#1b6946;text-decoration:underline;text-decoration-color:#a3cbb0;text-underline-offset:3px;font-weight:700}
+    .sp-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:22px 0 6px}
+    .sp-card{background:#f5f9f4;border:1px solid #e2ebe1;border-radius:16px;padding:19px}
+    .sp-card--gold{background:#fcf8ec;border-color:#f0e7cd}
+    .sp-card--blue{background:#f1f7f9;border-color:#deebed}
+    .sp-card p{font-size:.94rem;margin:0;line-height:1.65}
+    .sp-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#e1efe3;color:#195f44;margin-bottom:12px;font-size:1.15rem;font-weight:850}
+    .sp-card--gold .sp-icon{background:#f6e9bf;color:#906b13}
+    .sp-card--blue .sp-icon{background:#dfeaf0;color:#376177}
+    .sp-list{padding-left:22px;margin:12px 0 4px}
+    .sp-list li{padding-left:5px;margin-bottom:8px}
+    .sp-note{padding:18px 20px;background:#ecf5ed;border-left:4px solid #3b8c60;border-radius:0 13px 13px 0;margin:19px 0 3px;color:#345d46;line-height:1.7}
+    .sp-note--gold{background:#fbf6e9;border-left-color:#deb449;color:#63552e}
+    .sp-example{margin:20px 0 6px;padding:20px 22px;border-radius:16px;border:1px solid #e4eade;background:linear-gradient(120deg,#f4f9f3,#fdfbf3)}
+    .sp-example strong{color:#194937}
+    .sp-example p{margin:5px 0 0}
+    .sp-table-wrap{overflow-x:auto;margin:18px 0 5px;border:1px solid #e0e9e0;border-radius:13px}
+    .sp-table{width:100%;border-collapse:collapse;min-width:480px}
+    .sp-table th,.sp-table td{padding:13px 16px;text-align:left;vertical-align:top;border-bottom:1px solid #e6ece5;color:#456052;line-height:1.55;font-size:.94rem}
+    .sp-table thead th{background:#eff6ef;color:#184b39;font-weight:790}
+    .sp-table tr:last-child td{border-bottom:0}
+    .sp-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}
+    .sp-step{position:relative;padding:19px 17px 18px;border:1px solid #e2eadd;background:#f5f9f4;border-radius:15px}
+    .sp-step:nth-child(2){background:#fcf8ea;border-color:#eee3c9}
+    .sp-step:nth-child(3){background:#eef5f0}
+    .sp-step-index{display:inline-block;color:#638870;font-size:.81rem;font-weight:850;letter-spacing:.06em;margin-bottom:10px}
+    .sp-step h3{margin-bottom:7px}
+    .sp-step p{font-size:.91rem;line-height:1.6;margin:0}
+    .sp-calculator{padding:22px;background:#f6faf5;border:1px solid #e0eadf;border-radius:18px;margin:20px 0 19px}
+    .sp-calc-top{display:flex;align-items:end;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:18px}
+    .sp-calc-top label{font-weight:750;color:#174937;display:block;margin:0 0 7px}
+    .sp-input-wrap{display:flex;align-items:center;max-width:230px;border:1px solid #c6dbc9;border-radius:11px;overflow:hidden;background:#fff}
+    .sp-input-wrap input{display:block;min-width:0;width:100%;padding:11px 13px;border:0;outline-offset:-3px;font:inherit;color:#153c2f;font-weight:750}
+    .sp-input-wrap span{padding:0 14px 0 0;color:#698575;font-weight:750}
+    .sp-calc-hint{font-size:.83rem;color:#718577;max-width:300px;line-height:1.5}
+    .sp-calc-bar{height:17px;border-radius:100px;overflow:hidden;display:flex;margin:6px 0 16px;background:#e7ede7}
+    .sp-calc-bar span:nth-child(1){width:50%;background:#206848}
+    .sp-calc-bar span:nth-child(2){width:30%;background:#ddb14b}
+    .sp-calc-bar span:nth-child(3){width:20%;background:#9cc8a8}
+    .sp-budget-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+    .sp-budget-item{background:#fff;border:1px solid #e0eae0;border-radius:13px;padding:15px 13px}
+    .sp-budget-item b{display:block;font-size:1.3rem;color:#164734;margin:5px 0 5px;white-space:nowrap}
+    .sp-budget-item p{font-size:.79rem;line-height:1.5;margin:0;color:#718174}
+    .sp-budget-label{font-size:.78rem;color:#567c64;font-weight:850;letter-spacing:.03em}
+    .sp-budget-item:nth-child(2) .sp-budget-label{color:#9a7525}
+    .sp-tips{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:21px 0}
+    .sp-tip{padding:20px;border-radius:15px;background:#f6f9f5;border:1px solid #e0e9e0}
+    .sp-tip h3{margin-bottom:7px}
+    .sp-tip p{margin:0;font-size:.94rem}
+    .sp-quote{margin:25px 0;padding:20px 25px;background:#174b3a;color:#fff;border-radius:16px;font-size:1.14rem;font-weight:730;line-height:1.6}
+    .sp-inflation{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;background:#f8f9f4;padding:18px 20px;border-radius:16px;border:1px solid #e4e9dc;margin:20px 0}
+    .sp-inflation-cell span{display:block;color:#648272;font-size:.78rem;font-weight:780;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+    .sp-inflation-cell strong{font-size:clamp(1.35rem,3vw,1.8rem);color:#164834}
+    .sp-inflation-arrow{font-size:1.8rem;color:#bb9235}
+    .sp-inflation-cell:last-child{text-align:right}
+    .sp-cta-block{margin:24px 0 4px;padding:24px;border-radius:17px;background:linear-gradient(115deg,#e9f4eb,#fff8e8);border:1px solid #dbe9da}
+    .sp-cta-block h3{margin-bottom:9px}
+    .sp-cta-block p{margin-bottom:12px}
+    .sp-cta-links{display:flex;flex-wrap:wrap;gap:10px}
+    .sp-inline-cta{display:inline-flex;align-items:center;justify-content:center;background:#103c2e;color:#fff!important;border-radius:10px;padding:12px 16px;text-decoration:none!important;font-weight:750;font-size:.94rem;transition:transform .15s}
+    .sp-inline-cta:hover{transform:translateY(-2px)}
+    .sp-inline-cta--alt{color:#194f39!important;background:#fff;border:1px solid #c9dccb}
+    .sp-bottom{padding:25px 0 0;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+    .sp-bottom a{font-weight:750;color:#286d4b}
+    .sp-disclaimer{font-size:.78rem;color:#6a7f71;margin-top:14px;line-height:1.65}
+    @media(max-width:970px){.sp-layout{grid-template-columns:190px minmax(0,1fr);gap:18px}.sp-hero-layout{gap:28px}.sp-card-grid{grid-template-columns:1fr}.sp-steps{grid-template-columns:1fr}.sp-hero-wheel{width:200px}}
+    @media(max-width:760px){.sp-hero{padding:37px 0 32px}.sp-hero-layout{grid-template-columns:1fr}.sp-hero-panel{max-width:430px;width:100%;padding:20px}.sp-hero-wheel{width:150px}.sp-hero-panel h2{margin-bottom:10px}.sp-shell{padding:30px 0 60px}.sp-layout{grid-template-columns:1fr}.sp-toc{position:static;max-height:none;overflow:visible;padding:17px}.sp-toc-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.sp-toc a{padding:9px 8px;font-size:.85rem}.sp-toc-note{display:none}.sp-section{scroll-margin-top:85px}.sp-content{gap:16px}}
+    @media(max-width:560px){.sp-hero h1{font-size:clamp(36px,9vw,46px)}.sp-hero-panel{margin:0 auto}.sp-intro h2{font-size:27px}.sp-card-grid,.sp-budget-grid,.sp-tips{grid-template-columns:1fr}.sp-budget-item b{font-size:1.48rem}.sp-calculator{padding:16px}.sp-inflation{grid-template-columns:1fr;gap:7px}.sp-inflation-arrow{transform:rotate(90deg);font-size:1.4rem;text-align:center}.sp-inflation-cell:last-child{text-align:left}.sp-actions .btn,.sp-actions .sp-btn-alt{width:100%;text-align:center}.sp-cta-links a{width:100%}.sp-hero-wheel{width:145px}}
+    @media(prefers-reduced-motion:reduce){.sp-inline-cta,.sp-toc a,.sp-btn-alt{transition:none}}
+  </style>
+</head>
+<body data-root="../" data-page="sparen/">
+<div id="site-header"></div>
+<main>
+  <section class="sp-hero">
+    <div class="container sp-hero-layout">
+      <div>
+        <span class="eyebrow">Finanztaler / Sparen</span>
+        <h1>Geld verstehen.<br><span>Bewusst sparen.</span></h1>
+        <p class="lead">Sparen bedeutet nicht, auf alles zu verzichten. Es bedeutet, deine Einnahmen und Ausgaben zu kennen, Prioritäten zu setzen und deinem Geld eine Aufgabe zu geben – für mehr Sicherheit und finanzielle Freiheit.</p>
+        <div class="sp-actions">
+          <a class="btn" href="#warum-sparen">Sparen verstehen ↓</a>
+          <a class="sp-btn-alt" href="#regel-50-30-20">Budget berechnen →</a>
+        </div>
+      </div>
+      <div class="sp-hero-panel" aria-label="Illustration zur 50-30-20-Regel">
+        <span class="sp-mini-label">Ein möglicher Startpunkt</span>
+        <h2>Gib deinem Geld eine Struktur.</h2>
+        <div class="sp-hero-wheel" aria-hidden="true"><strong>50 / 30 / 20<small>Budgetregel</small></strong></div>
+        <div class="sp-legend" aria-hidden="true">
+          <span><i class="sp-dot" style="background:#206848"></i>Grundbedarf</span>
+          <span><i class="sp-dot" style="background:#ddb14b"></i>Wünsche</span>
+          <span><i class="sp-dot" style="background:#9cc8a8"></i>Zukunft</span>
+        </div>
+        <p class="sp-hero-footnote">Eine Orientierung, kein starres Gesetz.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container sp-shell">
+    <div class="sp-intro">
+      <span class="sp-kicker">Die Grundlagen</span>
+      <h2>Eine gute Sparstrategie beginnt im Alltag.</h2>
+      <p>Du musst weder jeden Cent umdrehen noch sofort auf alles verzichten. Wer weiß, woher sein Geld kommt, wohin es fließt und was ihm wichtig ist, kann bewusst entscheiden. Die acht Kapitel führen dich vom Überblick bis zum nächsten Schritt: Investieren.</p>
+    </div>
+    <div class="sp-layout">
+      <nav class="sp-toc" aria-label="Kapitel auf der Sparen-Seite">
+        <h2>Kapitelübersicht</h2>
+        <div class="sp-toc-list">
+          <a href="#warum-sparen"><span>01</span> Warum sparen?</a>
+          <a href="#einnahmen"><span>02</span> Einnahmen</a>
+          <a href="#ausgaben"><span>03</span> Ausgaben</a>
+          <a href="#kontenmodell"><span>04</span> Kontenmodell</a>
+          <a href="#regel-50-30-20"><span>05</span> 50-30-20-Regel</a>
+          <a href="#bezahle-dich-zuerst"><span>06</span> Bezahle dich zuerst</a>
+          <a href="#lifestyle-inflation"><span>07</span> Lifestyle-Inflation</a>
+          <a href="#sparen-investieren"><span>08</span> Sparen &amp; Investieren</a>
+        </div>
+        <p class="sp-toc-note">Alle Kapitel bleiben auf der Seite sichtbar. Wähle ein Thema, um direkt dorthin zu springen.</p>
+      </nav>
+
+      <div class="sp-content">
+        <section class="sp-section" id="warum-sparen" aria-labelledby="sp-h-warum">
+          <span class="sp-kicker">01 · Die Motivation</span>
+          <h2 id="sp-h-warum">Warum sparen?</h2>
+          <p>Geld allein macht nicht glücklich. Aber finanzielle Rücklagen geben dir Möglichkeiten: eine unerwartete Rechnung bezahlen, eine berufliche Pause einlegen oder eine Entscheidung treffen, ohne sofort aufs Konto schauen zu müssen. <strong>Sparen schafft Handlungsspielraum.</strong></p>
+          <div class="sp-card-grid">
+            <div class="sp-card"><span class="sp-icon" aria-hidden="true">✓</span><h3>Sicherheit</h3><p>Ein finanzieller Puffer fängt unvorhergesehene Ausgaben ab – etwa eine Reparatur oder einen vorübergehenden Einkommensausfall.</p></div>
+            <div class="sp-card sp-card--gold"><span class="sp-icon" aria-hidden="true">↗</span><h3>Selbstbestimmung</h3><p>Rücklagen ermöglichen mehr Freiheit bei großen und kleinen Lebensentscheidungen.</p></div>
+            <div class="sp-card sp-card--blue"><span class="sp-icon" aria-hidden="true">◎</span><h3>Ziele</h3><p>Vom Urlaub bis zur Weiterbildung: Wer gezielt spart, muss Wünsche nicht automatisch auf Kredit finanzieren.</p></div>
+          </div>
+          <div class="sp-note"><strong>Ein sinnvoller Anfang:</strong> Baue einen Notgroschen auf. Als grobe Orientierung gelten oft drei bis sechs Monate notwendiger Ausgaben. Die passende Höhe hängt unter anderem von deiner Einkommenssicherheit und deinen Verpflichtungen ab. Kurzfristig benötigtes Geld sollte gut verfügbar bleiben.</div>
+        </section>
+
+        <section class="sp-section" id="einnahmen" aria-labelledby="sp-h-einnahmen">
+          <span class="sp-kicker">02 · Die Grundlage</span>
+          <h2 id="sp-h-einnahmen">Einnahmen: Was steht dir wirklich zur Verfügung?</h2>
+          <p>Bevor du ein Budget aufstellst, brauchst du eine ehrliche Übersicht über deine <strong>regelmäßig verfügbaren Netto-Einnahmen</strong>. Entscheidend ist nicht dein Bruttogehalt, sondern das Geld, das tatsächlich auf deinen Konten ankommt.</p>
+          <div class="sp-tips">
+            <div class="sp-tip"><h3>Regelmäßige Einnahmen</h3><p>Nettogehalt, Rente, verlässliche Nebeneinkünfte oder andere wiederkehrende Zahlungen.</p></div>
+            <div class="sp-tip"><h3>Unregelmäßige Einnahmen</h3><p>Boni, Steuerrückzahlungen oder einmalige Verkäufe lieber separat einplanen. Sie sind keine sichere Basis für laufende Fixkosten.</p></div>
+          </div>
+          <div class="sp-example"><strong>Merksatz</strong><p>Plane deinen gewöhnlichen Monat mit verlässlichen Einnahmen. Zusätzliche Zahlungen kannst du bewusst für Rücklagen, größere Wünsche oder Investitionen verwenden.</p></div>
+        </section>
+
+        <section class="sp-section" id="ausgaben" aria-labelledby="sp-h-ausgaben">
+          <span class="sp-kicker">03 · Den Überblick gewinnen</span>
+          <h2 id="sp-h-ausgaben">Ausgaben: Wohin fließt dein Geld?</h2>
+          <p>Viele kleine Ausgaben wirken harmlos. Zusammen können Abos, Lieferdienste und spontane Käufe aber einen erheblichen Teil deines Budgets beanspruchen. Schau dir deshalb zwei bis drei Monate Konto- und Kartenzahlungen an und sortiere sie.</p>
+          <div class="sp-table-wrap">
+            <table class="sp-table">
+              <thead><tr><th>Kategorie</th><th>Beispiele</th><th>Was hilft?</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Fixkosten</strong></td><td>Miete, Strom, Versicherungen, Verträge</td><td>Regelmäßig vergleichen und unnötige Verträge kündigen</td></tr>
+                <tr><td><strong>Variable Ausgaben</strong></td><td>Lebensmittel, Freizeit, Shopping</td><td>Monatliches Budget festlegen und bewusst priorisieren</td></tr>
+                <tr><td><strong>Unregelmäßige Kosten</strong></td><td>Urlaub, Reparaturen, Jahresbeiträge</td><td>Auf zwölf Monate verteilen und monatlich zurücklegen</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sp-example"><strong>Beispiel: Jahreskosten sichtbar machen</strong><p>Eine Versicherung kostet 360 € im Jahr? Plane dafür monatlich <strong>30 €</strong> ein. So wird aus einer unerwartet hohen Abbuchung eine vorhersehbare Ausgabe.</p></div>
+          <p>Das Ziel ist nicht, jede Freude zu streichen. Es geht darum, Ausgaben zu erkennen, die dir weniger wert sind als die Ziele, für die du eigentlich sparen möchtest.</p>
+        </section>
+
+        <section class="sp-section" id="kontenmodell" aria-labelledby="sp-h-konten">
+          <span class="sp-kicker">04 · Ordnung schaffen</span>
+          <h2 id="sp-h-konten">Das Kontenmodell: Gib jedem Euro einen Platz.</h2>
+          <p>Ein Kontenmodell trennt Geld für den Alltag von Geld für deine Ziele. Das macht Budgets sichtbar und verhindert, dass Rücklagen versehentlich im Alltag ausgegeben werden. Schon drei Konten beziehungsweise Unterkonten können reichen.</p>
+          <div class="sp-steps" aria-label="Drei Bausteine eines Kontenmodells">
+            <div class="sp-step"><span class="sp-step-index">KONTO 01</span><h3>Gehalts- &amp; Fixkostenkonto</h3><p>Hier gehen Einnahmen ein und Miete, Versicherungen sowie andere feste Verpflichtungen ab.</p></div>
+            <div class="sp-step"><span class="sp-step-index">KONTO 02</span><h3>Alltagskonto</h3><p>Für Einkäufe, Freizeit und persönliche Wünsche. Ein fester Monatsbetrag setzt einen klaren Rahmen.</p></div>
+            <div class="sp-step"><span class="sp-step-index">KONTO 03</span><h3>Rücklagen &amp; Ziele</h3><p>Für Notgroschen, Jahreskosten und geplante Ausgaben – idealerweise getrennt in Spartöpfen.</p></div>
+          </div>
+          <div class="sp-note"><strong>Und wo bleibt das Investieren?</strong> Langfristig angelegtes Geld gehört nicht in denselben Topf wie dein Notgroschen. Ein Wertpapierdepot kann dein Kontenmodell ergänzen, sobald die kurzfristigen Rücklagen stehen. Mehr zu sicheren Rücklagen findest du bei <a href="../investieren/tagesgeld-festgeld/">Tagesgeld &amp; Festgeld</a>.</div>
+        </section>
+
+        <section class="sp-section" id="regel-50-30-20" aria-labelledby="sp-h-regel">
+          <span class="sp-kicker">05 · Eine einfache Budgetregel</span>
+          <h2 id="sp-h-regel">Die 50-30-20-Regel</h2>
+          <p>Die 50-30-20-Regel teilt das monatliche <strong>Nettoeinkommen</strong> in drei Bereiche auf: notwendige Ausgaben, persönliche Wünsche und deine finanzielle Zukunft. Sie ist ein Startpunkt für die Budgetplanung, keine allgemeingültige Vorgabe.</p>
+          <div class="sp-calculator">
+            <div class="sp-calc-top">
+              <div>
+                <label for="sp-netto">Dein monatliches Nettoeinkommen</label>
+                <div class="sp-input-wrap"><input id="sp-netto" type="number" inputmode="decimal" min="0" max="1000000" step="50" value="2500" aria-describedby="sp-netto-hinweis"><span>€</span></div>
+              </div>
+              <div id="sp-netto-hinweis" class="sp-calc-hint">Betrag ändern: Die Aufteilung wird sofort neu berechnet.</div>
+            </div>
+            <div class="sp-calc-bar" role="img" aria-label="50 Prozent Grundbedarf, 30 Prozent Wünsche, 20 Prozent Sparen und Investieren"><span></span><span></span><span></span></div>
+            <div class="sp-budget-grid" aria-live="polite" aria-atomic="true">
+              <div class="sp-budget-item"><span class="sp-budget-label">50 % · Grundbedarf</span><b id="sp-need">1.250 €</b><p>Wohnen, Lebensmittel, Mobilität und notwendige Verträge</p></div>
+              <div class="sp-budget-item"><span class="sp-budget-label">30 % · Wünsche</span><b id="sp-want">750 €</b><p>Hobbys, Restaurants, Urlaub und freiwilliger Konsum</p></div>
+              <div class="sp-budget-item"><span class="sp-budget-label">20 % · Zukunft</span><b id="sp-future">500 €</b><p>Notgroschen, zusätzliche Schuldentilgung und Investitionen</p></div>
+            </div>
+          </div>
+          <p>Gerade bei hohen Wohnkosten sind 50 % für Grundbedarf nicht immer realistisch. Passe die Verteilung an deine Lebenssituation an. Wichtiger als das exakte Verhältnis ist, dass deine Ausgaben langfristig zu deinen Einnahmen passen und regelmäßig Geld für deine Ziele übrig bleibt.</p>
+        </section>
+
+        <section class="sp-section" id="bezahle-dich-zuerst" aria-labelledby="sp-h-zuerst">
+          <span class="sp-kicker">06 · Die wichtigste Routine</span>
+          <h2 id="sp-h-zuerst">Bezahle dich zuerst.</h2>
+          <p>Viele Menschen sparen, was am Monatsende noch übrig ist. Oft bleibt dann nichts. Dreh die Reihenfolge um: <strong>Überweise zuerst einen festen Betrag an dein zukünftiges Ich</strong> – und plane den Rest für deine laufenden Ausgaben ein.</p>
+          <div class="sp-quote">Einkommen → Sparen → Ausgeben<br><span style="font-size:.85em;font-weight:500;color:#cde3d1">Statt: Einkommen → Ausgeben → schauen, was übrig bleibt.</span></div>
+          <ol class="sp-list">
+            <li><strong>Lege einen realistischen Betrag fest.</strong> Lieber klein beginnen und dauerhaft dranbleiben als eine zu hohe Sparrate nach kurzer Zeit aufgeben.</li>
+            <li><strong>Automatisiere die Überweisung.</strong> Ein Dauerauftrag kurz nach dem Gehaltseingang nimmt dir die monatliche Entscheidung ab.</li>
+            <li><strong>Erhöhe die Sparrate schrittweise.</strong> Bei Gehaltserhöhungen oder wegfallenden Kosten kannst du einen Teil der zusätzlichen Mittel direkt für deine Ziele reservieren.</li>
+          </ol>
+          <p>Einmal eingerichtet, wird Sparen zur Gewohnheit – ohne dass du dich jeden Monat neu motivieren musst.</p>
+        </section>
+
+        <section class="sp-section" id="lifestyle-inflation" aria-labelledby="sp-h-lifestyle">
+          <span class="sp-kicker">07 · Wenn der Lebensstandard mitwächst</span>
+          <h2 id="sp-h-lifestyle">Lifestyle-Inflation: Mehr verdienen, trotzdem nicht mehr übrig haben.</h2>
+          <p>Mit steigendem Einkommen wachsen häufig die Ansprüche: eine größere Wohnung, ein teureres Auto, mehr Abos oder häufiger essen gehen. Das ist nicht grundsätzlich schlecht – problematisch wird es, wenn <strong>jede Gehaltserhöhung sofort vollständig ausgegeben wird</strong>.</p>
+          <div class="sp-example"><strong>Beispiel: 200 € mehr Nettogehalt</strong><p>Du könntest 100 € zusätzlich für Dinge nutzen, die dir Freude machen, und die anderen <strong>100 € automatisch sparen oder investieren</strong>. So steigt dein Lebensstandard, ohne dass dein Vermögensaufbau stehen bleibt.</p></div>
+          <div class="sp-tips">
+            <div class="sp-tip"><h3>Bewusst verbessern</h3><p>Mehr Geld darf auch mehr Lebensqualität bedeuten. Frage dich aber, welche Ausgaben dir wirklich langfristig etwas bringen.</p></div>
+            <div class="sp-tip"><h3>Neue Fixkosten prüfen</h3><p>Besonders laufende Verpflichtungen sind schwer rückgängig zu machen. Prüfe daher, bevor du deinen Lebensstandard dauerhaft erhöhst.</p></div>
+          </div>
+          <p>Ein hilfreicher Gedanke: Gewöhnung setzt schnell ein. Was heute ein Luxus ist, fühlt sich morgen oft normal an. Eine bewusst gewählte Sparquote schützt dich davor, dass dein finanzieller Spielraum trotz höherem Einkommen stagniert.</p>
+        </section>
+
+        <section class="sp-section" id="sparen-investieren" aria-labelledby="sp-h-investieren">
+          <span class="sp-kicker">08 · Der nächste Schritt</span>
+          <h2 id="sp-h-investieren">Warum Sparen allein langfristig nicht reicht</h2>
+          <p>Sparen ist die Grundlage. Doch Geld, das über viele Jahre unverzinst liegen bleibt, verliert bei steigenden Preisen an <strong>Kaufkraft</strong>. Du besitzt zwar weiterhin denselben Eurobetrag, kannst dir dafür aber weniger kaufen.</p>
+          <div class="sp-inflation" aria-label="Rechenbeispiel: 10.000 Euro haben nach 20 Jahren bei zwei Prozent jährlicher Inflation eine Kaufkraft von rund 6.730 Euro in heutigen Preisen">
+            <div class="sp-inflation-cell"><span>Heute</span><strong>10.000 €</strong></div>
+            <div class="sp-inflation-arrow" aria-hidden="true">→</div>
+            <div class="sp-inflation-cell"><span>Kaufkraft nach 20 Jahren</span><strong>ca. 6.730 €</strong></div>
+          </div>
+          <p style="font-size:.84rem;color:#75877b;margin-top:-8px">Vereinfachtes Beispiel mit konstant 2 % Inflation pro Jahr, ohne Zinsen und Steuern.</p>
+          <p>Deshalb haben Sparen und Investieren unterschiedliche Aufgaben: <strong>Sparen</strong> schafft verfügbare Reserven für kurzfristige Ausgaben. <strong>Investieren</strong> eröffnet langfristig Renditechancen und die Möglichkeit, die Inflation zu übertreffen. Dafür musst du allerdings Wertschwankungen und mögliche Verluste aushalten können.</p>
+          <div class="sp-cta-block">
+            <h3>Was regelmäßiges Sparen langfristig bewirken kann</h3>
+            <p>Wie entwickelt sich dein Vermögen, wenn du monatlich etwas zurücklegst und das Geld Rendite erwirtschaftet? Probiere verschiedene Sparraten, Laufzeiten und Renditeannahmen aus. Die Ergebnisse sind Modellrechnungen, keine garantierten Erträge.</p>
+            <div class="sp-cta-links">
+              <a class="sp-inline-cta" href="../rechner/zinseszinsrechner/">Zum Zinseszinsrechner →</a>
+              <a class="sp-inline-cta sp-inline-cta--alt" href="../investieren/">Investieren verstehen →</a>
+              <a class="sp-inline-cta sp-inline-cta--alt" href="../rechner/sparrechner/">Zum Sparrechner →</a>
+            </div>
+          </div>
+          <div class="sp-note sp-note--gold"><strong>Die richtige Reihenfolge:</strong> Verschaffe dir einen Überblick, baue notwendige Rücklagen auf und kümmere dich um teure Schulden. Geld, das du in absehbarer Zeit brauchst, gehört grundsätzlich nicht in schwankungsreiche Anlagen.</div>
+        </section>
+      </div>
+    </div>
+    <div class="sp-bottom"><a href="../">← Zurück zur Startseite</a><a href="../investieren/">Weiter zu Investieren →</a></div>
+    <p class="sp-disclaimer">Die Inhalte dienen der allgemeinen Finanzbildung und stellen keine individuelle Finanz- oder Anlageberatung dar.</p>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script>
+  (() => {
+    'use strict';
+    const net = document.getElementById('sp-netto');
+    const output = [document.getElementById('sp-need'), document.getElementById('sp-want'), document.getElementById('sp-future')];
+    if (!net || output.some(el => !el)) return;
+    const format = new Intl.NumberFormat('de-DE', {style:'currency', currency:'EUR', maximumFractionDigits:0});
+    function updateBudget() {
+      const parsed = Number(net.value);
+      const amount = Number.isFinite(parsed) ? Math.max(0, Math.min(1000000, parsed)) : 0;
+      [0.5, 0.3, 0.2].forEach((ratio, i) => { output[i].textContent = format.format(amount * ratio); });
+    }
+    net.addEventListener('input', updateBudget);
+    updateBudget();
+  })();
+</script>
+</body>
+</html>
