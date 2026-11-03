@@ -57,34 +57,23 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d4ad
 </strong>
 <input class="range" type="range" id="target" min="0" max="100" value="50">
 </label>
-<p class="note">Der Zielregler übernimmt eine effiziente Mischung. Alle Gewichte ergeben zusammen 100 %.</p>
+<p class="note">Start: mittlere Zielrendite am effizienten Rand. Der Regler übernimmt die passende Mischung. Alle Gewichte ergeben zusammen 100 %.</p>
 </section>
 <section class="panel">
 <div class="heading">
 <h2>04 &nbsp; Effizienter Rand</h2>
 <span class="badge">Excel-Daten</span>
 </div>
-<p class="note">Klicke auf die grüne Kurve, um eine Mischung zu übernehmen.</p>
-<svg id="frontier" viewBox="0 0 700 390" role="img" aria-label="Risiko-Rendite-Diagramm">
+<p class="note">Alle Portfoliomischungen bleiben sichtbar – auch unterhalb der Zielrendite. Klicke auf die grüne Kurve oder einen hellen Punkt, um die Gewichtung zu übernehmen.</p>
+<svg id="frontier" viewBox="0 0 1000 450" role="img" aria-label="Risiko-Rendite-Diagramm">
 </svg>
-<div class="legend">
-<span style="color:#237c55">● Effizienter Rand</span>
-<span style="color:#d4ad48">● Deine Mischung</span>
-<span>○ Einzelanlagen</span>
-</div>
+<div class="legend"><span style="color:#a9c8b6">● Mögliche Mischungen</span><span style="color:#237c55">━ Effizienter Rand</span><span style="color:#d4ad48">● Deine Mischung</span></div><div class="legend" id="asset-legend" style="margin-top:12px"></div>
 <p class="note">Rendite = Monatsmittel × 12 · Risiko = Populationsstandardabweichung × √12</p>
 </section>
 </div>
+
 <section class="panel">
-<h2>05 &nbsp; Risiko-Rendite-Grafik</h2>
-<p class="note">Vergleiche die ausgewählten Anlagen mit möglichen Mischungen. Jeder helle Punkt ist ein Portfolio. Klicke auf einen Punkt, um dessen Gewichtung zu übernehmen.</p>
-<svg id="risk-return" viewBox="0 0 1000 450" role="img" aria-label="Risiko-Rendite-Grafik der Anlagen und Portfoliomischungen"></svg>
-<div class="legend"><span style="color:#a9c8b6">● Mögliche Mischungen</span><span style="color:#237c55">━ Effizienter Rand</span><span style="color:#d4ad48">● Deine Mischung</span></div>
-<div class="legend" id="asset-legend" style="margin-top:12px"></div>
-<p class="note">X-Achse: annualisierte Schwankung. Y-Achse: arithmetische Monatsrendite × 12. Alle Punkte verwenden denselben gemeinsamen Zeitraum. Mit nur einer Anlage gibt es eine einzige Gewichtung.</p>
-</section>
-<section class="panel">
-<h2>06 &nbsp; Deine Mischung im Überblick</h2>
+<h2>05 &nbsp; Deine Mischung im Überblick</h2>
 <div class="metrics" id="metrics">
 </div>
 <h2 style="margin-top:30px">Was wäre aus 10.000 € geworden?</h2>
