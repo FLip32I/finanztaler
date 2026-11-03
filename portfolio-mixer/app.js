@@ -1,13 +1,14 @@
 
 const names=['MSCI ACWI','MSCI World','MSCI Emerging Markets','MSCI World Small Cap','MSCI Japan','NASDAQ-100','S&P 500','DAX','STOXX Europe 600','Globale REITs','Gold','Silber','Bitcoin','Ethereum','Euro-Staatsanleihen'];
 let dataset=[], activeMonths=[];
+const locks=new Map();
 let selected=[1],w=[1],period='10',rows=[],mu=[],cov=[],curve=[];
 const $=id=>document.getElementById(id),pct=x=>(x*100).toLocaleString('de-DE',{maximumFractionDigits:1})+' %',eur=x=>x.toLocaleString('de-DE',{maximumFractionDigits:0})+' €';
 function month(i){return (2000+Math.floor(i/12))+'-'+String(i%12+1).padStart(2,'0')}function idx(s){let [y,m]=s.split('-').map(Number);return (y-2000)*12+m-1}
-function tiles(){$('tiles').innerHTML=names.map((n,i)=>`<button class="tile ${selected.includes(i)?'active':''}" data-i="${i}" aria-pressed="${selected.includes(i)}" ${!selected.includes(i)&&selected.length===5?'disabled':''}><small>${i<10?'AKTIEN':i<12?'EDELMETALLE':i<14?'KRYPTO':'ANLEIHEN'}</small><span class="check">${selected.includes(i)?'✓':'+'}</span><b>${n}</b></button>`).join('');$('count').textContent=selected.length+' von 5 ausgewählt';$('tiles').querySelectorAll('button').forEach(b=>b.onclick=()=>{let i=+b.dataset.i;if(selected.includes(i)){if(selected.length===1)return;selected.splice(selected.indexOf(i),1)}else selected.push(i);w=selected.map(()=>1/selected.length);tiles();recalc()})}
+function tiles(){$('tiles').innerHTML=names.map((n,i)=>`<button class="tile ${selected.includes(i)?'active':''}" data-i="${i}" aria-pressed="${selected.includes(i)}" ${!selected.includes(i)&&selected.length===5?'disabled':''}><small>${i<10?'AKTIEN':i<12?'EDELMETALLE':i<14?'KRYPTO':'ANLEIHEN'}</small><span class="check">${selected.includes(i)?'✓':'+'}</span><b>${n}</b></button>`).join('');$('count').textContent=selected.length+' von 5 ausgewählt';$('tiles').querySelectorAll('button').forEach(b=>b.onclick=()=>{let i=+b.dataset.i;if(selected.includes(i)){if(selected.length===1)return;locks.delete(i);selected.splice(selected.indexOf(i),1)}else selected.push(i);w=equalWeights();tiles();recalc()})}
 function simplex(v){let u=[...v].sort((a,b)=>b-a),s=0,t=0;for(let j=0;j<u.length;j++){s+=u[j];if(u[j]-(s-1)/(j+1)>0)t=(s-1)/(j+1)}return v.map(x=>Math.max(0,x-t))}
 function dot(a,b){return a.reduce((s,x,i)=>s+x*b[i],0)}function risk(v){return Math.sqrt(Math.max(0,v.reduce((s,x,i)=>s+x*dot(cov[i],v),0))*12)}
-function optimize(target){let v=mu.map(()=>1/mu.length),max= Math.max(...cov.map(r=>r.reduce((s,x)=>s+Math.abs(x),0))),step=.4/Math.max(max,1e-8),lo=mu.indexOf(Math.min(...mu)),hi=mu.indexOf(Math.max(...mu));function project(x){x=simplex(x);if(target===null||dot(x,mu)>=target-1e-12)return x;let l=0,h=1;while(dot(simplex(v.map((_,i)=>x[i]+h*mu[i])),mu)<target-1e-12&&h<1e12)h*=2;for(let k=0;k<48;k++){let m=(l+h)/2;if(dot(simplex(x.map((z,i)=>z+m*mu[i])),mu)<target)l=m;else h=m}return simplex(x.map((z,i)=>z+h*mu[i]))}for(let k=0;k<700;k++){let next=project(v.map((x,i)=>x-step*dot(cov[i],v)));let d=next.reduce((s,x,i)=>s+Math.abs(x-v[i]),0);v=next;if(d<1e-9)break}return v}
+function optimize(target){let v=mu.map(()=>1/mu.length),max= Math.max(...cov.map(r=>r.reduce((s,x)=>s+Math.abs(x),0))),step=.4/Math.max(max,1e-8),lo=mu.indexOf(Math.min(...mu)),hi=mu.indexOf(Math.max(...mu));function project(x){x=projectWeights(x);if(target===null||dot(x,mu)>=target-1e-12)return x;let l=0,h=1;while(dot(projectWeights(v.map((_,i)=>x[i]+h*mu[i])),mu)<target-1e-12&&h<1e12)h*=2;for(let k=0;k<48;k++){let m=(l+h)/2;if(dot(projectWeights(x.map((z,i)=>z+m*mu[i])),mu)<target)l=m;else h=m}return projectWeights(x.map((z,i)=>z+h*mu[i]))}for(let k=0;k<700;k++){let next=project(v.map((x,i)=>x-step*dot(cov[i],v)));let d=next.reduce((s,x,i)=>s+Math.abs(x-v[i]),0);v=next;if(d<1e-9)break}return v}
 function emptyState(message){
  rows=[];curve=[];mu=[];cov=[];
  $('coverage').textContent=message;
@@ -15,7 +16,7 @@ function emptyState(message){
  $('targetvalue').textContent='';
  for(const id of ['equal','min','target'])$(id).disabled=true;
 }
-function recalc(){
+function recalc(reset=true){
  $('dates').classList.toggle('hidden',period!=='custom');
  if(!dataset.length){emptyState('Noch keine Monatsrenditen vorhanden. Bitte pfmxdaten.xlsx befüllen oder eine befüllte Excel-Datei laden.');return;}
  const complete=dataset.filter(r=>selected.every(i=>Number.isFinite(r.values[i])));
@@ -41,15 +42,20 @@ function recalc(){
  rows=block.map(r=>selected.map(i=>r.values[i]));activeMonths=block.map(r=>r.month);
  mu=selected.map((_,i)=>rows.reduce((s,r)=>s+r[i],0)/rows.length);
  cov=selected.map((_,i)=>selected.map((_,j)=>rows.reduce((s,r)=>s+(r[i]-mu[i])*(r[j]-mu[j]),0)/rows.length));
- const minimum=optimize(null),start=dot(minimum,mu),end=Math.max(...mu);
+ const minimum=optimize(null),start=dot(minimum,mu),free=freeIndices(),end=free.length?selected.reduce((v,id,i)=>v+(locks.has(id)?locks.get(id)*mu[i]:0),0)+remainingWeight()*Math.max(...free.map(i=>mu[i])):dot(minimum,mu);
  curve=Array.from({length:51},(_,i)=>{const v=optimize(start+(end-start)*i/50);return {w:v,r:dot(v,mu)*12,s:risk(v)};});
  const cropped=idx(block[0].month)>a||idx(block.at(-1).month)<b;
  $('coverage').textContent=`Auswertung: ${block[0].month} bis ${block.at(-1).month} · ${rows.length} gemeinsame Monatsrenditen`+(cropped?' · Auf verfügbare gemeinsame Daten gekürzt.':'')+(period!=='custom'&&blocks.length>1?' · Neuester lückenloser Abschnitt; frühere Datenlücken wurden nicht überbrückt.':'');
- for(const id of ['equal','min','target'])$(id).disabled=false;
- $('target').value=50;w=[...curve[25].w];draw();
+ for(const id of ['equal','min','target'])$(id).disabled=freeIndices().length<2||remainingWeight()<1e-10;
+ if(reset){$('target').value=50;w=[...curve[25].w];}draw();
 }
-function draw(){ $('weights').innerHTML=selected.map((j,i)=>`<div class="weight"><label for="w${i}">${names[j]} <span>${pct(w[i])}</span></label><input id="w${i}" type="range" min="0" max="100" step="0.1" value="${w[i]*100}" data-i="${i}"></div>`).join('');$('weights').querySelectorAll('input').forEach(el=>el.oninput=()=>{let i=+el.dataset.i,v=+el.value/100,rest=1-w[i];w=w.map((x,j)=>j===i?v:rest>1e-10?x*(1-v)/rest:(1-v)/(w.length-1));if(w.length===1)w=[1];draw()});let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(dot(w,mu)*12);drawFrontier();}
-$('periods').innerHTML=[['5','5 Jahre'],['10','10 Jahre'],['15','15 Jahre'],['20','20 Jahre'],['max','Maximal'],['custom','Eigener Zeitraum']].map(([v,l])=>`<button data-v="${v}" class="${v===period?'active':''}">${l}</button>`).join('');$('periods').querySelectorAll('button').forEach(b=>b.onclick=()=>{period=b.dataset.v;$('periods').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));recalc()});$('start').onchange=$('end').onchange=recalc;$('equal').onclick=()=>{w=selected.map(()=>1/selected.length);draw()};$('min').onclick=()=>{w=[...curve[0].w];$('target').value=0;draw()};$('target').oninput=()=>{w=[...curve[Math.round(+$('target').value/2)].w];draw()};tiles();recalc();
+function draw(){
+ $('weights').innerHTML=selected.map((id,i)=>`<div class="weight"><label for="w${i}">${names[id]} <span>${pct(w[i])}</span></label><input id="w${i}" data-weight="${i}" type="range" min="0" max="${locks.has(id)?100:(remainingWeight()*100).toFixed(8)}" step="0.1" value="${w[i]*100}" ${locks.has(id)||freeIndices().length<2?'disabled':''}><label class="fix-control"><input type="checkbox" data-lock="${i}" ${locks.has(id)?'checked':''}> ${locks.has(id)?'Fixiert':'Fixieren'}</label></div>`).join('');
+ $('weights').querySelectorAll('[data-lock]').forEach(el=>el.onchange=()=>{const i=+el.dataset.lock,id=selected[i];if(el.checked)locks.set(id,w[i]);else locks.delete(id);recalc(false);});
+ $('weights').querySelectorAll('[data-weight]').forEach(el=>el.oninput=()=>{adjustWeight(+el.dataset.weight,+el.value/100);draw();});
+ $('lock-note').textContent=locks.size?'Fixierte Anteile bleiben unverändert. Kurve und Mischungen berücksichtigen die Fixierung; Einzelanlagen dienen als Vergleich.':'Fixiere einzelne Anteile, damit nur die übrigen Anlagen angepasst werden.';
+ let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(dot(w,mu)*12);drawFrontier();}
+$('periods').innerHTML=[['5','5 Jahre'],['10','10 Jahre'],['15','15 Jahre'],['20','20 Jahre'],['max','Maximal'],['custom','Eigener Zeitraum']].map(([v,l])=>`<button data-v="${v}" class="${v===period?'active':''}">${l}</button>`).join('');$('periods').querySelectorAll('button').forEach(b=>b.onclick=()=>{period=b.dataset.v;$('periods').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));recalc()});$('start').onchange=$('end').onchange=recalc;$('equal').onclick=()=>{w=equalWeights();draw()};$('min').onclick=()=>{w=[...curve[0].w];$('target').value=0;draw()};$('target').oninput=()=>{w=[...curve[Math.round(+$('target').value/2)].w];draw()};tiles();recalc();
 initializeExcel();
 
 async function applyExcel(buffer,label){
@@ -69,7 +75,7 @@ function drawFrontier(){
  const mixes=selected.length===1?[[1]]:selected.length===2?Array.from({length:301},(_,i)=>[i/300,1-i/300]):Array.from({length:280},()=>{
   const values=selected.map(()=>-Math.log(random())),sum=values.reduce((a,b)=>a+b,0);return values.map(v=>v/sum);
  });
- const points=mixes.map(v=>({w:v,s:risk(v),r:dot(v,mu)*12}));
+ const points=mixes.map(v=>{const candidate=constrainMix(v);return {w:candidate,s:risk(candidate),r:dot(candidate,mu)*12};});
  const assets=selected.map((j,i)=>({s:Math.sqrt(cov[i][i]*12),r:mu[i]*12,name:names[j]}));
  const all=[...points,...assets,...curve,{s:risk(w),r:dot(w,mu)*12}];
  const maxX=Math.max(.01,...all.map(p=>p.s))*1.12,minY=Math.min(0,...all.map(p=>p.r))-.01,maxY=Math.max(.01,...all.map(p=>p.r))+.02;
@@ -88,4 +94,25 @@ function drawFrontier(){
  $('asset-legend').innerHTML=assets.map((p,i)=>`<span style="color:${colors[i]}">● ${i+1} · ${p.name}</span>`).join('');
  $('frontier').querySelectorAll('[data-efficient]').forEach(el=>el.onclick=()=>{const i=+el.dataset.efficient;w=[...curve[i].w];$('target').value=i*2;draw();});
  $('frontier').querySelectorAll('[data-mix]').forEach(el=>el.onclick=()=>{w=[...points[+el.dataset.mix].w];draw();});
+}
+
+function freeIndices(){return selected.map((id,i)=>locks.has(id)?-1:i).filter(i=>i>=0);}
+function remainingWeight(){return Math.max(0,1-selected.reduce((sum,id)=>sum+(locks.get(id)||0),0));}
+function equalWeights(){const free=freeIndices(),remaining=remainingWeight();return selected.map(id=>locks.has(id)?locks.get(id):remaining/Math.max(1,free.length));}
+function projectWeights(values){
+ const free=freeIndices(),remaining=remainingWeight();
+ if(!free.length)return selected.map(id=>locks.get(id)||0);
+ const projected=remaining>1e-12?simplex(free.map(i=>values[i]/remaining)).map(v=>v*remaining):free.map(()=>0);
+ return selected.map((id,i)=>locks.has(id)?locks.get(id):projected[free.indexOf(i)]);
+}
+function constrainMix(values){
+ const free=freeIndices(),remaining=remainingWeight(),sum=free.reduce((a,i)=>a+values[i],0);
+ return selected.map((id,i)=>locks.has(id)?locks.get(id):sum>1e-12?remaining*values[i]/sum:remaining/Math.max(1,free.length));
+}
+function adjustWeight(index,value){
+ if(locks.has(selected[index]))return;
+ const others=freeIndices().filter(i=>i!==index);if(!others.length)return;
+ value=Math.min(remainingWeight(),Math.max(0,value));
+ const total=others.reduce((sum,i)=>sum+w[i],0),left=remainingWeight()-value;
+ w=w.map((v,i)=>i===index?value:locks.has(selected[i])?locks.get(selected[i]):total>1e-12?v*left/total:left/others.length);
 }
