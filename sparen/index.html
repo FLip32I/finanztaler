@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10342f">
-  <meta name="description" content="Sparen verstehen: Einnahmen, Ausgaben, Kontenmodell, 50-30-20-Regel, bezahle dich zuerst und Lifestyle-Inflation. Mit Budgetrechner und dem Weg vom Sparen zum Investieren.">
+  <meta name="description" content="Sparen lernen mit Finanztaler: Einnahmen, Ausgaben, Bezahle dich zuerst, Lifestyle-Inflation, 50-30-20-Regel, Kontenmodell und Notgroschen. Mit Budgetrechner und Einstieg ins Investieren.">
   <title>Sparen lernen: Geld bewusst einsetzen | Finanztaler</title>
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="../assets/js/script.js" defer></script>
@@ -119,6 +119,19 @@
     @media(max-width:760px){.sp-hero{padding:37px 0 32px}.sp-hero-layout{grid-template-columns:1fr}.sp-hero-panel{max-width:430px;width:100%;padding:20px}.sp-hero-wheel{width:150px}.sp-hero-panel h2{margin-bottom:10px}.sp-shell{padding:30px 0 60px}.sp-layout{grid-template-columns:1fr}.sp-toc{position:static;max-height:none;overflow:visible;padding:17px}.sp-toc-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.sp-toc a{padding:9px 8px;font-size:.85rem}.sp-toc-note{display:none}.sp-section{scroll-margin-top:85px}.sp-content{gap:16px}}
     @media(max-width:560px){.sp-hero h1{font-size:clamp(36px,9vw,46px)}.sp-hero-panel{margin:0 auto}.sp-intro h2{font-size:27px}.sp-card-grid,.sp-budget-grid,.sp-tips{grid-template-columns:1fr}.sp-budget-item b{font-size:1.48rem}.sp-calculator{padding:16px}.sp-inflation{grid-template-columns:1fr;gap:7px}.sp-inflation-arrow{transform:rotate(90deg);font-size:1.4rem;text-align:center}.sp-inflation-cell:last-child{text-align:left}.sp-actions .btn,.sp-actions .sp-btn-alt{width:100%;text-align:center}.sp-cta-links a{width:100%}.sp-hero-wheel{width:145px}}
     @media(prefers-reduced-motion:reduce){.sp-inline-cta,.sp-toc a,.sp-btn-alt{transition:none}}
+
+    /* Kapitel-Navigation als horizontale, dauerhaft sichtbare Pills. */
+    .sp-layout{display:block;min-width:0}
+    .sp-toc{position:static;max-height:none;overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none;padding:0;margin:0 0 28px}
+    .sp-visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;clip-path:inset(50%)}
+    .sp-toc-list{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:10px}
+    .sp-toc a{display:inline-flex;align-items:center;gap:0;padding:10px 15px;border:1px solid #d3e5d8;border-radius:999px;background:#fff;color:#174e39;font-size:.84rem;font-weight:750;line-height:1.3;white-space:normal;transition:background .15s,border-color .15s}
+    .sp-toc a:hover,.sp-toc a:focus-visible{background:#edf7ed;border-color:#8ebe9d;outline-offset:2px}
+    .sp-toc-note{display:none}
+    .sp-content{max-width:1060px;margin-left:clamp(14px,3.4vw,48px);padding-left:clamp(4px,1.6vw,18px);display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+    .sp-section{scroll-margin-top:108px;min-width:0}.sp-table-wrap{max-width:100%;min-width:0}
+    @media(max-width:760px){.sp-layout{display:block}.sp-toc{padding:0;margin-bottom:20px}.sp-toc-list{display:flex;flex-wrap:wrap;gap:8px}.sp-toc a{padding:9px 12px;font-size:.80rem}.sp-content{margin-left:0;padding-left:0;gap:16px}}
+    @media(max-width:420px){.sp-toc a{font-size:.78rem;padding:8px 11px}}
   </style>
 </head>
 <body data-root="../" data-page="sparen/">
@@ -153,22 +166,22 @@
     <div class="sp-intro">
       <span class="sp-kicker">Die Grundlagen</span>
       <h2>Eine gute Sparstrategie beginnt im Alltag.</h2>
-      <p>Du musst weder jeden Cent umdrehen noch sofort auf alles verzichten. Wer weiß, woher sein Geld kommt, wohin es fließt und was ihm wichtig ist, kann bewusst entscheiden. Die acht Kapitel führen dich vom Überblick bis zum nächsten Schritt: Investieren.</p>
+      <p>Du musst weder jeden Cent umdrehen noch sofort auf alles verzichten. Wer weiß, woher sein Geld kommt, wohin es fließt und was ihm wichtig ist, kann bewusst entscheiden. Die neun Kapitel führen dich von deinen Einnahmen und Ausgaben über einfache Sparroutinen und den Notgroschen bis zum langfristigen Investieren.</p>
     </div>
     <div class="sp-layout">
-      <nav class="sp-toc" aria-label="Kapitel auf der Sparen-Seite">
-        <h2>Kapitelübersicht</h2>
+      <nav class="sp-toc" aria-label="Kapitel der Sparen-Seite">
+        <h2 class="sp-visually-hidden">Direkt zu einem Kapitel springen</h2>
         <div class="sp-toc-list">
-          <a href="#warum-sparen"><span>01</span> Warum sparen?</a>
-          <a href="#einnahmen"><span>02</span> Einnahmen</a>
-          <a href="#ausgaben"><span>03</span> Ausgaben</a>
-          <a href="#kontenmodell"><span>04</span> Kontenmodell</a>
-          <a href="#regel-50-30-20"><span>05</span> 50-30-20-Regel</a>
-          <a href="#bezahle-dich-zuerst"><span>06</span> Bezahle dich zuerst</a>
-          <a href="#lifestyle-inflation"><span>07</span> Lifestyle-Inflation</a>
-          <a href="#sparen-investieren"><span>08</span> Sparen &amp; Investieren</a>
+          <a href="#warum-sparen">Warum sparen?</a>
+          <a href="#einnahmen">Einnahmen</a>
+          <a href="#ausgaben">Ausgaben</a>
+          <a href="#bezahle-dich-zuerst">Bezahle dich zuerst</a>
+          <a href="#lifestyle-inflation">Lifestyle-Inflation</a>
+          <a href="#regel-50-30-20">50-30-20-Regel</a>
+          <a href="#kontenmodell">Kontenmodell</a>
+          <a href="#notgroschen">Notgroschen</a>
+          <a href="#sparen-investieren">Sparen &amp; Investieren</a>
         </div>
-        <p class="sp-toc-note">Alle Kapitel bleiben auf der Seite sichtbar. Wähle ein Thema, um direkt dorthin zu springen.</p>
       </nav>
 
       <div class="sp-content">
@@ -181,7 +194,7 @@
             <div class="sp-card sp-card--gold"><span class="sp-icon" aria-hidden="true">↗</span><h3>Selbstbestimmung</h3><p>Rücklagen ermöglichen mehr Freiheit bei großen und kleinen Lebensentscheidungen.</p></div>
             <div class="sp-card sp-card--blue"><span class="sp-icon" aria-hidden="true">◎</span><h3>Ziele</h3><p>Vom Urlaub bis zur Weiterbildung: Wer gezielt spart, muss Wünsche nicht automatisch auf Kredit finanzieren.</p></div>
           </div>
-          <div class="sp-note"><strong>Ein sinnvoller Anfang:</strong> Baue einen Notgroschen auf. Als grobe Orientierung gelten oft drei bis sechs Monate notwendiger Ausgaben. Die passende Höhe hängt unter anderem von deiner Einkommenssicherheit und deinen Verpflichtungen ab. Kurzfristig benötigtes Geld sollte gut verfügbar bleiben.</div>
+          <div class="sp-note"><strong>Ein sinnvoller Anfang:</strong> Ein <a href="#notgroschen">Notgroschen</a> hilft dir, unerwartete finanzielle Belastungen abzufedern. Wie viel du dafür zurücklegen solltest und wofür diese Reserve gedacht ist, erfährst du weiter unten.</div>
         </section>
 
         <section class="sp-section" id="einnahmen" aria-labelledby="sp-h-einnahmen">
@@ -193,6 +206,7 @@
             <div class="sp-tip"><h3>Unregelmäßige Einnahmen</h3><p>Boni, Steuerrückzahlungen oder einmalige Verkäufe lieber separat einplanen. Sie sind keine sichere Basis für laufende Fixkosten.</p></div>
           </div>
           <div class="sp-example"><strong>Merksatz</strong><p>Plane deinen gewöhnlichen Monat mit verlässlichen Einnahmen. Zusätzliche Zahlungen kannst du bewusst für Rücklagen, größere Wünsche oder Investitionen verwenden.</p></div>
+          <p><strong>Denke auch an die Einnahmenseite:</strong> Weiterbildungen, Gehaltsverhandlungen, ein Stellenwechsel oder eine passende Nebentätigkeit können dein verfügbares Einkommen dauerhaft erhöhen. Entscheidend ist, dass sich der zusätzliche Aufwand für dich lohnt.</p>
         </section>
 
         <section class="sp-section" id="ausgaben" aria-labelledby="sp-h-ausgaben">
@@ -211,22 +225,36 @@
           </div>
           <div class="sp-example"><strong>Beispiel: Jahreskosten sichtbar machen</strong><p>Eine Versicherung kostet 360 € im Jahr? Plane dafür monatlich <strong>30 €</strong> ein. So wird aus einer unerwartet hohen Abbuchung eine vorhersehbare Ausgabe.</p></div>
           <p>Das Ziel ist nicht, jede Freude zu streichen. Es geht darum, Ausgaben zu erkennen, die dir weniger wert sind als die Ziele, für die du eigentlich sparen möchtest.</p>
+          <div class="sp-note sp-note--gold"><strong>Ausgaben lassen sich nicht endlos reduzieren.</strong> Miete, Lebensmittel und andere notwendige Kosten setzen eine natürliche Untergrenze. Einmalige Einsparungen sind sinnvoll – langfristig kann es jedoch mehr bewirken, auch deine <a href="#einnahmen">Einnahmen zu verbessern</a>, statt jeden kleinen Genuss zu streichen.</div>
         </section>
 
-        <section class="sp-section" id="kontenmodell" aria-labelledby="sp-h-konten">
-          <span class="sp-kicker">04 · Ordnung schaffen</span>
-          <h2 id="sp-h-konten">Das Kontenmodell: Gib jedem Euro einen Platz.</h2>
-          <p>Ein Kontenmodell trennt Geld für den Alltag von Geld für deine Ziele. Das macht Budgets sichtbar und verhindert, dass Rücklagen versehentlich im Alltag ausgegeben werden. Schon drei Konten beziehungsweise Unterkonten können reichen.</p>
-          <div class="sp-steps" aria-label="Drei Bausteine eines Kontenmodells">
-            <div class="sp-step"><span class="sp-step-index">KONTO 01</span><h3>Gehalts- &amp; Fixkostenkonto</h3><p>Hier gehen Einnahmen ein und Miete, Versicherungen sowie andere feste Verpflichtungen ab.</p></div>
-            <div class="sp-step"><span class="sp-step-index">KONTO 02</span><h3>Alltagskonto</h3><p>Für Einkäufe, Freizeit und persönliche Wünsche. Ein fester Monatsbetrag setzt einen klaren Rahmen.</p></div>
-            <div class="sp-step"><span class="sp-step-index">KONTO 03</span><h3>Rücklagen &amp; Ziele</h3><p>Für Notgroschen, Jahreskosten und geplante Ausgaben – idealerweise getrennt in Spartöpfen.</p></div>
+        <section class="sp-section" id="bezahle-dich-zuerst" aria-labelledby="sp-h-zuerst">
+          <span class="sp-kicker">04 · Die wichtigste Routine</span>
+          <h2 id="sp-h-zuerst">Bezahle dich zuerst.</h2>
+          <p>Viele Menschen sparen, was am Monatsende noch übrig ist. Oft bleibt dann nichts. Dreh die Reihenfolge um: <strong>Überweise zuerst einen festen Betrag an dein zukünftiges Ich</strong> – und plane den Rest für deine laufenden Ausgaben ein.</p>
+          <div class="sp-quote">Einkommen → Sparen → Ausgeben<br><span style="font-size:.85em;font-weight:500;color:#cde3d1">Statt: Einkommen → Ausgeben → schauen, was übrig bleibt.</span></div>
+          <ol class="sp-list">
+            <li><strong>Lege einen realistischen Betrag fest.</strong> Lieber klein beginnen und dauerhaft dranbleiben als eine zu hohe Sparrate nach kurzer Zeit aufgeben.</li>
+            <li><strong>Automatisiere die Überweisung.</strong> Ein Dauerauftrag kurz nach dem Gehaltseingang nimmt dir die monatliche Entscheidung ab.</li>
+            <li><strong>Erhöhe die Sparrate schrittweise.</strong> Bei Gehaltserhöhungen oder wegfallenden Kosten kannst du einen Teil der zusätzlichen Mittel direkt für deine Ziele reservieren.</li>
+          </ol>
+          <p>Einmal eingerichtet, wird Sparen zur Gewohnheit – ohne dass du dich jeden Monat neu motivieren musst.</p>
+        </section>
+
+        <section class="sp-section" id="lifestyle-inflation" aria-labelledby="sp-h-lifestyle">
+          <span class="sp-kicker">05 · Wenn der Lebensstandard mitwächst</span>
+          <h2 id="sp-h-lifestyle">Lifestyle-Inflation: Mehr verdienen, trotzdem nicht mehr übrig haben.</h2>
+          <p>Mit steigendem Einkommen wachsen häufig die Ansprüche: eine größere Wohnung, ein teureres Auto, mehr Abos oder häufiger essen gehen. Das ist nicht grundsätzlich schlecht – problematisch wird es, wenn <strong>jede Gehaltserhöhung sofort vollständig ausgegeben wird</strong>.</p>
+          <div class="sp-example"><strong>Beispiel: 200 € mehr Nettogehalt</strong><p>Du könntest 100 € zusätzlich für Dinge nutzen, die dir Freude machen, und die anderen <strong>100 € automatisch sparen oder investieren</strong>. So steigt dein Lebensstandard, ohne dass dein Vermögensaufbau stehen bleibt.</p></div>
+          <div class="sp-tips">
+            <div class="sp-tip"><h3>Bewusst verbessern</h3><p>Mehr Geld darf auch mehr Lebensqualität bedeuten. Frage dich aber, welche Ausgaben dir wirklich langfristig etwas bringen.</p></div>
+            <div class="sp-tip"><h3>Neue Fixkosten prüfen</h3><p>Besonders laufende Verpflichtungen sind schwer rückgängig zu machen. Prüfe daher, bevor du deinen Lebensstandard dauerhaft erhöhst.</p></div>
           </div>
-          <div class="sp-note"><strong>Und wo bleibt das Investieren?</strong> Langfristig angelegtes Geld gehört nicht in denselben Topf wie dein Notgroschen. Ein Wertpapierdepot kann dein Kontenmodell ergänzen, sobald die kurzfristigen Rücklagen stehen. Mehr zu sicheren Rücklagen findest du bei <a href="../investieren/tagesgeld-festgeld/">Tagesgeld &amp; Festgeld</a>.</div>
+          <p>Ein hilfreicher Gedanke: Gewöhnung setzt schnell ein. Was heute ein Luxus ist, fühlt sich morgen oft normal an. Eine bewusst gewählte Sparquote schützt dich davor, dass dein finanzieller Spielraum trotz höherem Einkommen stagniert.</p>
         </section>
 
         <section class="sp-section" id="regel-50-30-20" aria-labelledby="sp-h-regel">
-          <span class="sp-kicker">05 · Eine einfache Budgetregel</span>
+          <span class="sp-kicker">06 · Eine einfache Budgetregel</span>
           <h2 id="sp-h-regel">Die 50-30-20-Regel</h2>
           <p>Die 50-30-20-Regel teilt das monatliche <strong>Nettoeinkommen</strong> in drei Bereiche auf: notwendige Ausgaben, persönliche Wünsche und deine finanzielle Zukunft. Sie ist ein Startpunkt für die Budgetplanung, keine allgemeingültige Vorgabe.</p>
           <div class="sp-calculator">
@@ -247,33 +275,40 @@
           <p>Gerade bei hohen Wohnkosten sind 50 % für Grundbedarf nicht immer realistisch. Passe die Verteilung an deine Lebenssituation an. Wichtiger als das exakte Verhältnis ist, dass deine Ausgaben langfristig zu deinen Einnahmen passen und regelmäßig Geld für deine Ziele übrig bleibt.</p>
         </section>
 
-        <section class="sp-section" id="bezahle-dich-zuerst" aria-labelledby="sp-h-zuerst">
-          <span class="sp-kicker">06 · Die wichtigste Routine</span>
-          <h2 id="sp-h-zuerst">Bezahle dich zuerst.</h2>
-          <p>Viele Menschen sparen, was am Monatsende noch übrig ist. Oft bleibt dann nichts. Dreh die Reihenfolge um: <strong>Überweise zuerst einen festen Betrag an dein zukünftiges Ich</strong> – und plane den Rest für deine laufenden Ausgaben ein.</p>
-          <div class="sp-quote">Einkommen → Sparen → Ausgeben<br><span style="font-size:.85em;font-weight:500;color:#cde3d1">Statt: Einkommen → Ausgeben → schauen, was übrig bleibt.</span></div>
-          <ol class="sp-list">
-            <li><strong>Lege einen realistischen Betrag fest.</strong> Lieber klein beginnen und dauerhaft dranbleiben als eine zu hohe Sparrate nach kurzer Zeit aufgeben.</li>
-            <li><strong>Automatisiere die Überweisung.</strong> Ein Dauerauftrag kurz nach dem Gehaltseingang nimmt dir die monatliche Entscheidung ab.</li>
-            <li><strong>Erhöhe die Sparrate schrittweise.</strong> Bei Gehaltserhöhungen oder wegfallenden Kosten kannst du einen Teil der zusätzlichen Mittel direkt für deine Ziele reservieren.</li>
-          </ol>
-          <p>Einmal eingerichtet, wird Sparen zur Gewohnheit – ohne dass du dich jeden Monat neu motivieren musst.</p>
+        <section class="sp-section" id="kontenmodell" aria-labelledby="sp-h-konten">
+          <span class="sp-kicker">07 · Ordnung schaffen</span>
+          <h2 id="sp-h-konten">Das Kontenmodell: Gib jedem Euro einen Platz.</h2>
+          <p>Ein Kontenmodell trennt Geld für den Alltag von Geld für deine Ziele. Das macht Budgets sichtbar und verhindert, dass Rücklagen versehentlich im Alltag ausgegeben werden. Schon drei Konten beziehungsweise Unterkonten können reichen.</p>
+          <div class="sp-steps" aria-label="Drei Bausteine eines Kontenmodells">
+            <div class="sp-step"><span class="sp-step-index">KONTO 01</span><h3>Gehalts- &amp; Fixkostenkonto</h3><p>Hier gehen Einnahmen ein und Miete, Versicherungen sowie andere feste Verpflichtungen ab.</p></div>
+            <div class="sp-step"><span class="sp-step-index">KONTO 02</span><h3>Alltagskonto</h3><p>Für Einkäufe, Freizeit und persönliche Wünsche. Ein fester Monatsbetrag setzt einen klaren Rahmen.</p></div>
+            <div class="sp-step"><span class="sp-step-index">KONTO 03</span><h3>Rücklagen &amp; Ziele</h3><p>Für Notgroschen, Jahreskosten und geplante Ausgaben – idealerweise getrennt in Spartöpfen.</p></div>
+          </div>
+          <div class="sp-note"><strong>Und wo bleibt das Investieren?</strong> Langfristig angelegtes Geld gehört nicht in denselben Topf wie dein Notgroschen. Ein Wertpapierdepot kann dein Kontenmodell ergänzen, sobald die kurzfristigen Rücklagen stehen. Mehr zu sicheren Rücklagen findest du bei <a href="../investieren/tagesgeld-festgeld/">Tagesgeld &amp; Festgeld</a>.</div>
         </section>
 
-        <section class="sp-section" id="lifestyle-inflation" aria-labelledby="sp-h-lifestyle">
-          <span class="sp-kicker">07 · Wenn der Lebensstandard mitwächst</span>
-          <h2 id="sp-h-lifestyle">Lifestyle-Inflation: Mehr verdienen, trotzdem nicht mehr übrig haben.</h2>
-          <p>Mit steigendem Einkommen wachsen häufig die Ansprüche: eine größere Wohnung, ein teureres Auto, mehr Abos oder häufiger essen gehen. Das ist nicht grundsätzlich schlecht – problematisch wird es, wenn <strong>jede Gehaltserhöhung sofort vollständig ausgegeben wird</strong>.</p>
-          <div class="sp-example"><strong>Beispiel: 200 € mehr Nettogehalt</strong><p>Du könntest 100 € zusätzlich für Dinge nutzen, die dir Freude machen, und die anderen <strong>100 € automatisch sparen oder investieren</strong>. So steigt dein Lebensstandard, ohne dass dein Vermögensaufbau stehen bleibt.</p></div>
-          <div class="sp-tips">
-            <div class="sp-tip"><h3>Bewusst verbessern</h3><p>Mehr Geld darf auch mehr Lebensqualität bedeuten. Frage dich aber, welche Ausgaben dir wirklich langfristig etwas bringen.</p></div>
-            <div class="sp-tip"><h3>Neue Fixkosten prüfen</h3><p>Besonders laufende Verpflichtungen sind schwer rückgängig zu machen. Prüfe daher, bevor du deinen Lebensstandard dauerhaft erhöhst.</p></div>
+        <section class="sp-section" id="notgroschen" aria-labelledby="sp-h-notgroschen">
+          <span class="sp-kicker">08 · Für unvorhergesehene Ausgaben</span>
+          <h2 id="sp-h-notgroschen">Notgroschen: Deine finanzielle Sicherheitsreserve</h2>
+          <p>Der Notgroschen ist Geld, auf das du <strong>im Ernstfall sofort zugreifen kannst</strong>. Er soll verhindern, dass dich eine unerwartete Ausgabe in teure Schulden zwingt oder du dafür langfristige Investments zum falschen Zeitpunkt verkaufen musst.</p>
+          <div class="sp-card-grid">
+            <div class="sp-card"><span class="sp-icon" aria-hidden="true">✓</span><h3>Reparaturen</h3><p>Die Waschmaschine fällt aus oder dein Auto muss ungeplant in die Werkstatt.</p></div>
+            <div class="sp-card sp-card--gold"><span class="sp-icon" aria-hidden="true">↗</span><h3>Einkommensausfall</h3><p>Ein Jobwechsel, Arbeitslosigkeit oder eine längere Zahlungspause überbrücken.</p></div>
+            <div class="sp-card sp-card--blue"><span class="sp-icon" aria-hidden="true">◎</span><h3>Dringende Kosten</h3><p>Notwendige, kurzfristige Ausgaben, die sich nicht sinnvoll verschieben lassen.</p></div>
           </div>
-          <p>Ein hilfreicher Gedanke: Gewöhnung setzt schnell ein. Was heute ein Luxus ist, fühlt sich morgen oft normal an. Eine bewusst gewählte Sparquote schützt dich davor, dass dein finanzieller Spielraum trotz höherem Einkommen stagniert.</p>
+          <h3>Wie hoch sollte dein Notgroschen sein?</h3>
+          <p>Als grobe Faustregel gelten <strong>drei bis sechs Monate notwendiger Ausgaben</strong>. Bei unregelmäßigem Einkommen, Selbstständigkeit oder hohen finanziellen Verpflichtungen kann ein größerer Puffer sinnvoll sein. Ausgangspunkt sind deine unvermeidbaren Monatskosten – nicht automatisch dein gesamtes Nettogehalt.</p>
+          <div class="sp-example"><strong>Beispiel</strong><p>Benötigst du für Wohnen, Lebensmittel und andere notwendige Ausgaben monatlich <strong>1.800 €</strong>, entsprechen drei bis sechs Monate einem Notgroschen von etwa <strong>5.400 € bis 10.800 €</strong>. Das ist eine Orientierung, kein starrer Sollwert.</p></div>
+          <div class="sp-tips">
+            <div class="sp-tip"><h3>Gut verfügbar aufbewahren</h3><p>Nutze beispielsweise ein separates, täglich verfügbares Tagesgeldkonto. Sicherheit und Zugriff sind hier wichtiger als maximale Rendite.</p></div>
+            <div class="sp-tip"><h3>Getrennt von geplanten Ausgaben</h3><p>Urlaub, Versicherungsbeiträge oder ein absehbarer Autokauf sind keine Notfälle. Dafür eignen sich eigene Rücklagentöpfe.</p></div>
+          </div>
+          <p>Baue den Puffer schrittweise mit einem festen monatlichen Betrag auf. Wenn du ihn für einen echten Notfall nutzt, fülle ihn anschließend wieder auf.</p>
+          <div class="sp-note"><strong>Merke:</strong> Der Notgroschen soll dich vor finanziellen Engpässen schützen – nicht an der Börse wachsen. Mehr zur passenden Aufbewahrung liest du bei <a href="../investieren/tagesgeld-festgeld/">Tagesgeld &amp; Festgeld</a>.</div>
         </section>
 
         <section class="sp-section" id="sparen-investieren" aria-labelledby="sp-h-investieren">
-          <span class="sp-kicker">08 · Der nächste Schritt</span>
+          <span class="sp-kicker">09 · Der nächste Schritt</span>
           <h2 id="sp-h-investieren">Warum Sparen allein langfristig nicht reicht</h2>
           <p>Sparen ist die Grundlage. Doch Geld, das über viele Jahre unverzinst liegen bleibt, verliert bei steigenden Preisen an <strong>Kaufkraft</strong>. Du besitzt zwar weiterhin denselben Eurobetrag, kannst dir dafür aber weniger kaufen.</p>
           <div class="sp-inflation" aria-label="Rechenbeispiel: 10.000 Euro haben nach 20 Jahren bei zwei Prozent jährlicher Inflation eine Kaufkraft von rund 6.730 Euro in heutigen Preisen">
@@ -293,6 +328,9 @@
             </div>
           </div>
           <div class="sp-note sp-note--gold"><strong>Die richtige Reihenfolge:</strong> Verschaffe dir einen Überblick, baue notwendige Rücklagen auf und kümmere dich um teure Schulden. Geld, das du in absehbarer Zeit brauchst, gehört grundsätzlich nicht in schwankungsreiche Anlagen.</div>
+          <h3 style="margin-top:25px">Fazit: Nicht nur weniger ausgeben, sondern mehr Spielraum schaffen</h3>
+          <p>Ausgaben bewusst zu steuern, ist wichtig. Sie lassen sich aber nicht beliebig senken – irgendwann stößt Verzicht an Grenzen. Deshalb lohnt es sich langfristig oft stärker, <strong>an den Einnahmen zu arbeiten</strong>, etwa durch Qualifizierung, Gehaltsverhandlungen oder neue berufliche Möglichkeiten. Wenn du einen Teil zusätzlicher Einnahmen konsequent sparst und langfristig investierst, kann daraus echter finanzieller Spielraum entstehen.</p>
+          <p><strong>Das Ziel ist nicht maximaler Verzicht, sondern ein nachhaltiges Gleichgewicht:</strong> gut leben, Rücklagen bilden und Vermögen aufbauen.</p>
         </section>
       </div>
     </div>
