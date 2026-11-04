@@ -135,6 +135,16 @@ function drawComparison(){
  if(!rows.length||!mu.length)return;
  const b=comparisonStats(w);
  const a=comparisonStats(optimize(dot(w,mu)));
+ // Comparison B minus A: higher return is favorable, higher volatility unfavorable.
+ const deltaReturn=(b.annualReturn-a.annualReturn)*100;
+ const deltaRisk=(b.volatility-a.volatility)*100;
+ const formatDelta=x=>(x>0?'+':'')+x.toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1})+' PP';
+ const classify=(x,higherBetter)=>Math.abs(x)<0.05?'neutral':((x>0)===higherBetter?'good':'bad');
+ const retClass=classify(deltaReturn,true),riskClass=classify(deltaRisk,false);
+ const riskHeight=Math.min(19,Math.max(3,Math.abs(deltaRisk)*8));
+ const retHeight=Math.min(19,Math.max(3,Math.abs(deltaReturn)*8));
+ const bar=(x,height,klass,left)=>`<span class="delta-column ${x>=0?'up':'down'}" style="left:${left}px;height:${height}px;background:${klass==='good'?'#237c55':klass==='bad'?'#b94a42':'#9aa79f'}"></span>`;
+ $('compare-delta').innerHTML=`<span class="delta-label">Deine Mischung<br>gegenüber Optimum</span><span class="delta-cross" aria-hidden="true">${bar(deltaRisk,riskHeight,riskClass,9)}${bar(deltaReturn,retHeight,retClass,26)}</span><span class="delta-text"><span class="delta-${riskClass}">Risiko <strong>${formatDelta(deltaRisk)}</strong></span><span class="delta-${retClass}">Rendite <strong>${formatDelta(deltaReturn)}</strong></span></span>`;
  const metric=compareMode==='dd'?'drawdown':compareMode==='ratio'?'ratio':'volatility';
  const maxValue=Math.max(a[metric]||0,b[metric]||0,0.0001);
  const show=x=>metric==='ratio'?(x===null?'–':x.toLocaleString('de-DE',{maximumFractionDigits:2})):pct(metric==='drawdown'?-x:x);
