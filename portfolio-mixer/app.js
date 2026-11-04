@@ -144,11 +144,17 @@ function drawFrontier(){
  const points=mixes.map(v=>{const candidate=constrainMix(v);return {w:candidate,s:risk(candidate),r:dot(candidate,mu)*12};});
  const assets=selected.map((j,i)=>({s:Math.sqrt(cov[i][i]*12),r:mu[i]*12,name:names[j]}));
  const all=[...points,...assets,...curve,{s:risk(w),r:dot(w,mu)*12}];
- const maxX=Math.max(.01,...all.map(p=>p.s))*1.12,minY=Math.min(0,...all.map(p=>p.r))-.01,maxY=Math.max(.01,...all.map(p=>p.r))+.02;
- const X=x=>85+x/maxX*865,Y=y=>385-(y-minY)/(maxY-minY)*335;
+ // Center the entire feasible curve and the individual assets with symmetric padding.
+ // Bounds depend on the selected assets and dataset, not on slider movement.
+ const xs=all.map(p=>p.s),ys=all.map(p=>p.r);
+ const xLow=Math.min(...xs),xHigh=Math.max(...xs),yLow=Math.min(...ys),yHigh=Math.max(...ys);
+ const xSpan=Math.max(xHigh-xLow,.005),ySpan=Math.max(yHigh-yLow,.005);
+ const minX=Math.max(0,xLow-xSpan*.18),maxX=xHigh+xSpan*.18;
+ const minY=yLow-ySpan*.18,maxY=yHigh+ySpan*.18;
+ const X=x=>85+(x-minX)/(maxX-minX)*865,Y=y=>385-(y-minY)/(maxY-minY)*335;
  let svg='<text x="85" y="24">Historische Rendite p. a.</text>';
  for(let i=0;i<=5;i++){
-  const x=maxX*i/5,y=minY+(maxY-minY)*i/5;
+  const x=minX+(maxX-minX)*i/5,y=minY+(maxY-minY)*i/5;
   svg+=`<path d="M85 ${Y(y)}H950 M${X(x)} 50V385" stroke="#e8ede5"/><text x="75" y="${Y(y)+4}" text-anchor="end">${pct(y)}</text><text x="${X(x)}" y="410" text-anchor="middle">${pct(x)}</text>`;
  }
  points.forEach((p,i)=>{svg+=`<circle data-mix="${i}" cx="${X(p.s)}" cy="${Y(p.r)}" r="4" fill="#a9c8b6" opacity=".7" style="cursor:pointer"><title>${pct(p.r)} Rendite · ${pct(p.s)} Risiko</title></circle>`;});
