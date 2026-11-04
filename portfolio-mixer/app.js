@@ -225,7 +225,7 @@ function drawComparison(){
    <div class="compare-return">Rendite: <strong>${pct(stat.annualReturn)} p. a.</strong></div>
  </div>`).join('');
  $('compare-note').textContent=compareMode==='vol'
-  ?'Historische annualisierte Volatilität. Portfolio A bleibt auf der gewählten Zielrendite fixiert; B ist deine aktuelle Mischung.'
+  ?'Historische annualisierte Volatilität. Portfolio A bleibt die feste Benchmark; B ist deine aktuelle Mischung.'
   :compareMode==='dd'
   ?'Größter historischer Rückgang vom bisherigen Höchststand; monatliches Rebalancing.'
   :'Rendite / Volatilität bei 0 % Referenzzins (vereinfachte Sharpe-ähnliche Kennzahl).';

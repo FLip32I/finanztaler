@@ -41,7 +41,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d4ad
 <span>Portfolio-Mixer · Vorschau</span>
 </header>
 <main>
-<span class="badge">PORTFOLIO-MIXER · EXCEL-DATEN</span>
+
 <h1>Dein Portfolio. Deine Mischung.</h1>
 <p>Entdecke, wie Anlageklassen zusammenspielen. Wähle bis zu fünf Anlagen und erkunde ihren effizienten Rand.</p>
 
@@ -76,12 +76,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d4ad
 <div class="actions">
 <button id="equal">Gleich verteilen</button>
 <button id="min">Risiko minimieren</button>
+<button id="optimum">Optimum</button>
 </div>
 <label>Zielrendite <strong id="targetvalue">
 </strong>
-<input class="range" type="range" id="target" min="0" max="100" step="2" value="50"><span class="target-entry">Direkt eingeben: <input id="target-number" type="number" step="0.01" aria-label="Zielrendite in Prozent"> % p. a.</span>
+<input class="range" type="range" id="target" min="0" max="100" step="2" value="50">
 </label>
-<p class="note">Start: mittlere erreichbare Zielrendite. Der Regler verschiebt Portfolio A entlang der gesamten Kurve – Portfolio B bleibt unverändert. Alle Gewichte ergeben zusammen 100 %.</p>
+<p class="note">Start: mittlere erreichbare Zielrendite. Der Regler verschiebt Portfolio B entlang der gesamten Kurve. Portfolio A bleibt die feste Benchmark. Alle Gewichte ergeben zusammen 100 %.</p>
 </section>
 <section class="panel">
 <div class="heading">
