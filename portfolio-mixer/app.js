@@ -209,7 +209,7 @@ function drawComparison(){
  const retClass=classify(deltaReturn,true),riskClass=classify(deltaRisk,false);
  const riskHeight=Math.min(19,Math.max(3,Math.abs(deltaRisk)*8));
  const retHeight=Math.min(19,Math.max(3,Math.abs(deltaReturn)*8));
- const bar=(x,height,klass,left)=>Math.abs(Math.round(x*10)/10)<0.05?'':`<span class="delta-column ${x>=0?'up':'down'}" style="left:${left}px;height:${height}px;background:${klass==='good'?'#237c55':klass==='bad'?'#b94a42':'#9aa79f'}"></span>`;
+ const bar=(x,height,klass,left)=>Math.abs(x)<0.05?'':`<span class="delta-column ${x>=0?'up':'down'}" style="left:${left}px;height:${height}px;background:${klass==='good'?'#237c55':klass==='bad'?'#b94a42':'#9aa79f'}"></span>`;
  $('compare-delta').innerHTML=`<span class="delta-label">Deine Mischung<br>gegenüber Optimum</span><span class="delta-cross" aria-hidden="true">${bar(deltaRisk,riskHeight,riskClass,9)}${bar(deltaReturn,retHeight,retClass,26)}</span><span class="delta-text"><span class="delta-${riskClass}">Risiko <strong>${formatDelta(deltaRisk)}</strong></span><span class="delta-${retClass}">Rendite <strong>${formatDelta(deltaReturn)}</strong></span></span>`;
  const metric=compareMode==='dd'?'drawdown':compareMode==='ratio'?'ratio':'volatility';
  const maxValue=Math.max(a[metric]||0,b[metric]||0,0.0001);
