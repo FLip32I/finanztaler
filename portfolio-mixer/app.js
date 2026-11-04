@@ -3,6 +3,7 @@ const names=['MSCI ACWI','MSCI World','MSCI Emerging Markets','MSCI World Small 
 let dataset=[], activeMonths=[];
 const locks=new Map();
 let selected=[1],w=[1],period='10',rows=[],mu=[],cov=[],curve=[];
+let compareMode='vol';
 const $=id=>document.getElementById(id),pct=x=>(x*100).toLocaleString('de-DE',{maximumFractionDigits:1})+' %',eur=x=>x.toLocaleString('de-DE',{maximumFractionDigits:0})+' €';
 function month(i){return (2000+Math.floor(i/12))+'-'+String(i%12+1).padStart(2,'0')}function idx(s){let [y,m]=s.split('-').map(Number);return (y-2000)*12+m-1}
 function tiles(){$('tiles').innerHTML=names.map((n,i)=>`<button class="tile ${selected.includes(i)?'active':''}" data-i="${i}" aria-pressed="${selected.includes(i)}" ${!selected.includes(i)&&selected.length===5?'disabled':''}><small>${i<10?'AKTIEN':i<12?'EDELMETALLE':i<14?'KRYPTO':'ANLEIHEN'}</small><span class="check">${selected.includes(i)?'✓':'+'}</span><b>${n}</b></button>`).join('');$('count').textContent=selected.length+' von 5 ausgewählt';$('tiles').querySelectorAll('button').forEach(b=>b.onclick=()=>{let i=+b.dataset.i;if(selected.includes(i)){if(selected.length===1)return;locks.delete(i);selected.splice(selected.indexOf(i),1)}else selected.push(i);w=equalWeights();tiles();recalc()})}
@@ -12,7 +13,7 @@ function optimize(target){let v=mu.map(()=>1/mu.length),max= Math.max(...cov.map
 function emptyState(message){
  rows=[];curve=[];mu=[];cov=[];
  $('coverage').textContent=message;
- for(const id of ['weights','frontier','growth','metrics','asset-legend'])$(id).innerHTML='';
+ for(const id of ['weights','frontier','growth','metrics','asset-legend','compare-values'])$(id).innerHTML='';
  $('targetvalue').textContent='';
  for(const id of ['equal','min','target'])$(id).disabled=true;
 }
@@ -54,7 +55,7 @@ function draw(){
  $('weights').querySelectorAll('[data-lock]').forEach(el=>el.onchange=()=>{const i=+el.dataset.lock,id=selected[i];if(el.checked)locks.set(id,w[i]);else locks.delete(id);recalc(false);});
  $('weights').querySelectorAll('[data-weight]').forEach(el=>el.oninput=()=>{adjustWeight(+el.dataset.weight,+el.value/100);draw();});
  $('lock-note').textContent=locks.size?'Fixierte Anteile bleiben unverändert. Kurve und Mischungen berücksichtigen die Fixierung; Einzelanlagen dienen als Vergleich.':'Fixiere einzelne Anteile, damit nur die übrigen Anlagen angepasst werden.';
- let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(dot(w,mu)*12);drawFrontier();}
+ let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(dot(w,mu)*12);drawFrontier();drawComparison();}
 $('periods').innerHTML=[['5','5 Jahre'],['10','10 Jahre'],['15','15 Jahre'],['20','20 Jahre'],['max','Maximal'],['custom','Eigener Zeitraum']].map(([v,l])=>`<button data-v="${v}" class="${v===period?'active':''}">${l}</button>`).join('');$('periods').querySelectorAll('button').forEach(b=>b.onclick=()=>{period=b.dataset.v;$('periods').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));recalc()});$('start').onchange=$('end').onchange=recalc;$('equal').onclick=()=>{w=equalWeights();draw()};$('min').onclick=()=>{w=[...curve[0].w];$('target').value=0;draw()};$('target').oninput=()=>{w=[...curve[Math.round(+$('target').value/2)].w];draw()};tiles();recalc();
 initializeExcel();
 
@@ -116,3 +117,44 @@ function adjustWeight(index,value){
  const total=others.reduce((sum,i)=>sum+w[i],0),left=remainingWeight()-value;
  w=w.map((v,i)=>i===index?value:locks.has(selected[i])?locks.get(selected[i]):total>1e-12?v*left/total:left/others.length);
 }
+
+// A: lowest historical volatility for at least B's arithmetic annual return.
+// B: currently selected weights. Annual returns are permanently visible.
+function comparisonStats(weights){
+ let capital=1,peak=1,maxDrawdown=0;
+ for(const r of rows){
+  capital*=1+dot(r,weights);
+  peak=Math.max(peak,capital);
+  maxDrawdown=Math.min(maxDrawdown,capital/peak-1);
+ }
+ const annualReturn=dot(weights,mu)*12;
+ const volatility=risk(weights);
+ return {annualReturn,volatility,drawdown:-maxDrawdown,ratio:volatility>1e-12?annualReturn/volatility:null};
+}
+function drawComparison(){
+ if(!rows.length||!mu.length)return;
+ const b=comparisonStats(w);
+ const a=comparisonStats(optimize(dot(w,mu)));
+ const metric=compareMode==='dd'?'drawdown':compareMode==='ratio'?'ratio':'volatility';
+ const maxValue=Math.max(a[metric]||0,b[metric]||0,0.0001);
+ const show=x=>metric==='ratio'?(x===null?'–':x.toLocaleString('de-DE',{maximumFractionDigits:2})):pct(metric==='drawdown'?-x:x);
+ $('comparison').querySelectorAll('[data-compare]').forEach(button=>button.classList.toggle('active',button.dataset.compare===compareMode));
+ $('compare-values').innerHTML=[
+  {label:'Portfolio A · Optimum',stat:a,color:'#19815d'},
+  {label:'Portfolio B · Deine Mischung',stat:b,color:'#c99b30'}
+ ].map(({label,stat,color})=>`<div>
+   <div class="compare-name">${label}</div>
+   <div class="compare-value">${show(stat[metric])}</div>
+   <div class="compare-bar"><div style="width:${Math.max(0,Math.min(100,(stat[metric]||0)/maxValue*100))}%;background:${color}"></div></div>
+   <div class="compare-return">Rendite: <strong>${pct(stat.annualReturn)} p. a.</strong></div>
+ </div>`).join('');
+ $('compare-note').textContent=compareMode==='vol'
+  ?'Historische annualisierte Volatilität. A minimiert die Volatilität bei mindestens der Rendite von B.'
+  :compareMode==='dd'
+  ?'Größter historischer Rückgang vom bisherigen Höchststand; monatliches Rebalancing.'
+  :'Rendite / Volatilität bei 0 % Referenzzins (vereinfachte Sharpe-ähnliche Kennzahl).';
+}
+document.querySelectorAll('[data-compare]').forEach(button=>button.addEventListener('click',()=>{
+ compareMode=button.dataset.compare;
+ drawComparison();
+}));
