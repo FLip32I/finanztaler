@@ -1,4 +1,4 @@
-const base=document.body.dataset.root||'./';const sections=[['Sparen','sparen/'],['Investieren','investieren/'],['FIRE-Bewegung','fire/'],['Wertekompass','wertekompass/'],['Buchempfehlungen','buchempfehlungen/'],['Rechner','rechner/']];const here=document.body.dataset.page||'';document.querySelector('#site-header').innerHTML=`<header class="site-header"><div class="container header-inner"><a class="brand" href="${base}" aria-label="Finanztaler Startseite"><img src="${base}assets/img/logo.webp" alt="finanztaler"></a><button class="menu-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="main-nav">☰</button><nav class="main-nav" id="main-nav" aria-label="Hauptnavigation">${sections.map(([label,path])=>`<a href="${base}${path}" ${here===path?'aria-current="page"':''}>${label}</a>`).join('')}</nav></div></header>`;document.querySelector('#site-footer').innerHTML=`<footer class="footer"><div class="container"><div class="footer-inner"><div><div class="footer-title">finanz<span>taler</span></div><p>Finanzen selbst in die Hand nehmen.</p></div><nav class="footer-links" aria-label="Footer"><a href="${base}rechtliches/ueber-uns/">Über uns</a><a href="${base}rechtliches/impressum/">Impressum</a><a href="${base}rechtliches/datenschutz/">Datenschutzerklärung</a><a href="#" id="privacy-settings-link" style="display:none">Datenschutzeinstellungen</a></nav></div><div class="footer-bottom">© ${new Date().getFullYear()} Finanztaler. Alle Rechte vorbehalten. · Keine individuelle Anlageberatung.</div></div></footer>`;const btn=document.querySelector('.menu-toggle'),navEl=document.querySelector('#main-nav');function closeMenu(){navEl.classList.remove('open');btn.setAttribute('aria-expanded','false');btn.setAttribute('aria-label','Menü öffnen');btn.textContent='☰'}btn.addEventListener('click',()=>{const open=navEl.classList.toggle('open');btn.setAttribute('aria-expanded',String(open));btn.setAttribute('aria-label',open?'Menü schließen':'Menü öffnen');btn.textContent=open?'✕':'☰'});navEl.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+const base=document.body.dataset.root||'./';const sections=[['Sparen','sparen/'],['Investieren','investieren/'],['FIRE-Bewegung','fire/'],['Wertekompass','wertekompass/'],['Buchempfehlungen','buchempfehlungen/'],['Rechner','rechner/']];const here=document.body.dataset.page||'';document.querySelector('#site-header').innerHTML=`<header class="site-header"><div class="container header-inner"><a class="brand" href="${base}" aria-label="Finanztaler Startseite"><img src="${base}assets/img/logo.webp" alt="finanztaler"></a><button class="menu-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="main-nav">☰</button><nav class="main-nav" id="main-nav" aria-label="Hauptnavigation">${sections.map(([label,path])=>`<a href="${base}${path}" ${here===path?'aria-current="page"':''}>${label}</a>`).join('')}</nav></div></header>`;document.querySelector('#site-footer').innerHTML=`<footer class="footer"><div class="container"><div class="footer-inner"><div><div class="footer-title">finanz<span>taler</span></div><p>Finanzen selbst in die Hand nehmen.</p></div><nav class="footer-links" aria-label="Footer"><a href="${base}rechtliches/ueber-uns/">Über uns</a><a href="${base}rechtliches/impressum/">Impressum</a><a href="${base}rechtliches/datenschutz/">Datenschutzerklärung</a><a href="#" id="privacy-settings-link">Datenschutzeinstellungen</a></nav></div><div class="footer-bottom">© ${new Date().getFullYear()} Finanztaler. Alle Rechte vorbehalten. · Keine individuelle Anlageberatung.</div></div></footer>`;const btn=document.querySelector('.menu-toggle'),navEl=document.querySelector('#main-nav');function closeMenu(){navEl.classList.remove('open');btn.setAttribute('aria-expanded','false');btn.setAttribute('aria-label','Menü öffnen');btn.textContent='☰'}btn.addEventListener('click',()=>{const open=navEl.classList.toggle('open');btn.setAttribute('aria-expanded',String(open));btn.setAttribute('aria-label',open?'Menü schließen':'Menü öffnen');btn.textContent=open?'✕':'☰'});navEl.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
 
 
 // Google Privacy & Messaging: consent settings and GA4 (Basic Consent Mode).
@@ -7,17 +7,19 @@ const base=document.body.dataset.root||'./';const sections=[['Sparen','sparen/']
   const link = document.getElementById('privacy-settings-link');
   window.googlefc = window.googlefc || {};
   window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
-  window.googlefc.callbackQueue.push({CONSENT_API_READY: function(){
-    if(link){
-      link.style.display='';
-      link.addEventListener('click',function(event){
-        event.preventDefault();
-        window.googlefc.callbackQueue.push({CONSENT_API_READY:function(){
-          if(typeof window.googlefc.showRevocationMessage==='function') window.googlefc.showRevocationMessage();
-        }});
-      });
-    }
-  }});
+  // Keep the privacy settings link visible even if Google's CMP has not
+  // finished initializing or the AdSense site review is still pending.
+  if(link){
+    link.addEventListener('click',function(event){
+      event.preventDefault();
+      if(typeof window.googlefc.showRevocationMessage==='function'){
+        window.googlefc.showRevocationMessage();
+      } else {
+        // Do not silently fail: explain why the dialog is unavailable.
+        window.alert('Die Google-Datenschutzeinstellungen sind momentan nicht verfügbar. Bitte versuche es später erneut. Bis zu einer ausdrücklichen Einwilligung bleibt Google Analytics deaktiviert.');
+      }
+    });
+  }
   window.googlefc.callbackQueue.push({CONSENT_MODE_DATA_READY:function(){
     if(typeof window.googlefc.getGoogleConsentModeValues!=='function')return;
     const consent=window.googlefc.getGoogleConsentModeValues();
