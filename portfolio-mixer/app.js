@@ -4,12 +4,13 @@ let dataset=[], activeMonths=[];
 const locks=new Map();
 let selected=[1],w=[1],period='10',rows=[],mu=[],cov=[],curve=[];
 let compareMode='vol';
+let referenceWeights=[];
 const $=id=>document.getElementById(id),pct=x=>(x*100).toLocaleString('de-DE',{maximumFractionDigits:1})+' %',eur=x=>x.toLocaleString('de-DE',{maximumFractionDigits:0})+' €';
 function month(i){return (2000+Math.floor(i/12))+'-'+String(i%12+1).padStart(2,'0')}function idx(s){let [y,m]=s.split('-').map(Number);return (y-2000)*12+m-1}
 function tiles(){$('tiles').innerHTML=names.map((n,i)=>`<button class="tile ${selected.includes(i)?'active':''}" data-i="${i}" aria-pressed="${selected.includes(i)}" ${!selected.includes(i)&&selected.length===5?'disabled':''}><small>${i<10?'AKTIEN':i<12?'EDELMETALLE':i<14?'KRYPTO':'ANLEIHEN'}</small><span class="check">${selected.includes(i)?'✓':'+'}</span><b>${n}</b></button>`).join('');$('count').textContent=selected.length+' von 5 ausgewählt';$('tiles').querySelectorAll('button').forEach(b=>b.onclick=()=>{let i=+b.dataset.i;if(selected.includes(i)){if(selected.length===1)return;locks.delete(i);selected.splice(selected.indexOf(i),1)}else selected.push(i);w=equalWeights();tiles();recalc()})}
 function simplex(v){let u=[...v].sort((a,b)=>b-a),s=0,t=0;for(let j=0;j<u.length;j++){s+=u[j];if(u[j]-(s-1)/(j+1)>0)t=(s-1)/(j+1)}return v.map(x=>Math.max(0,x-t))}
 function dot(a,b){return a.reduce((s,x,i)=>s+x*b[i],0)}function risk(v){return Math.sqrt(Math.max(0,v.reduce((s,x,i)=>s+x*dot(cov[i],v),0))*12)}
-function optimize(target){let v=mu.map(()=>1/mu.length),max= Math.max(...cov.map(r=>r.reduce((s,x)=>s+Math.abs(x),0))),step=.4/Math.max(max,1e-8),lo=mu.indexOf(Math.min(...mu)),hi=mu.indexOf(Math.max(...mu));function project(x){x=projectWeights(x);if(target===null||dot(x,mu)>=target-1e-12)return x;let l=0,h=1;while(dot(projectWeights(v.map((_,i)=>x[i]+h*mu[i])),mu)<target-1e-12&&h<1e12)h*=2;for(let k=0;k<48;k++){let m=(l+h)/2;if(dot(projectWeights(x.map((z,i)=>z+m*mu[i])),mu)<target)l=m;else h=m}return projectWeights(x.map((z,i)=>z+h*mu[i]))}for(let k=0;k<700;k++){let next=project(v.map((x,i)=>x-step*dot(cov[i],v)));let d=next.reduce((s,x,i)=>s+Math.abs(x-v[i]),0);v=next;if(d<1e-9)break}return v}
+function optimize(target,side=1){let v=mu.map(()=>1/mu.length),max= Math.max(...cov.map(r=>r.reduce((s,x)=>s+Math.abs(x),0))),step=.4/Math.max(max,1e-8),lo=mu.indexOf(Math.min(...mu)),hi=mu.indexOf(Math.max(...mu));function project(x){x=projectWeights(x);if(target===null||side*dot(x,mu)>=side*target-1e-12)return x;let l=0,h=1;while(side*dot(projectWeights(v.map((_,i)=>x[i]+h*side*mu[i])),mu)<side*target-1e-12&&h<1e12)h*=2;for(let k=0;k<48;k++){let m=(l+h)/2;if(dot(projectWeights(x.map((z,i)=>z+m*mu[i])),mu)<target)l=m;else h=m}return projectWeights(x.map((z,i)=>z+h*mu[i]))}for(let k=0;k<700;k++){let next=project(v.map((x,i)=>x-step*dot(cov[i],v)));let d=next.reduce((s,x,i)=>s+Math.abs(x-v[i]),0);v=next;if(d<1e-9)break}return v}
 function emptyState(message){
  rows=[];curve=[];mu=[];cov=[];
  $('coverage').textContent=message;
@@ -43,20 +44,30 @@ function recalc(reset=true){
  rows=block.map(r=>selected.map(i=>r.values[i]));activeMonths=block.map(r=>r.month);
  mu=selected.map((_,i)=>rows.reduce((s,r)=>s+r[i],0)/rows.length);
  cov=selected.map((_,i)=>selected.map((_,j)=>rows.reduce((s,r)=>s+(r[i]-mu[i])*(r[j]-mu[j]),0)/rows.length));
- const minimum=optimize(null),start=dot(minimum,mu),free=freeIndices(),end=free.length?selected.reduce((v,id,i)=>v+(locks.has(id)?locks.get(id)*mu[i]:0),0)+remainingWeight()*Math.max(...free.map(i=>mu[i])):dot(minimum,mu);
- curve=Array.from({length:51},(_,i)=>{const v=optimize(start+(end-start)*i/50);return {w:v,r:dot(v,mu)*12,s:risk(v)};});
+ const minimum=optimize(null),minVarianceReturn=dot(minimum,mu);
+ const free=freeIndices(),fixedReturn=selected.reduce((v,id,i)=>v+(locks.has(id)?locks.get(id)*mu[i]:0),0);
+ const minReturn=free.length?fixedReturn+remainingWeight()*Math.min(...free.map(i=>mu[i])):minVarianceReturn;
+ const maxReturn=free.length?fixedReturn+remainingWeight()*Math.max(...free.map(i=>mu[i])):minVarianceReturn;
+ // Entire attainable return range, including the lower (inefficient) branch.
+ curve=Array.from({length:51},(_,i)=>{
+  const targetReturn=minReturn+(maxReturn-minReturn)*i/50;
+  const v=optimize(targetReturn,targetReturn<minVarianceReturn-1e-10?-1:1);
+  return {w:v,r:dot(v,mu)*12,s:risk(v)};
+ });
  const cropped=idx(block[0].month)>a||idx(block.at(-1).month)<b;
  $('coverage').textContent=`Auswertung: ${block[0].month} bis ${block.at(-1).month} · ${rows.length} gemeinsame Monatsrenditen`+(cropped?' · Auf verfügbare gemeinsame Daten gekürzt.':'')+(period!=='custom'&&blocks.length>1?' · Neuester lückenloser Abschnitt; frühere Datenlücken wurden nicht überbrückt.':'');
  for(const id of ['equal','min','target'])$(id).disabled=freeIndices().length<2||remainingWeight()<1e-10;
- if(reset){$('target').value=50;w=[...curve[25].w];}draw();
+ if(reset){$('target').value=50;w=[...curve[25].w];}
+ referenceWeights=[...curve[Math.round(+$('target').value/2)].w];
+ draw();
 }
 function draw(){
  $('weights').innerHTML=selected.map((id,i)=>`<div class="weight"><label for="w${i}">${names[id]} <span>${pct(w[i])}</span></label><input id="w${i}" data-weight="${i}" type="range" min="0" max="${locks.has(id)?100:(remainingWeight()*100).toFixed(8)}" step="0.1" value="${w[i]*100}" ${locks.has(id)||freeIndices().length<2?'disabled':''}><label class="fix-control"><input type="checkbox" data-lock="${i}" ${locks.has(id)?'checked':''}> ${locks.has(id)?'Fixiert':'Fixieren'}</label></div>`).join('');
  $('weights').querySelectorAll('[data-lock]').forEach(el=>el.onchange=()=>{const i=+el.dataset.lock,id=selected[i];if(el.checked)locks.set(id,w[i]);else locks.delete(id);recalc(false);});
  $('weights').querySelectorAll('[data-weight]').forEach(el=>el.oninput=()=>{adjustWeight(+el.dataset.weight,+el.value/100);draw();});
  $('lock-note').textContent=locks.size?'Fixierte Anteile bleiben unverändert. Kurve und Mischungen berücksichtigen die Fixierung; Einzelanlagen dienen als Vergleich.':'Fixiere einzelne Anteile, damit nur die übrigen Anlagen angepasst werden.';
- let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(dot(w,mu)*12);drawFrontier();drawComparison();}
-$('periods').innerHTML=[['5','5 Jahre'],['10','10 Jahre'],['15','15 Jahre'],['20','20 Jahre'],['max','Maximal'],['custom','Eigener Zeitraum']].map(([v,l])=>`<button data-v="${v}" class="${v===period?'active':''}">${l}</button>`).join('');$('periods').querySelectorAll('button').forEach(b=>b.onclick=()=>{period=b.dataset.v;$('periods').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));recalc()});$('start').onchange=$('end').onchange=recalc;$('equal').onclick=()=>{w=equalWeights();draw()};$('min').onclick=()=>{w=[...curve[0].w];$('target').value=0;draw()};$('target').oninput=()=>{w=[...curve[Math.round(+$('target').value/2)].w];draw()};tiles();recalc();
+ let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(dot(referenceWeights,mu)*12);drawFrontier();drawComparison();}
+$('periods').innerHTML=[['5','5 Jahre'],['10','10 Jahre'],['15','15 Jahre'],['20','20 Jahre'],['max','Maximal'],['custom','Eigener Zeitraum']].map(([v,l])=>`<button data-v="${v}" class="${v===period?'active':''}">${l}</button>`).join('');$('periods').querySelectorAll('button').forEach(b=>b.onclick=()=>{period=b.dataset.v;$('periods').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));recalc()});$('start').onchange=$('end').onchange=recalc;$('equal').onclick=()=>{w=equalWeights();draw()};$('min').onclick=()=>{const minimum=optimize(null);let best=0;curve.forEach((p,i)=>{if(Math.abs(p.r-dot(minimum,mu)*12)<Math.abs(curve[best].r-dot(minimum,mu)*12))best=i});$('target').value=best*2;referenceWeights=[...minimum];w=[...minimum];draw()};$('target').oninput=()=>{referenceWeights=[...curve[Math.round(+$('target').value/2)].w];w=[...referenceWeights];draw()};tiles();recalc();
 initializeExcel();
 
 async function applyExcel(buffer,label){
@@ -93,7 +104,7 @@ function drawFrontier(){
  svg+=`<circle cx="${X(risk(w))}" cy="${Y(dot(w,mu)*12)}" r="9" fill="#d4ad48" stroke="#fff" stroke-width="3"><title>Deine Mischung</title></circle><text x="520" y="443" text-anchor="middle">Risiko / Schwankung p. a. →</text>`;
  $('frontier').innerHTML=svg;
  $('asset-legend').innerHTML=assets.map((p,i)=>`<span style="color:${colors[i]}">● ${i+1} · ${p.name}</span>`).join('');
- $('frontier').querySelectorAll('[data-efficient]').forEach(el=>el.onclick=()=>{const i=+el.dataset.efficient;w=[...curve[i].w];$('target').value=i*2;draw();});
+ $('frontier').querySelectorAll('[data-efficient]').forEach(el=>el.onclick=()=>{const i=+el.dataset.efficient;w=[...curve[i].w];referenceWeights=[...w];$('target').value=i*2;draw();});
  $('frontier').querySelectorAll('[data-mix]').forEach(el=>el.onclick=()=>{w=[...points[+el.dataset.mix].w];draw();});
 }
 
@@ -118,7 +129,7 @@ function adjustWeight(index,value){
  w=w.map((v,i)=>i===index?value:locks.has(selected[i])?locks.get(selected[i]):total>1e-12?v*left/total:left/others.length);
 }
 
-// A: lowest historical volatility for at least B's arithmetic annual return.
+// A: fixed reference selected by the target-return control; independent of B.
 // B: currently selected weights. Annual returns are permanently visible.
 function comparisonStats(weights){
  let capital=1,peak=1,maxDrawdown=0;
@@ -134,7 +145,7 @@ function comparisonStats(weights){
 function drawComparison(){
  if(!rows.length||!mu.length)return;
  const b=comparisonStats(w);
- const a=comparisonStats(optimize(dot(w,mu)));
+ const a=comparisonStats(referenceWeights);
  // Comparison B minus A: higher return is favorable, higher volatility unfavorable.
  const deltaReturn=(b.annualReturn-a.annualReturn)*100;
  const deltaRisk=(b.volatility-a.volatility)*100;
@@ -159,7 +170,7 @@ function drawComparison(){
    <div class="compare-return">Rendite: <strong>${pct(stat.annualReturn)} p. a.</strong></div>
  </div>`).join('');
  $('compare-note').textContent=compareMode==='vol'
-  ?'Historische annualisierte Volatilität. A minimiert die Volatilität bei mindestens der Rendite von B.'
+  ?'Historische annualisierte Volatilität. Portfolio A bleibt auf der gewählten Zielrendite fixiert; B ist deine aktuelle Mischung.'
   :compareMode==='dd'
   ?'Größter historischer Rückgang vom bisherigen Höchststand; monatliches Rebalancing.'
   :'Rendite / Volatilität bei 0 % Referenzzins (vereinfachte Sharpe-ähnliche Kennzahl).';
