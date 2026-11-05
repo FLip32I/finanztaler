@@ -1,6 +1,7 @@
 
 const names=['MSCI ACWI','MSCI World','MSCI Emerging Markets','MSCI World Small Cap','MSCI Japan','NASDAQ-100','S&P 500','DAX','STOXX Europe 600','Globale REITs','Gold','Silber','Bitcoin','Ethereum','Euro-Staatsanleihen'];
 let dataset=[], activeMonths=[];
+let timelineState=null;
 const locks=new Map();
 let selected=[1],w=[1],period='10',rows=[],mu=[],cov=[],curve=[];
 let compareMode='vol';
@@ -49,6 +50,7 @@ function optimize(target,side=1){
 }
 function emptyState(message){
  rows=[];curve=[];mu=[];cov=[];
+ $('time-editor').classList.add('hidden');
  $('coverage').textContent=message;
  for(const id of ['weights','frontier','growth','metrics','asset-legend','compare-values'])$(id).innerHTML='';
  $('targetvalue').textContent='';
@@ -77,6 +79,7 @@ function recalc(reset=true){
   block=block.filter(r=>idx(r.month)>=a&&idx(r.month)<=b);
  }
  if(block.length<12){emptyState('Mindestens 12 lückenlose gemeinsame Monate erforderlich. Verfügbar für diese Auswahl: '+block.length+'.');return;}
+ renderTimeline(blocks,block);
  rows=block.map(r=>selected.map(i=>r.values[i]));activeMonths=block.map(r=>r.month);
  mu=selected.map((_,i)=>rows.reduce((s,r)=>s+r[i],0)/rows.length);
  cov=selected.map((_,i)=>selected.map((_,j)=>rows.reduce((s,r)=>s+(r[i]-mu[i])*(r[j]-mu[j]),0)/rows.length));
@@ -121,6 +124,7 @@ function syncTargetToMix(){
  $('target').value=best*2;
 }
 $('target').oninput=()=>setMixFromCurve(+$('target').value/2);
+setupTimeline();
 tiles();recalc();
 initializeExcel();
 
@@ -240,3 +244,55 @@ document.querySelectorAll('[data-compare]').forEach(button=>button.addEventListe
  compareMode=button.dataset.compare;
  drawComparison();
 }));
+
+// Timeline uses month indices and the same contiguous data blocks as recalc().
+
+function timelineLabel(value){const [y,m]=month(value).split('-');return m+'.'+y;}
+function renderTimeline(blocks,block){
+ const lo=idx(dataset[0].month),hi=idx(dataset.at(-1).month),span=Math.max(1,hi-lo);
+ const start=idx(block[0].month),end=idx(block.at(-1).month);
+ const available=blocks.find(g=>idx(g[0].month)<=start&&idx(g.at(-1).month)>=end);
+ timelineState={lo,hi,start,end,min:idx(available[0].month),max:idx(available.at(-1).month)};
+ $('time-editor').classList.remove('hidden');
+ $('time-availability').innerHTML=blocks.map(g=>{const a=idx(g[0].month),b=idx(g.at(-1).month);return `<div class="time-available" style="left:${100*(a-lo)/span}%;width:${100*(b-a)/span}%"></div>`}).join('');
+ const count=window.innerWidth<600?3:5;
+ $('time-ticks').innerHTML=Array.from({length:count},(_,i)=>{const value=Math.round(lo+span*i/(count-1));return `<span style="left:${100*i/(count-1)}%">${timelineLabel(value)}</span>`}).join('');
+ paintTimeline();
+}
+function paintTimeline(){
+ const t=timelineState,span=Math.max(1,t.hi-t.lo),left=100*(t.start-t.lo)/span,right=100*(t.end-t.lo)/span;
+ $('time-window').style.left=left+'%';$('time-window').style.width=(right-left)+'%';
+ for(const [id,v,min,max] of [['time-start',t.start,t.min,t.end-11],['time-end',t.end,t.start+11,t.max]]){
+  const el=$(id);el.style.left=(100*(v-t.lo)/span)+'%';el.setAttribute('aria-valuemin',min);el.setAttribute('aria-valuemax',max);el.setAttribute('aria-valuenow',v);el.setAttribute('aria-valuetext',timelineLabel(v));
+ }
+ $('time-selection').textContent=timelineLabel(t.start)+' – '+timelineLabel(t.end);
+ const n=t.end-t.start+1,years=Math.floor(n/12),months=n%12;
+ $('time-duration').textContent=(years?years+(years===1?' Jahr':' Jahre'):'')+(months?(years?' · ':'')+months+(months===1?' Monat':' Monate'):'');
+}
+function commitTimeline(){
+ if(!timelineState)return;
+ period='custom';$('start').value=month(timelineState.start);$('end').value=month(timelineState.end);
+ $('periods').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.v==='custom'));
+ recalc();
+}
+function setupTimeline(){
+ for(const [id,mode] of [['time-start','start'],['time-end','end'],['time-window','move']]){
+  const el=$(id);let drag=null;
+  el.addEventListener('pointerdown',e=>{if(!timelineState||e.button!==0)return;e.preventDefault();drag={x:e.clientX,...timelineState};el.setPointerCapture(e.pointerId)});
+  el.addEventListener('pointermove',e=>{
+   if(!drag)return;const delta=Math.round((e.clientX-drag.x)/$('time-track').getBoundingClientRect().width*(drag.hi-drag.lo)),t=timelineState;
+   if(mode==='start')t.start=Math.max(t.min,Math.min(drag.end-11,drag.start+delta));
+   else if(mode==='end')t.end=Math.min(t.max,Math.max(drag.start+11,drag.end+delta));
+   else{const shift=Math.max(t.min-drag.start,Math.min(t.max-drag.end,delta));t.start=drag.start+shift;t.end=drag.end+shift;}
+   paintTimeline();
+  });
+  el.addEventListener('pointerup',()=>{if(drag){drag=null;commitTimeline()}});
+  el.addEventListener('pointercancel',()=>{if(drag){timelineState={...drag};drag=null;paintTimeline()}});
+  if(mode!=='move')el.addEventListener('keydown',e=>{
+   if(!timelineState)return;const t=timelineState;
+   let v=t[mode];const step=e.shiftKey?12:1;
+   if(e.key==='ArrowLeft'||e.key==='ArrowDown')v-=step;else if(e.key==='ArrowRight'||e.key==='ArrowUp')v+=step;else if(e.key==='Home')v=mode==='start'?t.min:t.start+11;else if(e.key==='End')v=mode==='start'?t.end-11:t.max;else return;
+   e.preventDefault();t[mode]=mode==='start'?Math.max(t.min,Math.min(t.end-11,v)):Math.min(t.max,Math.max(t.start+11,v));paintTimeline();commitTimeline();
+  });
+ }
+}

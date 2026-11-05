@@ -47,7 +47,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d4ad
 .compare-bar>div{height:100%;border-radius:8px}
 .compare-return{font-size:12px;color:#607269;margin-top:7px}
 .compare-note{font-size:11px;color:#718178;margin-top:12px}
-@media(max-width:460px){.compare-grid{gap:10px}.compare-tabs button{font-size:10px;padding:8px 3px}}</style>
+@media(max-width:460px){.compare-grid{gap:10px}.compare-tabs button{font-size:10px;padding:8px 3px}}
+.time-editor{margin-top:26px;padding:18px 18px 8px;background:#f7f9f4;border:1px solid #e1e7dd;border-radius:14px}.time-summary{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:14px;margin-bottom:24px}.time-summary span{color:#607269}.time-track{position:relative;height:14px;background:#e3e7df;border-radius:8px;touch-action:none;margin:0 8px}.time-available{position:absolute;height:100%;background:#a9c8b5;border-radius:8px}.time-window{position:absolute;height:100%;background:#d4ad48;cursor:grab;touch-action:none}.time-window:active{cursor:grabbing}.time-handle{position:absolute;top:50%;transform:translate(-50%,-50%);width:24px;height:32px;padding:0;border:2px solid #184c3b;border-radius:8px;background:#fff;touch-action:none;cursor:ew-resize;z-index:2}.time-handle:after{content:'';display:block;width:3px;height:12px;background:#184c3b;margin:auto;border-radius:2px}.time-handle:focus-visible{outline:3px solid #d4ad48;outline-offset:4px}.time-ticks{position:relative;height:34px;margin:12px 8px 0;font-size:12px;color:#607269}.time-ticks span{position:absolute;transform:translateX(-50%)}.time-ticks span:first-child{transform:none}.time-ticks span:last-child{transform:translateX(-100%)}
+</style>
 <link rel="canonical" href="https://www.finanztaler.de/portfolio-mixer/">
 </head>
 <body>
@@ -80,6 +82,15 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d4ad
 </label>
 <label>Bis <input type="month" id="end" min="1900-01" max="2200-12" value="2025-12">
 </label>
+</div>
+<div class="time-editor hidden" id="time-editor">
+<div class="time-summary"><strong id="time-selection"></strong><span id="time-duration"></span></div>
+<div class="time-track" id="time-track" aria-label="Verfügbare Zeiträume">
+<div id="time-availability"></div><div class="time-window" id="time-window" title="Gesamten Zeitraum verschieben"></div>
+<button type="button" class="time-handle" id="time-start" role="slider" aria-label="Startmonat" title="Startmonat verschieben"></button>
+<button type="button" class="time-handle" id="time-end" role="slider" aria-label="Endmonat" title="Endmonat verschieben"></button>
+</div><div class="time-ticks" id="time-ticks" aria-hidden="true"></div>
+<p class="note">Grün: gemeinsame Daten · Gold: deine Auswahl. Ziehe die Griffe oder verschiebe den goldenen Bereich. Mindestens 12 Monate.</p>
 </div>
 <p class="note" id="coverage">
 </p>
