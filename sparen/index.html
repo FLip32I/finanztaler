@@ -7,13 +7,15 @@
 <script data-cookieconsent="ignore">
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
-gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
+gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',functionality_storage:'denied',personalization_storage:'denied',security_storage:'granted',wait_for_update:500});
+gtag('set','ads_data_redaction',true);
+gtag('set','url_passthrough',false);
 </script>
 <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="0c83db57-8dda-4e39-aa0c-26f695d656d8" type="text/javascript"></script>
-<script type="text/plain" data-cookieconsent="statistics" src="https://www.googletagmanager.com/gtag/js?id=G-TYXJ3CPX1T" async></script>
-<script type="text/plain" data-cookieconsent="statistics">
+<script data-cookieconsent="ignore" src="https://www.googletagmanager.com/gtag/js?id=G-TYXJ3CPX1T" async></script>
+<script data-cookieconsent="ignore">
 gtag('js',new Date());
-gtag('config','G-TYXJ3CPX1T');
+gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalization_signals:false,page_location:window.location.origin+window.location.pathname,page_referrer:document.referrer.split(/[?#]/)[0]});
 </script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
