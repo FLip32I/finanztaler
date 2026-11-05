@@ -10,3 +10,23 @@ const base=document.body.dataset.root||'./';const sections=[['Sparen','sparen/']
     else window.alert('Die Datenschutzeinstellungen konnten nicht geladen werden. Bitte lade die Seite erneut oder prüfe deinen Inhaltsblocker.');
   });
 })();
+
+// GoatCounter: aggregate page statistics; no custom interaction events.
+(function(){
+  if(!['finanztaler.de','www.finanztaler.de'].includes(window.location.hostname)) return;
+  if(document.querySelector('script[data-goatcounter]')) return;
+  window.goatcounter={
+    no_events:true,
+    path:window.location.pathname.replace(/index\.html$/, ''),
+    referrer:function(){
+      try{return document.referrer ? new URL(document.referrer).origin : '';}
+      catch(error){return '';}
+    }
+  };
+  const tag=document.createElement('script');
+  tag.async=true;
+  tag.src='https://gc.zgo.at/count.js';
+  tag.referrerPolicy='no-referrer';
+  tag.setAttribute('data-goatcounter','https://finanztaler.goatcounter.com/count');
+  document.head.appendChild(tag);
+})();
