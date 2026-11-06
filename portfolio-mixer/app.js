@@ -7,7 +7,7 @@ let selected=[1],w=[1],period='10',rows=[],mu=[],cov=[],curve=[];
 let compareMode='vol';
 let referenceWeights=[];
 const $=id=>document.getElementById(id),pct=x=>(x*100).toLocaleString('de-DE',{maximumFractionDigits:1})+' %',eur=x=>x.toLocaleString('de-DE',{maximumFractionDigits:0})+' €';
-function month(i){return (2000+Math.floor(i/12))+'-'+String(i%12+1).padStart(2,'0')}function idx(s){let [y,m]=s.split('-').map(Number);return (y-2000)*12+m-1}
+function month(i){return (2000+Math.floor(i/12))+'-'+String(((i%12)+12)%12+1).padStart(2,'0')}function idx(s){let [y,m]=s.split('-').map(Number);return (y-2000)*12+m-1}
 function tiles(){$('tiles').innerHTML=names.map((n,i)=>`<button class="tile ${selected.includes(i)?'active':''}" data-i="${i}" aria-pressed="${selected.includes(i)}" ${!selected.includes(i)&&selected.length===5?'disabled':''}><small>${i<10?'AKTIEN':i<12?'EDELMETALLE':i<14?'KRYPTO':'ANLEIHEN'}</small><span class="check">${selected.includes(i)?'✓':'+'}</span><b>${n}</b></button>`).join('');$('count').textContent=selected.length+' von 5 ausgewählt';$('tiles').querySelectorAll('button').forEach(b=>b.onclick=()=>{let i=+b.dataset.i;if(selected.includes(i)){if(selected.length===1)return;locks.delete(i);selected.splice(selected.indexOf(i),1)}else selected.push(i);w=equalWeights();tiles();recalc()})}
 function simplex(v){let u=[...v].sort((a,b)=>b-a),s=0,t=0;for(let j=0;j<u.length;j++){s+=u[j];if(u[j]-(s-1)/(j+1)>0)t=(s-1)/(j+1)}return v.map(x=>Math.max(0,x-t))}
 function dot(a,b){return a.reduce((s,x,i)=>s+x*b[i],0)}function risk(v){return Math.sqrt(Math.max(0,v.reduce((s,x,i)=>s+x*dot(cov[i],v),0))*12)}
@@ -255,8 +255,12 @@ function renderTimeline(blocks,block){
  timelineState={lo,hi,start,end,min:idx(available[0].month),max:idx(available.at(-1).month)};
  $('time-editor').classList.remove('hidden');
  $('time-availability').innerHTML=blocks.map(g=>{const a=idx(g[0].month),b=idx(g.at(-1).month);return `<div class="time-available" style="left:${100*(a-lo)/span}%;width:${100*(b-a)/span}%"></div>`}).join('');
- const count=window.innerWidth<600?3:5;
- $('time-ticks').innerHTML=Array.from({length:count},(_,i)=>{const value=Math.round(lo+span*i/(count-1));return `<span style="left:${100*i/(count-1)}%">${timelineLabel(value)}</span>`}).join('');
+ const firstYear=2000+Math.floor(lo/12),lastYear=2000+Math.floor(hi/12);
+ const step=window.innerWidth<600?20:10;
+ const ticks=[lo];
+ for(let year=Math.ceil((firstYear+1)/step)*step;year<lastYear;year+=step){const value=idx(year+'-01');if((value-lo)/span>.10&&(hi-value)/span>.10)ticks.push(value);}
+ ticks.push(hi);
+ $('time-ticks').innerHTML=ticks.map(value=>`<span style="left:${100*(value-lo)/span}%">${2000+Math.floor(value/12)}</span>`).join('');
  paintTimeline();
 }
 function paintTimeline(){
@@ -267,7 +271,10 @@ function paintTimeline(){
  }
  $('time-selection').textContent=timelineLabel(t.start)+' – '+timelineLabel(t.end);
  const n=t.end-t.start+1,years=Math.floor(n/12),months=n%12;
- $('time-duration').textContent=(years?years+(years===1?' Jahr':' Jahre'):'')+(months?(years?' · ':'')+months+(months===1?' Monat':' Monate'):'');
+ const duration=(years?years+(years===1?' Jahr':' Jahre'):'')+(months?(years?' · ':'')+months+(months===1?' Monat':' Monate'):'');
+ $('time-duration').textContent=duration;
+ const customButton=$('periods').querySelector('[data-v=custom]');
+ customButton.textContent=period==='custom'?'Eigener Zeitraum · '+duration:'Eigener Zeitraum';
 }
 function commitTimeline(){
  if(!timelineState)return;
