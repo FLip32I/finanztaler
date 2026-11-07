@@ -1,9 +1,8 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="de">
 <head>
-  <meta charset="utf-8">
-
-
+<meta charset="utf-8"/>
 <script data-cookieconsent="ignore">
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
@@ -11,21 +10,20 @@ gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user
 gtag('set','ads_data_redaction',true);
 gtag('set','url_passthrough',false);
 </script>
-<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="0c83db57-8dda-4e39-aa0c-26f695d656d8" type="text/javascript"></script>
-<script data-cookieconsent="ignore" src="https://www.googletagmanager.com/gtag/js?id=G-TYXJ3CPX1T" async></script>
+<script data-cbid="0c83db57-8dda-4e39-aa0c-26f695d656d8" id="Cookiebot" src="https://consent.cookiebot.com/uc.js" type="text/javascript"></script>
+<script async="" data-cookieconsent="ignore" src="https://www.googletagmanager.com/gtag/js?id=G-TYXJ3CPX1T"></script>
 <script data-cookieconsent="ignore">
 gtag('js',new Date());
 gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalization_signals:false,page_location:window.location.origin+window.location.pathname,page_referrer:document.referrer.split(/[?#]/)[0]});
 </script>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#10342f">
-  <meta name="description" content="Sparen lernen mit Finanztaler: Einnahmen, Ausgaben, Bezahle dich zuerst, Lifestyle-Inflation, 50-30-20-Regel, Kontenmodell und Notgroschen. Mit Budgetrechner und Einstieg ins Investieren.">
-  <title>Sparen lernen: Geld bewusst einsetzen | Finanztaler</title>
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <script src="../assets/js/script.js" defer></script>
-  <script type="text/plain" data-cookieconsent="marketing" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5554850334897452" crossorigin="anonymous"></script>
-  <style>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#10342f" name="theme-color"/>
+<meta content="Sparen lernen mit Finanztaler: Einnahmen, Ausgaben, Bezahle dich zuerst, Lifestyle-Inflation, 50-30-20-Regel, Kontenmodell und Notgroschen. Mit Budgetrechner und Einstieg ins Investieren." name="description"/>
+<title>Sparen lernen: Geld bewusst einsetzen | Finanztaler</title>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<script defer="" src="../assets/js/script.js"></script>
+<script async="" crossorigin="anonymous" data-cookieconsent="marketing" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5554850334897452" type="text/plain"></script>
+<style>
     /* Nur für die Sparen-Seite: bestehende globale Gestaltung bleibt unberührt. */
     .sp-hero{padding:62px 0 48px;background:radial-gradient(ellipse at 85% 35%,#e1f0e4 0,transparent 46%),linear-gradient(115deg,#fafbf7 52%,#faf5e8)}
     .sp-hero-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:52px;align-items:center}
@@ -176,243 +174,276 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
       .sp-lines-card{padding:14px 9px 12px}
     }
     @media(max-width:420px){.sp-shell .sp-toc .sp-toc-list > a{font-size:.77rem;padding:8px 11px}}
-  </style>
-<link rel="canonical" href="https://www.finanztaler.de/sparen/">
+  
+/* Einnahmen: reduzierte Darstellung, übrige Kapitel unverändert */
+.sp-income-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.sp-income-card h3{margin:0}
+.sp-income-card .sp-income-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#e4f0e6;color:#226c4b;font-weight:800;font-size:19px}
+.sp-income-card:nth-child(2) .sp-income-icon{background:#f8edcf;color:#9b731d}
+.sp-income-caption{font-size:.82rem;color:#667b6c;margin-top:auto;padding-top:4px}
+.sp-income-focus{display:flex;align-items:flex-start;gap:16px;padding:21px 0;border-top:1px solid #e0e9e0;margin-top:5px}
+.sp-income-focus-icon{flex:0 0 44px;height:44px;display:grid;place-items:center;background:#eaf3eb;border-radius:12px;color:#236d4b;font-size:26px;font-weight:700}
+.sp-income-focus h3{margin:0 0 7px}
+.sp-income-focus p{margin:0}
+.sp-income-summary{background:#f3f7f1;border:1px solid #e0e9e0;border-radius:14px;padding:18px 20px}
+.sp-income-summary p{margin:6px 0 0}
+</style>
+<link href="https://www.finanztaler.de/sparen/" rel="canonical"/>
 </head>
-<body data-root="../" data-page="sparen/">
+<body data-page="sparen/" data-root="../">
 <div id="site-header"></div>
 <main>
-  <section class="sp-hero">
-    <div class="container sp-hero-layout">
-      <div>
-        <span class="eyebrow">Finanztaler / Sparen</span>
-        <h1>Geld verstehen.<br><span>Bewusst sparen.</span></h1>
-        <p class="lead">Sparen bedeutet nicht, auf alles zu verzichten. Es bedeutet, deine Einnahmen und Ausgaben zu kennen, Prioritäten zu setzen und deinem Geld eine Aufgabe zu geben – für mehr Sicherheit und finanzielle Freiheit.</p>
+<section class="sp-hero">
+<div class="container sp-hero-layout">
+<div>
+<span class="eyebrow">Finanztaler / Sparen</span>
+<h1>Geld verstehen.<br/><span>Bewusst sparen.</span></h1>
+<p class="lead">Sparen bedeutet nicht, auf alles zu verzichten. Es bedeutet, deine Einnahmen und Ausgaben zu kennen, Prioritäten zu setzen und deinem Geld eine Aufgabe zu geben – für mehr Sicherheit und finanzielle Freiheit.</p>
+<div class="sp-actions">
+<a class="btn" href="#warum-sparen">Sparen verstehen ↓</a>
+<a class="sp-btn-alt" href="#regel-50-30-20">Budget berechnen →</a>
+</div>
+</div>
+<div aria-label="Illustration zur 50-30-20-Regel" class="sp-hero-panel">
+<span class="sp-mini-label">Ein möglicher Startpunkt</span>
+<h2>Gib deinem Geld eine Struktur.</h2>
+<div aria-hidden="true" class="sp-hero-wheel"><strong>50 / 30 / 20<small>Budgetregel</small></strong></div>
+<div aria-hidden="true" class="sp-legend">
+<span><i class="sp-dot" style="background:#206848"></i>Grundbedarf</span>
+<span><i class="sp-dot" style="background:#ddb14b"></i>Wünsche</span>
+<span><i class="sp-dot" style="background:#9cc8a8"></i>Zukunft</span>
+</div>
+<p class="sp-hero-footnote">Eine Orientierung, kein starres Gesetz.</p>
+</div>
+</div>
+</section>
+<div class="container sp-shell">
+<div class="sp-intro">
+<span class="sp-kicker">Die Grundlagen</span>
+<h2>Eine gute Sparstrategie beginnt im Alltag.</h2>
+<p>Du musst weder jeden Cent umdrehen noch sofort auf alles verzichten. Wer weiß, woher sein Geld kommt, wohin es fließt und was ihm wichtig ist, kann bewusst entscheiden. Die neun Kapitel führen dich von deinen Einnahmen und Ausgaben über einfache Sparroutinen und den Notgroschen bis zum langfristigen Investieren.</p>
+</div>
+<div class="sp-layout">
+<nav aria-label="Kapitel der Sparen-Seite" class="sp-toc">
+<h2 class="sp-visually-hidden">Direkt zu einem Kapitel springen</h2>
+<div class="sp-toc-list">
+<a href="#warum-sparen">Warum sparen?</a>
+<a href="#einnahmen">Einnahmen</a>
+<a href="#lifestyle-inflation">Lifestyle-Inflation</a>
+<a href="#ausgaben">Ausgaben</a>
+<a href="#bezahle-dich-zuerst">Bezahle dich zuerst</a>
+<a href="#regel-50-30-20">50-30-20-Regel</a>
+<a href="#kontenmodell">Kontenmodell</a>
+<a href="#notgroschen">Notgroschen</a>
+<a href="#sparen-investieren">Sparen &amp; Investieren</a>
+</div>
+</nav>
+<div class="sp-content">
+<section aria-labelledby="sp-h-warum" class="sp-section" id="warum-sparen">
+<span class="sp-kicker">01 · Die Motivation</span>
+<h2 id="sp-h-warum">Warum sparen?</h2>
+<p>Geld allein macht nicht glücklich. Aber finanzielle Rücklagen geben dir Möglichkeiten: eine unerwartete Rechnung bezahlen, eine berufliche Pause einlegen oder eine Entscheidung treffen, ohne sofort aufs Konto schauen zu müssen. <strong>Sparen schafft Handlungsspielraum.</strong></p>
+<div class="sp-card-grid">
+<div class="sp-card"><span aria-hidden="true" class="sp-icon">✓</span><h3>Sicherheit</h3><p>Ein finanzieller Puffer fängt unvorhergesehene Ausgaben ab – etwa eine Reparatur oder einen vorübergehenden Einkommensausfall.</p></div>
+<div class="sp-card sp-card--gold"><span aria-hidden="true" class="sp-icon">↗</span><h3>Selbstbestimmung</h3><p>Rücklagen ermöglichen mehr Freiheit bei großen und kleinen Lebensentscheidungen.</p></div>
+<div class="sp-card sp-card--blue"><span aria-hidden="true" class="sp-icon">◎</span><h3>Ziele</h3><p>Vom Urlaub bis zur Weiterbildung: Wer gezielt spart, muss Wünsche nicht automatisch auf Kredit finanzieren.</p></div>
+</div>
+<div class="sp-note"><strong>Ein sinnvoller Anfang:</strong> Ein <a href="#notgroschen">Notgroschen</a> hilft dir, unerwartete finanzielle Belastungen abzufedern. Wie viel du dafür zurücklegen solltest und wofür diese Reserve gedacht ist, erfährst du weiter unten.</div>
+</section>
+<section aria-labelledby="sp-h-einnahmen" class="sp-section" id="einnahmen">
+<span class="sp-kicker">02 · Die Grundlage</span>
+<h2 id="sp-h-einnahmen">Einnahmen: Was steht dir wirklich zur Verfügung?</h2>
 
-      </div>
-      <div class="sp-hero-panel" aria-label="Illustration zur 50-30-20-Regel">
-        <span class="sp-mini-label">Ein möglicher Startpunkt</span>
-        <h2>Gib deinem Geld eine Struktur.</h2>
-        <div class="sp-hero-wheel" aria-hidden="true"><strong>50 / 30 / 20<small>Budgetregel</small></strong></div>
-        <div class="sp-legend" aria-hidden="true">
-          <span><i class="sp-dot" style="background:#206848"></i>Grundbedarf</span>
-          <span><i class="sp-dot" style="background:#ddb14b"></i>Wünsche</span>
-          <span><i class="sp-dot" style="background:#9cc8a8"></i>Zukunft</span>
-        </div>
-        <p class="sp-hero-footnote">Eine Orientierung, kein starres Gesetz.</p>
-      </div>
-    </div>
-  </section>
 
-  <div class="container sp-shell">
-    <div class="sp-intro">
-      <span class="sp-kicker">Die Grundlagen</span>
-      <h2>Eine gute Sparstrategie beginnt im Alltag.</h2>
-      <p>Du musst weder jeden Cent umdrehen noch sofort auf alles verzichten. Wer weiß, woher sein Geld kommt, wohin es fließt und was ihm wichtig ist, kann bewusst entscheiden. Die neun Kapitel führen dich von deinen Einnahmen und Ausgaben über einfache Sparroutinen und den Notgroschen bis zum langfristigen Investieren.</p>
-    </div>
-    <div class="sp-layout">
-      <nav class="sp-toc" aria-label="Kapitel der Sparen-Seite">
-        <h2 class="sp-visually-hidden">Direkt zu einem Kapitel springen</h2>
-        <div class="sp-toc-list">
-          <a href="#warum-sparen">Warum sparen?</a>
-          <a href="#einnahmen">Einnahmen</a>
-          <a href="#lifestyle-inflation">Lifestyle-Inflation</a>
-          <a href="#ausgaben">Ausgaben</a>
-          <a href="#bezahle-dich-zuerst">Bezahle dich zuerst</a>
-          <a href="#regel-50-30-20">50-30-20-Regel</a>
-          <a href="#kontenmodell">Kontenmodell</a>
-          <a href="#notgroschen">Notgroschen</a>
-          <a href="#sparen-investieren">Sparen &amp; Investieren</a>
-        </div>
-      </nav>
 
-      <div class="sp-content">
-        <section class="sp-section" id="warum-sparen" aria-labelledby="sp-h-warum">
-          <span class="sp-kicker">01 · Die Motivation</span>
-          <h2 id="sp-h-warum">Warum sparen?</h2>
-          <p>Geld allein macht nicht glücklich. Aber finanzielle Rücklagen geben dir Möglichkeiten: eine unerwartete Rechnung bezahlen, eine berufliche Pause einlegen oder eine Entscheidung treffen, ohne sofort aufs Konto schauen zu müssen. <strong>Sparen schafft Handlungsspielraum.</strong></p>
-          <div class="sp-card-grid">
-            <div class="sp-card"><span class="sp-icon" aria-hidden="true">✓</span><h3>Sicherheit</h3><p>Ein finanzieller Puffer fängt unvorhergesehene Ausgaben ab – etwa eine Reparatur oder einen vorübergehenden Einkommensausfall.</p></div>
-            <div class="sp-card sp-card--gold"><span class="sp-icon" aria-hidden="true">↗</span><h3>Selbstbestimmung</h3><p>Rücklagen ermöglichen mehr Freiheit bei großen und kleinen Lebensentscheidungen.</p></div>
-            <div class="sp-card sp-card--blue"><span class="sp-icon" aria-hidden="true">◎</span><h3>Ziele</h3><p>Vom Urlaub bis zur Weiterbildung: Wer gezielt spart, muss Wünsche nicht automatisch auf Kredit finanzieren.</p></div>
-          </div>
-          <div class="sp-note"><strong>Ein sinnvoller Anfang:</strong> Ein <a href="#notgroschen">Notgroschen</a> hilft dir, unerwartete finanzielle Belastungen abzufedern. Wie viel du dafür zurücklegen solltest und wofür diese Reserve gedacht ist, erfährst du weiter unten.</div>
-        </section>
 
-        <section class="sp-section" id="einnahmen" aria-labelledby="sp-h-einnahmen">
-          <span class="sp-kicker">02 · Die Grundlage</span>
-          <h2 id="sp-h-einnahmen">Einnahmen: Was steht dir wirklich zur Verfügung?</h2>
-          <p>Bevor du ein Budget aufstellst, brauchst du eine ehrliche Übersicht über deine <strong>regelmäßig verfügbaren Netto-Einnahmen</strong>. Entscheidend ist nicht dein Bruttogehalt, sondern das Geld, das tatsächlich auf deinen Konten ankommt.</p>
-          <div class="sp-tips">
-            <div class="sp-tip"><h3>Regelmäßige Einnahmen</h3><p>Nettogehalt, Rente, verlässliche Nebeneinkünfte oder andere wiederkehrende Zahlungen.</p></div>
-            <div class="sp-tip"><h3>Unregelmäßige Einnahmen</h3><p>Boni, Steuerrückzahlungen oder einmalige Verkäufe lieber separat einplanen. Sie sind keine sichere Basis für laufende Fixkosten.</p></div>
-          </div>
-          <div class="sp-example"><strong>Merksatz</strong><p>Plane deinen gewöhnlichen Monat mit verlässlichen Einnahmen. Zusätzliche Zahlungen kannst du gezielt für Rücklagen, geplante Anschaffungen oder den Abbau teurer Schulden nutzen.</p></div>
-          <p><strong>Denke auch an die Einnahmenseite:</strong> Weiterbildungen, Gehaltsverhandlungen, ein Stellenwechsel oder eine passende Nebentätigkeit können dein verfügbares Einkommen dauerhaft erhöhen. Entscheidend ist, dass sich der zusätzliche Aufwand für dich lohnt.</p>
-          <div class="sp-note"><strong>Wichtig:</strong> Mehr Netto hilft dir nur dann dauerhaft, wenn nicht jede Gehaltserhöhung sofort wieder im Alltag verschwindet. Genau hier setzt das Thema <a href="#lifestyle-inflation">Lifestyle-Inflation</a> an.</div>
-        </section>
 
-        <section class="sp-section" id="lifestyle-inflation" aria-labelledby="sp-h-lifestyle">
-          <span class="sp-kicker">03 · Mehr Einkommen sinnvoll nutzen</span>
-          <h2 id="sp-h-lifestyle">Lifestyle-Inflation: Mehr verdienen, trotzdem nicht mehr übrig haben.</h2>
-          <p>Mit steigendem Einkommen wachsen häufig die Ansprüche: eine größere Wohnung, ein teureres Auto, mehr Abos oder häufiger essen gehen. Das ist nicht grundsätzlich schlecht – problematisch wird es, wenn <strong>jede Gehaltserhöhung sofort vollständig ausgegeben wird</strong>.</p>
-          <p>Dieses Phänomen hängt mit der <strong>hedonistischen Tretmühle</strong> zusammen: An einen höheren Lebensstandard gewöhnen wir uns häufig schneller, als wir erwarten. Was zunächst besonders erscheint, wird mit der Zeit selbstverständlich. Neue Wünsche entstehen – und trotz höheren Einkommens bleibt am Monatsende womöglich nicht mehr übrig.</p>
-          <div class="sp-example"><strong>Beispiel: 200 € mehr Nettogehalt – die 50/50-Aufteilung</strong><p>Verteile deine Gehaltserhöhung bewusst: <strong>100 € (50 %) gehen direkt in deine Rücklagen</strong> und <strong>100 € (50 %) auf dein Spaßgeldkonto</strong> für Freizeit und Wünsche. So hast du monatlich mehr zur freien Verfügung und legst zugleich <strong>1.200 € zusätzlich pro Jahr</strong> zurück.</p></div>
-          <div class="sp-tips">
-            <div class="sp-tip"><h3>Bewusst verbessern</h3><p>Mehr Geld darf auch mehr Lebensqualität bedeuten. Frage dich aber, welche Ausgaben dir wirklich langfristig etwas bringen.</p></div>
-            <div class="sp-tip"><h3>Neue Fixkosten prüfen</h3><p>Besonders laufende Verpflichtungen sind schwer rückgängig zu machen. Prüfe daher, bevor du deinen Lebensstandard dauerhaft erhöhst.</p></div>
-          </div>
-          <p><strong>Praktischer Tipp:</strong> Lege bereits vor der nächsten Gehaltserhöhung fest, welcher Anteil auf dein Rücklagenkonto und welcher auf dein Spaßgeldkonto fließt. Mit einem <a href="#kontenmodell">Kontenmodell</a> kannst du diese Aufteilung per Dauerauftrag automatisieren. <a href="../rechner/budget-kontenplaner/">Zum Budget- und Kontenplaner →</a></p>
-        </section>
-
-        <section class="sp-section" id="ausgaben" aria-labelledby="sp-h-ausgaben">
-          <span class="sp-kicker">04 · Den Überblick gewinnen</span>
-          <h2 id="sp-h-ausgaben">Ausgaben: Wohin fließt dein Geld?</h2>
-          <p>Viele kleine Ausgaben wirken harmlos. Zusammen können Abos, Lieferdienste und spontane Käufe aber einen erheblichen Teil deines Budgets beanspruchen. Schau dir deshalb zwei bis drei Monate Konto- und Kartenzahlungen an und sortiere sie.</p>
-          <div class="sp-table-wrap">
-            <table class="sp-table">
-              <thead><tr><th>Kategorie</th><th>Beispiele</th><th>Was hilft?</th></tr></thead>
-              <tbody>
-                <tr><td><strong>Fixkosten</strong></td><td>Miete, Strom, Versicherungen, Verträge</td><td>Regelmäßig vergleichen und unnötige Verträge kündigen</td></tr>
-                <tr><td><strong>Variable Ausgaben</strong></td><td>Lebensmittel, Freizeit, Shopping</td><td>Monatliches Budget festlegen und bewusst priorisieren</td></tr>
-                <tr><td><strong>Unregelmäßige Kosten</strong></td><td>Urlaub, Reparaturen, Jahresbeiträge</td><td>Auf zwölf Monate verteilen und monatlich zurücklegen</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="sp-example"><strong>Beispiel: Jahreskosten sichtbar machen</strong><p>Eine Versicherung kostet 360 € im Jahr? Plane dafür monatlich <strong>30 €</strong> ein. So wird aus einer unerwartet hohen Abbuchung eine vorhersehbare Ausgabe.</p></div>
-          <p>Das Ziel ist nicht, jede Freude zu streichen. Es geht darum, Ausgaben zu erkennen, die dir weniger wert sind als die Ziele, für die du eigentlich sparen möchtest. <strong>Bei Impulskäufen</strong> kann eine Wartezeit von 24 Stunden helfen. Prüfe außerdem teure Dispo- und Konsumschulden: Ihre Zinsen belasten dein Budget jeden Monat.</p>
-          <div class="sp-note sp-note--gold"><strong>Ausgaben lassen sich nicht endlos reduzieren.</strong> Miete, Lebensmittel und andere notwendige Kosten setzen eine natürliche Untergrenze. Einmalige Einsparungen sind sinnvoll – langfristig kann es jedoch mehr bewirken, auch deine <a href="#einnahmen">Einnahmen zu verbessern</a>, statt jeden kleinen Genuss zu streichen.</div>
-        </section>
-
-        <section class="sp-section" id="bezahle-dich-zuerst" aria-labelledby="sp-h-zuerst">
-          <span class="sp-kicker">05 · Die wichtigste Routine</span>
-          <h2 id="sp-h-zuerst">Bezahle dich zuerst.</h2>
-          <p>Viele Menschen sparen, was am Monatsende noch übrig ist. Oft bleibt dann nichts. Dreh die Reihenfolge um: <strong>Überweise zuerst einen festen Betrag an dein zukünftiges Ich</strong> – und plane den Rest für deine laufenden Ausgaben ein.</p>
-          <div class="sp-quote">Einkommen → Sparen → Ausgeben/Konsum<br><span style="font-size:.85em;font-weight:500;color:#cde3d1">Statt: Einkommen → Ausgeben → schauen, was übrig bleibt.</span></div>
-          <ol class="sp-list">
-            <li><strong>Lege einen realistischen Betrag fest.</strong> Lieber klein beginnen und dauerhaft dranbleiben als eine zu hohe Sparrate nach kurzer Zeit aufgeben.</li>
-            <li><strong>Automatisiere die Überweisung.</strong> Ein Dauerauftrag kurz nach dem Gehaltseingang nimmt dir die monatliche Entscheidung ab.</li>
-            <li><strong>Erhöhe die Sparrate schrittweise.</strong> Bei Gehaltserhöhungen oder wegfallenden Kosten kannst du einen Teil der zusätzlichen Mittel direkt für deine Ziele reservieren.</li>
-          </ol>
-          <p>Einmal eingerichtet, wird Sparen zur Gewohnheit – ohne dass du dich jeden Monat neu motivieren musst. <strong>Wichtig:</strong> Plane die Rate so, dass dein Konto bis zum Monatsende ausreichend gedeckt bleibt. Passe sie bei Bedarf an, statt den Dauerauftrag dauerhaft auszusetzen.</p>
-        </section>
-
-        <section class="sp-section" id="regel-50-30-20" aria-labelledby="sp-h-regel">
-          <span class="sp-kicker">06 · Eine einfache Budgetregel</span>
-          <h2 id="sp-h-regel">Die 50-30-20-Regel</h2>
-          <p>Die 50-30-20-Regel teilt das monatliche <strong>Nettoeinkommen</strong> in drei Bereiche auf: notwendige Ausgaben, persönliche Wünsche und deine finanzielle Zukunft. Sie ist ein Startpunkt für die Budgetplanung, keine allgemeingültige Vorgabe.</p>
-          <div class="sp-calculator sp-rule-visual">
-            <img src="50-30-20-regel.svg" alt="50-30-20-Regel: 50 Prozent Grundbedarf, 30 Prozent Wünsche und 20 Prozent Rücklagen bei beispielhaft 2.500 Euro Nettoeinkommen" loading="lazy" style="display:block;width:100%;height:auto;border-radius:14px;">
-            <p style="margin:16px 0 0;text-align:center">Passe die Beträge an dein eigenes Einkommen an: <a class="sp-inline-cta" href="../rechner/budget-kontenplaner/">Zum interaktiven Budget- und Kontenplaner →</a></p>
-          </div>
-          <p>Gerade bei hohen Wohnkosten sind 50 % für Grundbedarf nicht immer realistisch. Die 20 % sind ebenfalls kein Mindestwert: Beginne mit einer tragbaren Sparquote und passe die Verteilung an deine Lebenssituation an. Wichtiger als das exakte Verhältnis ist, dass deine Ausgaben langfristig zu deinen Einnahmen passen und regelmäßig Geld für deine Ziele übrig bleibt.</p>
-        </section>
-
-        <section class="sp-section" id="kontenmodell" aria-labelledby="sp-h-konten">
-          <span class="sp-kicker">07 · Ordnung schaffen</span>
-          <h2 id="sp-h-konten">Das Kontenmodell: Gib jedem Euro einen Platz.</h2>
-          <p>Ein Kontenmodell trennt Geld für den Alltag von Geld für deine Ziele. Das macht Budgets sichtbar und verhindert, dass Rücklagen versehentlich im Alltag ausgegeben werden. Schon drei Konten beziehungsweise Unterkonten können reichen.</p>
-          <div class="sp-steps" aria-label="Drei Bausteine eines Kontenmodells">
-            <div class="sp-step"><span class="sp-step-index">KONTO 01</span><h3>Gehalts- &amp; Fixkostenkonto</h3><p>Hier gehen Einnahmen ein und Miete, Versicherungen sowie andere feste Verpflichtungen ab.</p></div>
-            <div class="sp-step"><span class="sp-step-index">KONTO 02</span><h3>Alltagskonto</h3><p>Für Einkäufe, Freizeit und persönliche Wünsche. Ein fester Monatsbetrag setzt einen klaren Rahmen.</p></div>
-            <div class="sp-step"><span class="sp-step-index">KONTO 03</span><h3>Rücklagen &amp; Ziele</h3><p>Für Notgroschen, Jahreskosten und geplante Ausgaben – idealerweise getrennt in Spartöpfen.</p></div>
-          </div>
-          <div class="sp-note"><strong>So bleibt das System übersichtlich:</strong> Trenne den Notgroschen von planbaren Ausgaben wie Urlaub, Jahresversicherungen oder einem neuen Auto. Richte für jeden Topf einen festen monatlichen Betrag ein. Unterkonten reichen dafür häufig aus – du brauchst nicht für jedes Ziel eine eigene Bank. <a href="../rechner/budget-kontenplaner/">Mit dem Budget- und Kontenplaner deine Aufteilung berechnen →</a></div>
-        </section>
-
-        <section class="sp-section" id="notgroschen" aria-labelledby="sp-h-notgroschen">
-          <span class="sp-kicker">08 · Für unvorhergesehene Ausgaben</span>
-          <h2 id="sp-h-notgroschen">Notgroschen: Deine finanzielle Sicherheitsreserve</h2>
-          <p>Der Notgroschen ist Geld, auf das du <strong>im Ernstfall sofort zugreifen kannst</strong>. Er soll verhindern, dass dich eine unerwartete Ausgabe in teure Schulden zwingt oder du wichtige laufende Rechnungen nicht bezahlen kannst.</p>
-          <div class="sp-card-grid">
-            <div class="sp-card"><span class="sp-icon" aria-hidden="true">✓</span><h3>Reparaturen</h3><p>Die Waschmaschine fällt aus oder dein Auto muss ungeplant in die Werkstatt.</p></div>
-            <div class="sp-card sp-card--gold"><span class="sp-icon" aria-hidden="true">↗</span><h3>Einkommensausfall</h3><p>Ein Jobwechsel, Arbeitslosigkeit oder eine längere Zahlungspause überbrücken.</p></div>
-            <div class="sp-card sp-card--blue"><span class="sp-icon" aria-hidden="true">◎</span><h3>Dringende Kosten</h3><p>Notwendige, kurzfristige Ausgaben, die sich nicht sinnvoll verschieben lassen.</p></div>
-          </div>
-          <h3>Wie hoch sollte dein Notgroschen sein?</h3>
-          <p>Als grobe Faustregel gelten <strong>drei bis sechs Monate notwendiger Ausgaben</strong>. Bei unregelmäßigem Einkommen, Selbstständigkeit oder hohen finanziellen Verpflichtungen kann ein größerer Puffer sinnvoll sein. Ausgangspunkt sind deine unvermeidbaren Monatskosten – nicht automatisch dein gesamtes Nettogehalt.</p>
-          <div class="sp-example"><strong>Beispiel</strong><p>Benötigst du für Wohnen, Lebensmittel und andere notwendige Ausgaben monatlich <strong>1.800 €</strong>, entsprechen drei bis sechs Monate einem Notgroschen von etwa <strong>5.400 € bis 10.800 €</strong>. Das ist eine Orientierung, kein starrer Sollwert.</p></div>
-          <div class="sp-tips">
-            <div class="sp-tip"><h3>Gut verfügbar aufbewahren</h3><p>Nutze beispielsweise ein separates, täglich verfügbares Tagesgeldkonto. Sicherheit und Zugriff sind hier wichtiger als maximale Rendite.</p></div>
-            <div class="sp-tip"><h3>Getrennt von geplanten Ausgaben</h3><p>Urlaub, Versicherungsbeiträge oder ein absehbarer Autokauf sind keine Notfälle. Dafür eignen sich eigene Rücklagentöpfe.</p></div>
-          </div>
-          <p>Baue den Puffer schrittweise mit einem festen monatlichen Betrag auf. Wenn du ihn für einen echten Notfall nutzt, fülle ihn anschließend wieder auf.</p>
-          <div class="sp-note"><strong>Merke:</strong> Der Notgroschen ist für echte Notfälle gedacht. Für vorhersehbare Ausgaben wie Urlaub, Jahresbeiträge oder eine geplante Anschaffung solltest du separate Sparziele anlegen. So bleibt deine Sicherheitsreserve unangetastet.</div>
-        </section>
-
-        <section class="sp-section" id="sparen-investieren" aria-labelledby="sp-h-investieren">
-          <span class="sp-kicker">09 · Der nächste Schritt</span>
-          <h2 id="sp-h-investieren">Warum Sparen allein langfristig nicht reicht</h2>
-          <p>Sparen ist die Grundlage. Doch Geld, das über viele Jahre unverzinst liegen bleibt, verliert bei steigenden Preisen an <strong>Kaufkraft</strong>. Du besitzt zwar weiterhin denselben Eurobetrag, kannst dir dafür aber weniger kaufen.</p>
-          
-          <div class="sp-lines-card" aria-labelledby="sp-lines-title">
-            <div class="sp-lines-scroll" role="region" aria-label="Vergleichsgrafik; auf kleinen Bildschirmen horizontal scrollbar" tabindex="0">
-            <svg viewBox="0 0 920 422" role="img" aria-labelledby="sp-lines-title sp-lines-desc" xmlns="http://www.w3.org/2000/svg">
-              <title id="sp-lines-title">Vermögensentwicklung: Sparen, Kaufkraftverlust und Investieren</title>
-              <desc id="sp-lines-desc">Bei 200 Euro monatlich sind nach 20 Jahren nominal 48.000 Euro gespart. Die Kaufkraft entspricht bei zwei Prozent Inflation rund 32.300 Euro in heutigen Preisen. Bei einer angenommenen jährlichen Anlagerendite von 6,5 Prozent ergeben sich nominal rund 95.900 Euro. Die nominale Sparlinie steigt linear, die Anlagekurve zeigt Zinseszinseffekt.</desc>
-              <rect width="920" height="422" fill="#fff" rx="15"/>
-              <g font-family="system-ui,Arial,sans-serif" font-size="13" fill="#688075">
-              <line x1="99" x2="879" y1="42.00" y2="42.00" stroke="#e2eae1" stroke-width="1"/>
-              <text x="87" y="46.00" text-anchor="end">100.000 €</text>
-              <line x1="99" x2="879" y1="99.80" y2="99.80" stroke="#e2eae1" stroke-width="1"/>
-              <text x="87" y="103.80" text-anchor="end">80.000 €</text>
-              <line x1="99" x2="879" y1="157.60" y2="157.60" stroke="#e2eae1" stroke-width="1"/>
-              <text x="87" y="161.60" text-anchor="end">60.000 €</text>
-              <line x1="99" x2="879" y1="215.40" y2="215.40" stroke="#e2eae1" stroke-width="1"/>
-              <text x="87" y="219.40" text-anchor="end">40.000 €</text>
-              <line x1="99" x2="879" y1="273.20" y2="273.20" stroke="#e2eae1" stroke-width="1"/>
-              <text x="87" y="277.20" text-anchor="end">20.000 €</text>
-              <line x1="99" x2="879" y1="331.00" y2="331.00" stroke="#e2eae1" stroke-width="1"/>
-              <text x="87" y="335.00" text-anchor="end">0 €</text>
-              <line x1="99" y1="42" x2="99" y2="331" stroke="#254d3d" stroke-width="2"/><line x1="99" y1="331" x2="879" y2="331" stroke="#254d3d" stroke-width="2"/>
-              <text x="99.00" y="356" text-anchor="middle">0</text>
-              <text x="294.00" y="356" text-anchor="middle">5</text>
-              <text x="489.00" y="356" text-anchor="middle">10</text>
-              <text x="684.00" y="356" text-anchor="middle">15</text>
-              <text x="879.00" y="356" text-anchor="middle">20</text>
-              <text x="879" y="384" text-anchor="end" font-size="14">Jahre</text><text x="99" y="24" font-size="14" fill="#415f50">Vermögen / Kaufkraft</text></g>
-              <polyline fill="none" stroke="#c79a2a" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" points="99.00,331.00 108.75,329.27 118.50,327.57 128.25,325.87 138.00,324.20 147.75,322.54 157.50,320.90 167.25,319.28 177.00,317.67 186.75,316.07 196.50,314.50 206.25,312.94 216.00,311.39 225.75,309.86 235.50,308.35 245.25,306.85 255.00,305.37 264.75,303.90 274.50,302.45 284.25,301.01 294.00,299.59 303.75,298.18 313.50,296.79 323.25,295.41 333.00,294.05 342.75,292.70 352.50,291.36 362.25,290.04 372.00,288.73 381.75,287.44 391.50,286.16 401.25,284.89 411.00,283.64 420.75,282.40 430.50,281.18 440.25,279.97 450.00,278.77 459.75,277.58 469.50,276.41 479.25,275.25 489.00,274.10 498.75,272.97 508.50,271.84 518.25,270.73 528.00,269.64 537.75,268.55 547.50,267.48 557.25,266.42 567.00,265.37 576.75,264.34 586.50,263.31 596.25,262.30 606.00,261.30 615.75,260.31 625.50,259.33 635.25,258.36 645.00,257.41 654.75,256.46 664.50,255.53 674.25,254.61 684.00,253.70 693.75,252.80 703.50,251.91 713.25,251.03 723.00,250.16 732.75,249.30 742.50,248.46 752.25,247.62 762.00,246.79 771.75,245.98 781.50,245.17 791.25,244.37 801.00,243.59 810.75,242.81 820.50,242.04 830.25,241.29 840.00,240.54 849.75,239.80 859.50,239.07 869.25,238.35 879.00,237.65"/>
-              <circle cx="879.00" cy="237.65" r="5.5" fill="#c79a2a" stroke="#fff" stroke-width="2"/>
-              <polyline fill="none" stroke="#1f674a" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" points="99.00,331.00 108.75,329.27 118.50,327.53 128.25,325.80 138.00,324.06 147.75,322.33 157.50,320.60 167.25,318.86 177.00,317.13 186.75,315.39 196.50,313.66 206.25,311.93 216.00,310.19 225.75,308.46 235.50,306.72 245.25,304.99 255.00,303.26 264.75,301.52 274.50,299.79 284.25,298.05 294.00,296.32 303.75,294.59 313.50,292.85 323.25,291.12 333.00,289.38 342.75,287.65 352.50,285.92 362.25,284.18 372.00,282.45 381.75,280.71 391.50,278.98 401.25,277.25 411.00,275.51 420.75,273.78 430.50,272.04 440.25,270.31 450.00,268.58 459.75,266.84 469.50,265.11 479.25,263.37 489.00,261.64 498.75,259.91 508.50,258.17 518.25,256.44 528.00,254.70 537.75,252.97 547.50,251.24 557.25,249.50 567.00,247.77 576.75,246.03 586.50,244.30 596.25,242.57 606.00,240.83 615.75,239.10 625.50,237.36 635.25,235.63 645.00,233.90 654.75,232.16 664.50,230.43 674.25,228.69 684.00,226.96 693.75,225.23 703.50,223.49 713.25,221.76 723.00,220.02 732.75,218.29 742.50,216.56 752.25,214.82 762.00,213.09 771.75,211.35 781.50,209.62 791.25,207.89 801.00,206.15 810.75,204.42 820.50,202.68 830.25,200.95 840.00,199.22 849.75,197.48 859.50,195.75 869.25,194.01 879.00,192.28"/>
-              <circle cx="879.00" cy="192.28" r="5.5" fill="#1f674a" stroke="#fff" stroke-width="2"/>
-              <polyline fill="none" stroke="#5f8eb8" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" points="99.00,331.00 108.75,329.26 118.50,327.49 128.25,325.69 138.00,323.86 147.75,322.00 157.50,320.12 167.25,318.20 177.00,316.26 186.75,314.28 196.50,312.27 206.25,310.23 216.00,308.16 225.75,306.05 235.50,303.91 245.25,301.74 255.00,299.53 264.75,297.29 274.50,295.01 284.25,292.70 294.00,290.35 303.75,287.96 313.50,285.53 323.25,283.07 333.00,280.56 342.75,278.02 352.50,275.44 362.25,272.81 372.00,270.14 381.75,267.44 391.50,264.68 401.25,261.89 411.00,259.05 420.75,256.16 430.50,253.23 440.25,250.26 450.00,247.23 459.75,244.16 469.50,241.04 479.25,237.87 489.00,234.65 498.75,231.37 508.50,228.05 518.25,224.67 528.00,221.24 537.75,217.76 547.50,214.22 557.25,210.62 567.00,206.97 576.75,203.26 586.50,199.49 596.25,195.66 606.00,191.77 615.75,187.81 625.50,183.80 635.25,179.72 645.00,175.58 654.75,171.37 664.50,167.09 674.25,162.75 684.00,158.33 693.75,153.85 703.50,149.30 713.25,144.67 723.00,139.97 732.75,135.19 742.50,130.34 752.25,125.42 762.00,120.41 771.75,115.33 781.50,110.16 791.25,104.91 801.00,99.58 810.75,94.17 820.50,88.67 830.25,83.08 840.00,77.40 849.75,71.63 859.50,65.77 869.25,59.82 879.00,53.78"/>
-              <circle cx="879.00" cy="53.78" r="5.5" fill="#5f8eb8" stroke="#fff" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="sp-chart-legend" aria-label="Farblegende">
-              <span><i class="sp-chart-swatch" style="background:#1f674a" aria-hidden="true"></i>Nominal gespart</span>
-              <span><i class="sp-chart-swatch" style="background:#c79a2a" aria-hidden="true"></i>Kaufkraft des Gesparten</span>
-              <span><i class="sp-chart-swatch" style="background:#5f8eb8" aria-hidden="true"></i>Gespart und investiert</span>
-            </div>
-            <div class="sp-lines-meta">
-              <div><span>Nur gespart</span><b>48.000 €</b><p>200 € monatlich über 20 Jahre – ohne Rendite.</p></div>
-              <div><span>Kaufkraft davon</span><b>ca. 32.300 €</b><p>Bei konstant 2 % Inflation in heutiger Kaufkraft.</p></div>
-              <div><span>Gespart &amp; investiert</span><b>ca. 95.900 €</b><p>Bei 6,5 % Rendite pro Jahr als vereinfachtes Modell.</p></div>
-            </div>
-          </div>
-          <p style="font-size:.84rem;color:#75877b;margin-top:-6px">Vereinfachtes Beispiel mit 200 € monatlicher Sparrate über 20 Jahre, 2 % Inflation und 6,5 % Rendite p. a. Modellrechnung ohne Steuern und Gebühren.</p>
-          <p>Deshalb haben Sparen und Investieren unterschiedliche Aufgaben: <strong>Sparen</strong> schafft verfügbare Reserven für kurzfristige Ausgaben. <strong>Investieren</strong> eröffnet langfristig Renditechancen und die Möglichkeit, die Inflation zu übertreffen. Dafür musst du allerdings Wertschwankungen und mögliche Verluste aushalten können.</p>
-          <div class="sp-cta-block">
-            <h3>Was regelmäßiges Sparen langfristig bewirken kann</h3>
-            <p>Wie entwickelt sich dein Vermögen, wenn du monatlich etwas zurücklegst und das Geld Rendite erwirtschaftet? Probiere verschiedene Sparraten, Laufzeiten und Renditeannahmen aus. Die Ergebnisse sind Modellrechnungen, keine garantierten Erträge.</p>
-            <div class="sp-cta-links">
-              <a class="sp-inline-cta" href="../rechner/zinseszinsrechner/">Zum Zinseszinsrechner →</a>
-              <a class="sp-inline-cta sp-inline-cta--alt" href="../investieren/">Investieren verstehen →</a>
-              <a class="sp-inline-cta sp-inline-cta--alt" href="../rechner/sparrechner/">Zum Sparrechner →</a>
-            </div>
-          </div>
-          <div class="sp-note sp-note--gold"><strong>Die richtige Reihenfolge:</strong> Verschaffe dir einen Überblick, baue notwendige Rücklagen auf und kümmere dich um teure Schulden. Geld, das du in absehbarer Zeit brauchst, gehört grundsätzlich nicht in schwankungsreiche Anlagen.</div>
-          <h3 style="margin-top:25px">Fazit: Nicht nur weniger ausgeben, sondern mehr Spielraum schaffen</h3>
-          <p>Ausgaben bewusst zu steuern, ist wichtig. Sie lassen sich aber nicht beliebig senken – irgendwann stößt Verzicht an Grenzen. Deshalb lohnt es sich langfristig oft stärker, <strong>an den Einnahmen zu arbeiten</strong>, etwa durch Qualifizierung, Gehaltsverhandlungen oder neue berufliche Möglichkeiten. Wenn du einen Teil zusätzlicher Einnahmen konsequent sparst und langfristig investierst, kann daraus echter finanzieller Spielraum entstehen.</p>
-          <p><strong>Das Ziel ist nicht maximaler Verzicht, sondern ein nachhaltiges Gleichgewicht:</strong> gut leben, Rücklagen bilden und Vermögen aufbauen.</p>
-        </section>
-      </div>
-    </div>
-    <div class="sp-bottom"><a href="../">← Zurück zur Startseite</a><a href="../investieren/">Weiter zu Investieren →</a></div>
-    <p class="sp-disclaimer">Die Inhalte dienen der allgemeinen Finanzbildung und stellen keine individuelle Finanz- oder Anlageberatung dar.</p>
-  </div>
+<p>Entscheidend ist nicht dein Bruttogehalt, sondern das Geld, das dir monatlich tatsächlich zur Verfügung steht. Unterscheide dabei zwischen <strong>regelmäßigen</strong> und <strong>unregelmäßigen Einnahmen</strong>.</p>
+<div class="sp-tips sp-income-grid">
+<div class="sp-tip sp-income-card"><div aria-hidden="true" class="sp-income-icon">✓</div><h3>Regelmäßige Einnahmen</h3><p>Nettogehalt, Rente und verlässliche Nebeneinkünfte.</p><span class="sp-income-caption">Basis für dein Budget</span></div>
+<div class="sp-tip sp-income-card"><div aria-hidden="true" class="sp-income-icon">＋</div><h3>Unregelmäßige Einnahmen</h3><p>Boni, Steuererstattungen und einmalige Verkäufe.</p><span class="sp-income-caption">Für zusätzliche Rücklagen</span></div>
+</div>
+<div class="sp-income-focus"><div aria-hidden="true" class="sp-income-focus-icon">↗</div><div><h3>Der größere Hebel: Einkommen steigern</h3><p>Während sich Ausgaben nur begrenzt reduzieren lassen, kannst du dein Einkommen durch Weiterbildung, Gehaltsverhandlungen, einen Stellenwechsel oder eine passende Nebentätigkeit langfristig erhöhen. Entscheidend ist, dass sich der zusätzliche Aufwand lohnt.</p></div></div>
+<div class="sp-income-summary"><strong>Mehr verdienen heißt nicht automatisch mehr sparen.</strong><p>Damit eine Gehaltserhöhung auch finanziellen Spielraum schafft, solltest du nicht alles zusätzlich ausgeben. Genau hier beginnt die <a href="#lifestyle-inflation">Lifestyle-Inflation</a>.</p></div></section>
+<section aria-labelledby="sp-h-lifestyle" class="sp-section" id="lifestyle-inflation">
+<span class="sp-kicker">03 · Mehr Einkommen sinnvoll nutzen</span>
+<h2 id="sp-h-lifestyle">Lifestyle-Inflation: Mehr verdienen, trotzdem nicht mehr übrig haben.</h2>
+<p>Mit steigendem Einkommen wachsen häufig die Ansprüche: eine größere Wohnung, ein teureres Auto, mehr Abos oder häufiger essen gehen. Das ist nicht grundsätzlich schlecht – problematisch wird es, wenn <strong>jede Gehaltserhöhung sofort vollständig ausgegeben wird</strong>.</p>
+<div class="sp-example"><strong>Beispiel: 200 € mehr Nettogehalt</strong><p>Du könntest 100 € zusätzlich für Dinge nutzen, die dir Freude machen, und die anderen <strong>100 € automatisch zurücklegen</strong>. Nach einem Jahr wären das 1.200 € zusätzliche Rücklagen. So steigt dein Lebensstandard, ohne dass dein Vermögensaufbau stehen bleibt.</p></div>
+<div class="sp-tips">
+<div class="sp-tip"><h3>Bewusst verbessern</h3><p>Mehr Geld darf auch mehr Lebensqualität bedeuten. Frage dich aber, welche Ausgaben dir wirklich langfristig etwas bringen.</p></div>
+<div class="sp-tip"><h3>Neue Fixkosten prüfen</h3><p>Besonders laufende Verpflichtungen sind schwer rückgängig zu machen. Prüfe daher, bevor du deinen Lebensstandard dauerhaft erhöhst.</p></div>
+</div>
+<p>Ein hilfreicher Gedanke: Gewöhnung setzt schnell ein. Was heute ein Luxus ist, fühlt sich morgen oft normal an. Eine bewusst gewählte Sparquote schützt dich davor, dass dein finanzieller Spielraum trotz höherem Einkommen stagniert. <strong>Praktischer Tipp:</strong> Lege schon vor der nächsten Gehaltserhöhung fest, welcher Anteil davon künftig auf dein Rücklagenkonto fließt.</p>
+</section>
+<section aria-labelledby="sp-h-ausgaben" class="sp-section" id="ausgaben">
+<span class="sp-kicker">04 · Den Überblick gewinnen</span>
+<h2 id="sp-h-ausgaben">Ausgaben: Wohin fließt dein Geld?</h2>
+<p>Viele kleine Ausgaben wirken harmlos. Zusammen können Abos, Lieferdienste und spontane Käufe aber einen erheblichen Teil deines Budgets beanspruchen. Schau dir deshalb zwei bis drei Monate Konto- und Kartenzahlungen an und sortiere sie.</p>
+<div class="sp-table-wrap">
+<table class="sp-table">
+<thead><tr><th>Kategorie</th><th>Beispiele</th><th>Was hilft?</th></tr></thead>
+<tbody>
+<tr><td><strong>Fixkosten</strong></td><td>Miete, Strom, Versicherungen, Verträge</td><td>Regelmäßig vergleichen und unnötige Verträge kündigen</td></tr>
+<tr><td><strong>Variable Ausgaben</strong></td><td>Lebensmittel, Freizeit, Shopping</td><td>Monatliches Budget festlegen und bewusst priorisieren</td></tr>
+<tr><td><strong>Unregelmäßige Kosten</strong></td><td>Urlaub, Reparaturen, Jahresbeiträge</td><td>Auf zwölf Monate verteilen und monatlich zurücklegen</td></tr>
+</tbody>
+</table>
+</div>
+<div class="sp-example"><strong>Beispiel: Jahreskosten sichtbar machen</strong><p>Eine Versicherung kostet 360 € im Jahr? Plane dafür monatlich <strong>30 €</strong> ein. So wird aus einer unerwartet hohen Abbuchung eine vorhersehbare Ausgabe.</p></div>
+<p>Das Ziel ist nicht, jede Freude zu streichen. Es geht darum, Ausgaben zu erkennen, die dir weniger wert sind als die Ziele, für die du eigentlich sparen möchtest. <strong>Bei Impulskäufen</strong> kann eine Wartezeit von 24 Stunden helfen. Prüfe außerdem teure Dispo- und Konsumschulden: Ihre Zinsen belasten dein Budget jeden Monat.</p>
+<div class="sp-note sp-note--gold"><strong>Ausgaben lassen sich nicht endlos reduzieren.</strong> Miete, Lebensmittel und andere notwendige Kosten setzen eine natürliche Untergrenze. Einmalige Einsparungen sind sinnvoll – langfristig kann es jedoch mehr bewirken, auch deine <a href="#einnahmen">Einnahmen zu verbessern</a>, statt jeden kleinen Genuss zu streichen.</div>
+</section>
+<section aria-labelledby="sp-h-zuerst" class="sp-section" id="bezahle-dich-zuerst">
+<span class="sp-kicker">05 · Die wichtigste Routine</span>
+<h2 id="sp-h-zuerst">Bezahle dich zuerst.</h2>
+<p>Viele Menschen sparen, was am Monatsende noch übrig ist. Oft bleibt dann nichts. Dreh die Reihenfolge um: <strong>Überweise zuerst einen festen Betrag an dein zukünftiges Ich</strong> – und plane den Rest für deine laufenden Ausgaben ein.</p>
+<div class="sp-quote">Einkommen → Sparen → Ausgeben<br/><span style="font-size:.85em;font-weight:500;color:#cde3d1">Statt: Einkommen → Ausgeben → schauen, was übrig bleibt.</span></div>
+<ol class="sp-list">
+<li><strong>Lege einen realistischen Betrag fest.</strong> Lieber klein beginnen und dauerhaft dranbleiben als eine zu hohe Sparrate nach kurzer Zeit aufgeben.</li>
+<li><strong>Automatisiere die Überweisung.</strong> Ein Dauerauftrag kurz nach dem Gehaltseingang nimmt dir die monatliche Entscheidung ab.</li>
+<li><strong>Erhöhe die Sparrate schrittweise.</strong> Bei Gehaltserhöhungen oder wegfallenden Kosten kannst du einen Teil der zusätzlichen Mittel direkt für deine Ziele reservieren.</li>
+</ol>
+<p>Einmal eingerichtet, wird Sparen zur Gewohnheit – ohne dass du dich jeden Monat neu motivieren musst. <strong>Wichtig:</strong> Plane die Rate so, dass dein Konto bis zum Monatsende ausreichend gedeckt bleibt. Passe sie bei Bedarf an, statt den Dauerauftrag dauerhaft auszusetzen.</p>
+</section>
+<section aria-labelledby="sp-h-regel" class="sp-section" id="regel-50-30-20">
+<span class="sp-kicker">06 · Eine einfache Budgetregel</span>
+<h2 id="sp-h-regel">Die 50-30-20-Regel</h2>
+<p>Die 50-30-20-Regel teilt das monatliche <strong>Nettoeinkommen</strong> in drei Bereiche auf: notwendige Ausgaben, persönliche Wünsche und deine finanzielle Zukunft. Sie ist ein Startpunkt für die Budgetplanung, keine allgemeingültige Vorgabe.</p>
+<div class="sp-calculator">
+<div class="sp-calc-top">
+<div>
+<label for="sp-netto">Dein monatliches Nettoeinkommen</label>
+<div class="sp-input-wrap"><input aria-describedby="sp-netto-hinweis" id="sp-netto" inputmode="decimal" max="1000000" min="0" step="50" type="number" value="2500"/><span>€</span></div>
+</div>
+<div class="sp-calc-hint" id="sp-netto-hinweis">Betrag ändern: Die Aufteilung wird sofort neu berechnet.</div>
+</div>
+<div aria-label="50 Prozent Grundbedarf, 30 Prozent Wünsche, 20 Prozent Rücklagen und Schuldentilgung" class="sp-calc-bar" role="img"><span></span><span></span><span></span></div>
+<div aria-atomic="true" aria-live="polite" class="sp-budget-grid">
+<div class="sp-budget-item"><span class="sp-budget-label">50 % · Grundbedarf</span><b id="sp-need">1.250 €</b><p>Wohnen, Lebensmittel, Mobilität und notwendige Verträge</p></div>
+<div class="sp-budget-item"><span class="sp-budget-label">30 % · Wünsche</span><b id="sp-want">750 €</b><p>Hobbys, Restaurants, Urlaub und freiwilliger Konsum</p></div>
+<div class="sp-budget-item"><span class="sp-budget-label">20 % · Rücklagen</span><b id="sp-future">500 €</b><p>Notgroschen, Sparziele und zusätzliche Schuldentilgung</p></div>
+</div>
+</div>
+<p>Gerade bei hohen Wohnkosten sind 50 % für Grundbedarf nicht immer realistisch. Die 20 % sind ebenfalls kein Mindestwert: Beginne mit einer tragbaren Sparquote und passe die Verteilung an deine Lebenssituation an. Wichtiger als das exakte Verhältnis ist, dass deine Ausgaben langfristig zu deinen Einnahmen passen und regelmäßig Geld für deine Ziele übrig bleibt.</p>
+</section>
+<section aria-labelledby="sp-h-konten" class="sp-section" id="kontenmodell">
+<span class="sp-kicker">07 · Ordnung schaffen</span>
+<h2 id="sp-h-konten">Das Kontenmodell: Gib jedem Euro einen Platz.</h2>
+<p>Ein Kontenmodell trennt Geld für den Alltag von Geld für deine Ziele. Das macht Budgets sichtbar und verhindert, dass Rücklagen versehentlich im Alltag ausgegeben werden. Schon drei Konten beziehungsweise Unterkonten können reichen.</p>
+<div aria-label="Drei Bausteine eines Kontenmodells" class="sp-steps">
+<div class="sp-step"><span class="sp-step-index">KONTO 01</span><h3>Gehalts- &amp; Fixkostenkonto</h3><p>Hier gehen Einnahmen ein und Miete, Versicherungen sowie andere feste Verpflichtungen ab.</p></div>
+<div class="sp-step"><span class="sp-step-index">KONTO 02</span><h3>Alltagskonto</h3><p>Für Einkäufe, Freizeit und persönliche Wünsche. Ein fester Monatsbetrag setzt einen klaren Rahmen.</p></div>
+<div class="sp-step"><span class="sp-step-index">KONTO 03</span><h3>Rücklagen &amp; Ziele</h3><p>Für Notgroschen, Jahreskosten und geplante Ausgaben – idealerweise getrennt in Spartöpfen.</p></div>
+</div>
+<div class="sp-note"><strong>So bleibt das System übersichtlich:</strong> Trenne den Notgroschen von planbaren Ausgaben wie Urlaub, Jahresversicherungen oder einem neuen Auto. Richte für jeden Topf einen festen monatlichen Betrag ein. Unterkonten reichen dafür häufig aus – du brauchst nicht für jedes Ziel eine eigene Bank.</div>
+</section>
+<section aria-labelledby="sp-h-notgroschen" class="sp-section" id="notgroschen">
+<span class="sp-kicker">08 · Für unvorhergesehene Ausgaben</span>
+<h2 id="sp-h-notgroschen">Notgroschen: Deine finanzielle Sicherheitsreserve</h2>
+<p>Der Notgroschen ist Geld, auf das du <strong>im Ernstfall sofort zugreifen kannst</strong>. Er soll verhindern, dass dich eine unerwartete Ausgabe in teure Schulden zwingt oder du wichtige laufende Rechnungen nicht bezahlen kannst.</p>
+<div class="sp-card-grid">
+<div class="sp-card"><span aria-hidden="true" class="sp-icon">✓</span><h3>Reparaturen</h3><p>Die Waschmaschine fällt aus oder dein Auto muss ungeplant in die Werkstatt.</p></div>
+<div class="sp-card sp-card--gold"><span aria-hidden="true" class="sp-icon">↗</span><h3>Einkommensausfall</h3><p>Ein Jobwechsel, Arbeitslosigkeit oder eine längere Zahlungspause überbrücken.</p></div>
+<div class="sp-card sp-card--blue"><span aria-hidden="true" class="sp-icon">◎</span><h3>Dringende Kosten</h3><p>Notwendige, kurzfristige Ausgaben, die sich nicht sinnvoll verschieben lassen.</p></div>
+</div>
+<h3>Wie hoch sollte dein Notgroschen sein?</h3>
+<p>Als grobe Faustregel gelten <strong>drei bis sechs Monate notwendiger Ausgaben</strong>. Bei unregelmäßigem Einkommen, Selbstständigkeit oder hohen finanziellen Verpflichtungen kann ein größerer Puffer sinnvoll sein. Ausgangspunkt sind deine unvermeidbaren Monatskosten – nicht automatisch dein gesamtes Nettogehalt.</p>
+<div class="sp-example"><strong>Beispiel</strong><p>Benötigst du für Wohnen, Lebensmittel und andere notwendige Ausgaben monatlich <strong>1.800 €</strong>, entsprechen drei bis sechs Monate einem Notgroschen von etwa <strong>5.400 € bis 10.800 €</strong>. Das ist eine Orientierung, kein starrer Sollwert.</p></div>
+<div class="sp-tips">
+<div class="sp-tip"><h3>Gut verfügbar aufbewahren</h3><p>Nutze beispielsweise ein separates, täglich verfügbares Tagesgeldkonto. Sicherheit und Zugriff sind hier wichtiger als maximale Rendite.</p></div>
+<div class="sp-tip"><h3>Getrennt von geplanten Ausgaben</h3><p>Urlaub, Versicherungsbeiträge oder ein absehbarer Autokauf sind keine Notfälle. Dafür eignen sich eigene Rücklagentöpfe.</p></div>
+</div>
+<p>Baue den Puffer schrittweise mit einem festen monatlichen Betrag auf. Wenn du ihn für einen echten Notfall nutzt, fülle ihn anschließend wieder auf.</p>
+<div class="sp-note"><strong>Merke:</strong> Der Notgroschen ist für echte Notfälle gedacht. Für vorhersehbare Ausgaben wie Urlaub, Jahresbeiträge oder eine geplante Anschaffung solltest du separate Sparziele anlegen. So bleibt deine Sicherheitsreserve unangetastet.</div>
+</section>
+<section aria-labelledby="sp-h-investieren" class="sp-section" id="sparen-investieren">
+<span class="sp-kicker">09 · Der nächste Schritt</span>
+<h2 id="sp-h-investieren">Warum Sparen allein langfristig nicht reicht</h2>
+<p>Sparen ist die Grundlage. Doch Geld, das über viele Jahre unverzinst liegen bleibt, verliert bei steigenden Preisen an <strong>Kaufkraft</strong>. Du besitzt zwar weiterhin denselben Eurobetrag, kannst dir dafür aber weniger kaufen.</p>
+<div aria-labelledby="sp-lines-title" class="sp-lines-card">
+<div aria-label="Vergleichsgrafik; auf kleinen Bildschirmen horizontal scrollbar" class="sp-lines-scroll" role="region" tabindex="0">
+<svg aria-labelledby="sp-lines-title sp-lines-desc" role="img" viewbox="0 0 920 422" xmlns="http://www.w3.org/2000/svg">
+<title id="sp-lines-title">Vermögensentwicklung: Sparen, Kaufkraftverlust und Investieren</title>
+<desc id="sp-lines-desc">Bei 200 Euro monatlich sind nach 20 Jahren nominal 48.000 Euro gespart. Die Kaufkraft entspricht bei zwei Prozent Inflation rund 32.300 Euro in heutigen Preisen. Bei einer angenommenen jährlichen Anlagerendite von 6,5 Prozent ergeben sich nominal rund 95.900 Euro. Die nominale Sparlinie steigt linear, die Anlagekurve zeigt Zinseszinseffekt.</desc>
+<rect fill="#fff" height="422" rx="15" width="920"></rect>
+<g fill="#688075" font-family="system-ui,Arial,sans-serif" font-size="13">
+<line stroke="#e2eae1" stroke-width="1" x1="99" x2="879" y1="42.00" y2="42.00"></line>
+<text text-anchor="end" x="87" y="46.00">100.000 €</text>
+<line stroke="#e2eae1" stroke-width="1" x1="99" x2="879" y1="99.80" y2="99.80"></line>
+<text text-anchor="end" x="87" y="103.80">80.000 €</text>
+<line stroke="#e2eae1" stroke-width="1" x1="99" x2="879" y1="157.60" y2="157.60"></line>
+<text text-anchor="end" x="87" y="161.60">60.000 €</text>
+<line stroke="#e2eae1" stroke-width="1" x1="99" x2="879" y1="215.40" y2="215.40"></line>
+<text text-anchor="end" x="87" y="219.40">40.000 €</text>
+<line stroke="#e2eae1" stroke-width="1" x1="99" x2="879" y1="273.20" y2="273.20"></line>
+<text text-anchor="end" x="87" y="277.20">20.000 €</text>
+<line stroke="#e2eae1" stroke-width="1" x1="99" x2="879" y1="331.00" y2="331.00"></line>
+<text text-anchor="end" x="87" y="335.00">0 €</text>
+<line stroke="#254d3d" stroke-width="2" x1="99" x2="99" y1="42" y2="331"></line><line stroke="#254d3d" stroke-width="2" x1="99" x2="879" y1="331" y2="331"></line>
+<text text-anchor="middle" x="99.00" y="356">0</text>
+<text text-anchor="middle" x="294.00" y="356">5</text>
+<text text-anchor="middle" x="489.00" y="356">10</text>
+<text text-anchor="middle" x="684.00" y="356">15</text>
+<text text-anchor="middle" x="879.00" y="356">20</text>
+<text font-size="14" text-anchor="end" x="879" y="384">Jahre</text><text fill="#415f50" font-size="14" x="99" y="24">Vermögen / Kaufkraft</text></g>
+<polyline fill="none" points="99.00,331.00 108.75,329.27 118.50,327.57 128.25,325.87 138.00,324.20 147.75,322.54 157.50,320.90 167.25,319.28 177.00,317.67 186.75,316.07 196.50,314.50 206.25,312.94 216.00,311.39 225.75,309.86 235.50,308.35 245.25,306.85 255.00,305.37 264.75,303.90 274.50,302.45 284.25,301.01 294.00,299.59 303.75,298.18 313.50,296.79 323.25,295.41 333.00,294.05 342.75,292.70 352.50,291.36 362.25,290.04 372.00,288.73 381.75,287.44 391.50,286.16 401.25,284.89 411.00,283.64 420.75,282.40 430.50,281.18 440.25,279.97 450.00,278.77 459.75,277.58 469.50,276.41 479.25,275.25 489.00,274.10 498.75,272.97 508.50,271.84 518.25,270.73 528.00,269.64 537.75,268.55 547.50,267.48 557.25,266.42 567.00,265.37 576.75,264.34 586.50,263.31 596.25,262.30 606.00,261.30 615.75,260.31 625.50,259.33 635.25,258.36 645.00,257.41 654.75,256.46 664.50,255.53 674.25,254.61 684.00,253.70 693.75,252.80 703.50,251.91 713.25,251.03 723.00,250.16 732.75,249.30 742.50,248.46 752.25,247.62 762.00,246.79 771.75,245.98 781.50,245.17 791.25,244.37 801.00,243.59 810.75,242.81 820.50,242.04 830.25,241.29 840.00,240.54 849.75,239.80 859.50,239.07 869.25,238.35 879.00,237.65" stroke="#c79a2a" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.2"></polyline>
+<circle cx="879.00" cy="237.65" fill="#c79a2a" r="5.5" stroke="#fff" stroke-width="2"></circle>
+<polyline fill="none" points="99.00,331.00 108.75,329.27 118.50,327.53 128.25,325.80 138.00,324.06 147.75,322.33 157.50,320.60 167.25,318.86 177.00,317.13 186.75,315.39 196.50,313.66 206.25,311.93 216.00,310.19 225.75,308.46 235.50,306.72 245.25,304.99 255.00,303.26 264.75,301.52 274.50,299.79 284.25,298.05 294.00,296.32 303.75,294.59 313.50,292.85 323.25,291.12 333.00,289.38 342.75,287.65 352.50,285.92 362.25,284.18 372.00,282.45 381.75,280.71 391.50,278.98 401.25,277.25 411.00,275.51 420.75,273.78 430.50,272.04 440.25,270.31 450.00,268.58 459.75,266.84 469.50,265.11 479.25,263.37 489.00,261.64 498.75,259.91 508.50,258.17 518.25,256.44 528.00,254.70 537.75,252.97 547.50,251.24 557.25,249.50 567.00,247.77 576.75,246.03 586.50,244.30 596.25,242.57 606.00,240.83 615.75,239.10 625.50,237.36 635.25,235.63 645.00,233.90 654.75,232.16 664.50,230.43 674.25,228.69 684.00,226.96 693.75,225.23 703.50,223.49 713.25,221.76 723.00,220.02 732.75,218.29 742.50,216.56 752.25,214.82 762.00,213.09 771.75,211.35 781.50,209.62 791.25,207.89 801.00,206.15 810.75,204.42 820.50,202.68 830.25,200.95 840.00,199.22 849.75,197.48 859.50,195.75 869.25,194.01 879.00,192.28" stroke="#1f674a" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.2"></polyline>
+<circle cx="879.00" cy="192.28" fill="#1f674a" r="5.5" stroke="#fff" stroke-width="2"></circle>
+<polyline fill="none" points="99.00,331.00 108.75,329.26 118.50,327.49 128.25,325.69 138.00,323.86 147.75,322.00 157.50,320.12 167.25,318.20 177.00,316.26 186.75,314.28 196.50,312.27 206.25,310.23 216.00,308.16 225.75,306.05 235.50,303.91 245.25,301.74 255.00,299.53 264.75,297.29 274.50,295.01 284.25,292.70 294.00,290.35 303.75,287.96 313.50,285.53 323.25,283.07 333.00,280.56 342.75,278.02 352.50,275.44 362.25,272.81 372.00,270.14 381.75,267.44 391.50,264.68 401.25,261.89 411.00,259.05 420.75,256.16 430.50,253.23 440.25,250.26 450.00,247.23 459.75,244.16 469.50,241.04 479.25,237.87 489.00,234.65 498.75,231.37 508.50,228.05 518.25,224.67 528.00,221.24 537.75,217.76 547.50,214.22 557.25,210.62 567.00,206.97 576.75,203.26 586.50,199.49 596.25,195.66 606.00,191.77 615.75,187.81 625.50,183.80 635.25,179.72 645.00,175.58 654.75,171.37 664.50,167.09 674.25,162.75 684.00,158.33 693.75,153.85 703.50,149.30 713.25,144.67 723.00,139.97 732.75,135.19 742.50,130.34 752.25,125.42 762.00,120.41 771.75,115.33 781.50,110.16 791.25,104.91 801.00,99.58 810.75,94.17 820.50,88.67 830.25,83.08 840.00,77.40 849.75,71.63 859.50,65.77 869.25,59.82 879.00,53.78" stroke="#5f8eb8" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.2"></polyline>
+<circle cx="879.00" cy="53.78" fill="#5f8eb8" r="5.5" stroke="#fff" stroke-width="2"></circle>
+</svg>
+</div>
+<div aria-label="Farblegende" class="sp-chart-legend">
+<span><i aria-hidden="true" class="sp-chart-swatch" style="background:#1f674a"></i>Nominal gespart</span>
+<span><i aria-hidden="true" class="sp-chart-swatch" style="background:#c79a2a"></i>Kaufkraft des Gesparten</span>
+<span><i aria-hidden="true" class="sp-chart-swatch" style="background:#5f8eb8"></i>Gespart und investiert</span>
+</div>
+<div class="sp-lines-meta">
+<div><span>Nur gespart</span><b>48.000 €</b><p>200 € monatlich über 20 Jahre – ohne Rendite.</p></div>
+<div><span>Kaufkraft davon</span><b>ca. 32.300 €</b><p>Bei konstant 2 % Inflation in heutiger Kaufkraft.</p></div>
+<div><span>Gespart &amp; investiert</span><b>ca. 95.900 €</b><p>Bei 6,5 % Rendite pro Jahr als vereinfachtes Modell.</p></div>
+</div>
+</div>
+<p style="font-size:.84rem;color:#75877b;margin-top:-6px">Vereinfachtes Beispiel mit 200 € monatlicher Sparrate über 20 Jahre, 2 % Inflation und 6,5 % Rendite p. a. Modellrechnung ohne Steuern und Gebühren.</p>
+<p>Deshalb haben Sparen und Investieren unterschiedliche Aufgaben: <strong>Sparen</strong> schafft verfügbare Reserven für kurzfristige Ausgaben. <strong>Investieren</strong> eröffnet langfristig Renditechancen und die Möglichkeit, die Inflation zu übertreffen. Dafür musst du allerdings Wertschwankungen und mögliche Verluste aushalten können.</p>
+<div class="sp-cta-block">
+<h3>Was regelmäßiges Sparen langfristig bewirken kann</h3>
+<p>Wie entwickelt sich dein Vermögen, wenn du monatlich etwas zurücklegst und das Geld Rendite erwirtschaftet? Probiere verschiedene Sparraten, Laufzeiten und Renditeannahmen aus. Die Ergebnisse sind Modellrechnungen, keine garantierten Erträge.</p>
+<div class="sp-cta-links">
+<a class="sp-inline-cta" href="../rechner/zinseszinsrechner/">Zum Zinseszinsrechner →</a>
+<a class="sp-inline-cta sp-inline-cta--alt" href="../investieren/">Investieren verstehen →</a>
+<a class="sp-inline-cta sp-inline-cta--alt" href="../rechner/sparrechner/">Zum Sparrechner →</a>
+</div>
+</div>
+<div class="sp-note sp-note--gold"><strong>Die richtige Reihenfolge:</strong> Verschaffe dir einen Überblick, baue notwendige Rücklagen auf und kümmere dich um teure Schulden. Geld, das du in absehbarer Zeit brauchst, gehört grundsätzlich nicht in schwankungsreiche Anlagen.</div>
+<h3 style="margin-top:25px">Fazit: Nicht nur weniger ausgeben, sondern mehr Spielraum schaffen</h3>
+<p>Ausgaben bewusst zu steuern, ist wichtig. Sie lassen sich aber nicht beliebig senken – irgendwann stößt Verzicht an Grenzen. Deshalb lohnt es sich langfristig oft stärker, <strong>an den Einnahmen zu arbeiten</strong>, etwa durch Qualifizierung, Gehaltsverhandlungen oder neue berufliche Möglichkeiten. Wenn du einen Teil zusätzlicher Einnahmen konsequent sparst und langfristig investierst, kann daraus echter finanzieller Spielraum entstehen.</p>
+<p><strong>Das Ziel ist nicht maximaler Verzicht, sondern ein nachhaltiges Gleichgewicht:</strong> gut leben, Rücklagen bilden und Vermögen aufbauen.</p>
+</section>
+</div>
+</div>
+<div class="sp-bottom"><a href="../">← Zurück zur Startseite</a><a href="../investieren/">Weiter zu Investieren →</a></div>
+<p class="sp-disclaimer">Die Inhalte dienen der allgemeinen Finanzbildung und stellen keine individuelle Finanz- oder Anlageberatung dar.</p>
+</div>
 </main>
 <div id="site-footer"></div>
-
+<script>
+  (() => {
+    'use strict';
+    const net = document.getElementById('sp-netto');
+    const output = [document.getElementById('sp-need'), document.getElementById('sp-want'), document.getElementById('sp-future')];
+    if (!net || output.some(el => !el)) return;
+    const format = new Intl.NumberFormat('de-DE', {style:'currency', currency:'EUR', maximumFractionDigits:0});
+    function updateBudget() {
+      const parsed = Number(net.value);
+      const amount = Number.isFinite(parsed) ? Math.max(0, Math.min(1000000, parsed)) : 0;
+      [0.5, 0.3, 0.2].forEach((ratio, i) => { output[i].textContent = format.format(amount * ratio); });
+    }
+    net.addEventListener('input', updateBudget);
+    updateBudget();
+  })();
+</script>
 </body>
 </html>
