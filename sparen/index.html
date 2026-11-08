@@ -190,6 +190,19 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 @media(max-width:640px){.sp-income-opportunities{grid-template-columns:1fr}}
 .sp-income-summary{background:#f3f7f1;border:1px solid #e0e9e0;border-radius:14px;padding:18px 20px}
 .sp-income-summary p{margin:6px 0 0}
+
+    .sp-money-flow{margin:26px 0;color:#163f34}
+    .sp-flow-income{text-align:center;font-weight:750;margin-bottom:12px}.sp-flow-income>span{display:block;font-size:26px;color:#528669}
+    .sp-flow-main{display:flex;align-items:center;gap:20px;max-width:660px;margin:auto;padding:24px;border:1px solid #c8dbcf;border-radius:18px;background:#edf5ee}
+    .sp-flow-symbol{display:grid;place-items:center;flex-shrink:0;width:48px;height:48px;border-radius:14px;background:#fff;color:#276449;font-size:26px;font-weight:750;border:1px solid #dbe7da}
+    .sp-money-flow h3{margin:0 0 8px}.sp-money-flow p{margin:0;font-size:.93rem;line-height:1.65}.sp-money-flow .sp-step-index{margin-bottom:8px;font-size:.72rem}
+    .sp-flow-transfer{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 0;color:#597565;font-size:.84rem;font-weight:700}.sp-flow-transfer>span{font-size:27px}
+    .sp-flow-branches{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-top:18px}.sp-flow-branches:before{content:"";position:absolute;top:0;left:25%;right:25%;height:16px;border:solid #a7c4af;border-width:2px 2px 0;border-radius:10px 10px 0 0}
+    .sp-flow-target{padding:24px;border:1px solid #ebdfbd;border-radius:18px;background:#fcf8ec}.sp-flow-target:last-child{border-color:#d6e4d8;background:#f4f8f2}.sp-flow-target>.sp-flow-symbol{margin-bottom:16px}.sp-flow-target>.sp-step-index{display:block}
+    .sp-flow-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}.sp-flow-tags span{padding:5px 9px;border-radius:7px;background:#ffffffb3;border:1px solid #dfdfcf;font-size:.74rem;font-weight:650}
+    .sp-planner-callout{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:24px;padding:26px;border:1px solid #d8b75d;border-radius:18px;background:linear-gradient(115deg,#fbf6e5,#f6edcc)}
+    .sp-planner-callout h3{margin:8px 0;font-size:1.25rem}.sp-planner-callout p{margin:0;font-size:.93rem}.sp-planner-button{display:inline-flex;align-items:center;justify-content:center;gap:18px;flex-shrink:0;padding:15px 20px;border-radius:11px;background:#174f3d;color:#fff!important;font-weight:800;text-decoration:none!important;box-shadow:0 4px 10px #174f3d14;transition:background .15s,transform .15s}.sp-planner-button:hover{background:#236b51;transform:translateY(-2px)}.sp-planner-button:focus-visible{outline:3px solid #b58b22;outline-offset:4px}
+    @media(max-width:700px){.sp-flow-branches{grid-template-columns:1fr;padding-top:0;gap:12px}.sp-flow-branches:before{display:none}.sp-flow-main{padding:20px;align-items:flex-start;gap:13px}.sp-flow-main>.sp-flow-symbol{width:38px;height:38px}.sp-flow-target{padding:20px}.sp-flow-transfer{font-size:.77rem}.sp-planner-callout{flex-direction:column;align-items:stretch;padding:22px;gap:18px}.sp-planner-button{width:100%;box-sizing:border-box}}
 </style>
 <link href="https://www.finanztaler.de/sparen/" rel="canonical"/>
 </head>
@@ -337,13 +350,17 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <span class="sp-kicker">07 · Ordnung schaffen</span>
 <h2 id="sp-h-konten">Das Kontenmodell: Gib jedem Euro einen Platz.</h2>
 <p>Ein Kontenmodell trennt Geld für den Alltag von Geld für deine Ziele. Das macht Budgets sichtbar und verhindert, dass Rücklagen versehentlich im Alltag ausgegeben werden. Schon drei Konten beziehungsweise Unterkonten können reichen.</p>
-<div aria-label="Drei Bausteine eines Kontenmodells" class="sp-steps">
-<div class="sp-step"><span class="sp-step-index">KONTO 01</span><h3>Gehalts- &amp; Fixkostenkonto</h3><p>Hier gehen Einnahmen ein und Miete, Versicherungen sowie andere feste Verpflichtungen ab.</p></div>
-<div class="sp-step"><span class="sp-step-index">KONTO 02</span><h3>Alltagskonto</h3><p>Für Einkäufe, Freizeit und persönliche Wünsche. Ein fester Monatsbetrag setzt einen klaren Rahmen.</p></div>
-<div class="sp-step"><span class="sp-step-index">KONTO 03</span><h3>Rücklagen &amp; Ziele</h3><p>Für Notgroschen, Jahreskosten und geplante Ausgaben – idealerweise getrennt in Spartöpfen.</p></div>
+<div class="sp-money-flow" aria-label="Geldfluss: Einkommen auf das Gehaltskonto, von dort feste Beträge für Alltag und Rücklagen">
+<div class="sp-flow-income"><span aria-hidden="true">↓</span> Dein monatliches Einkommen</div>
+<div class="sp-flow-main"><span class="sp-flow-symbol" aria-hidden="true">€</span><div><span class="sp-step-index">KONTO 01 · GELDEINGANG</span><h3>Gehalts- &amp; Fixkostenkonto</h3><p>Hier kommt dein Gehalt an. Miete, Versicherungen und andere feste Verpflichtungen gehen direkt ab.</p></div></div>
+<div class="sp-flow-transfer"><span aria-hidden="true">↓</span> Feste Beträge per Dauerauftrag verteilen</div>
+<div class="sp-flow-branches">
+<div class="sp-flow-target"><span class="sp-flow-symbol" aria-hidden="true">↗</span><span class="sp-step-index">KONTO 02 · AUSGEBEN</span><h3>Alltagskonto</h3><p>Dein Budget für Einkäufe, Freizeit und persönliche Wünsche.</p><div class="sp-flow-tags"><span>Lebensmittel</span><span>Freizeit</span><span>Wünsche</span></div></div>
+<div class="sp-flow-target"><span class="sp-flow-symbol" aria-hidden="true">◎</span><span class="sp-step-index">KONTO 03 · ZURÜCKLEGEN</span><h3>Rücklagen &amp; Ziele</h3><p>Geld für Sicherheit und geplante Ausgaben – aufgeteilt in eigene Spartöpfe.</p><div class="sp-flow-tags"><span>Notgroschen</span><span>Jahreskosten</span><span>Sparziele</span></div></div>
 </div>
-<div class="sp-note"><strong>So bleibt das System übersichtlich:</strong> Trenne den Notgroschen von planbaren Ausgaben wie Urlaub, Jahresversicherungen oder einem neuen Auto. Richte für jeden Topf einen festen monatlichen Betrag ein. Unterkonten reichen dafür häufig aus – du brauchst nicht für jedes Ziel eine eigene Bank.</div>
-<p><strong>Kontenmodell selbst planen:</strong> Mit unserem <a href="../rechner/budget-kontenplaner/">Budget- und Kontenplaner →</a> kannst du dein monatliches Budget aufteilen und passende Rücklagentöpfe festlegen.</p>
+</div>
+<div class="sp-note"><strong>Ein Topf pro Ziel:</strong> Trenne den Notgroschen von planbaren Ausgaben wie Urlaub, Jahresversicherungen oder einem neuen Auto. Unterkonten reichen dafür häufig aus – du brauchst nicht für jedes Ziel eine eigene Bank.</div>
+<div class="sp-planner-callout"><div><span class="sp-kicker">JETZT SELBST PLANEN</span><h3>Dein Budget. Deine Konten. Dein Plan.</h3><p>Teile dein monatliches Budget auf und lege passende Rücklagentöpfe fest.</p></div><a class="sp-planner-button" href="../rechner/budget-kontenplaner/">Zum Kontenplaner <span aria-hidden="true">→</span></a></div>
 </section>
 <section aria-labelledby="sp-h-notgroschen" class="sp-section" id="notgroschen">
 <span class="sp-kicker">08 · Für unvorhergesehene Ausgaben</span>
