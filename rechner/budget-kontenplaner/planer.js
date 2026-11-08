@@ -40,12 +40,13 @@ const extraSum=()=>state.extraIncomes.reduce((s,x)=>s+num(x.amount),0);
 function renderExtraIncomes(){
  $('extraIncomeRows').innerHTML=state.extraIncomes.map((x,i)=>`<div class="extra-income-row"><input aria-label="Einnahme" data-extra-index="${i}" data-extra-field="name" value="${esc(x.name)}"><input aria-label="Betrag" type="number" min="0" step="0.01" data-extra-index="${i}" data-extra-field="amount" value="${num(x.amount)}"><input class="cf-day" aria-label="Zahlungstag" type="number" min="1" max="31" data-extra-index="${i}" data-extra-field="day" value="${day(x.day||1)}"><button type="button" data-remove-extra="${i}" aria-label="Einnahme entfernen">×</button></div>`).join('');
 }
-function setCashflowActive(active){cfActive=active;$('cashContent').hidden=!active;document.querySelectorAll('.cf-only').forEach(x=>x.hidden=!active);$('cashToggle').setAttribute('aria-expanded',String(active));$('cashToggle').innerHTML=active?'Cashflowplan ausblenden <span>⌃</span>':'Cashflowplan anzeigen <span>⌄</span>';$('cashOption').checked=active;document.body.classList.toggle('cf-active',active);if(active)renderCashflow()}
-$('cashToggle').onclick=()=>setCashflowActive(!cfActive);
+function setCashflowActive(active){cfActive=active;$('cashContent').hidden=!active;document.querySelectorAll('.cf-only').forEach(x=>x.hidden=!active);$('cashflow').hidden=!active;$('cashOption').checked=active;document.body.classList.toggle('cf-active',active);if(active)renderCashflow()}
 $('cashOption').addEventListener('change',e=>setCashflowActive(e.target.checked));
 $('addExtraIncome').onclick=()=>{state.extraIncomes.push({name:'Weitere Einnahme',amount:0,day:1});renderExtraIncomes();renderSummary();renderCashflow()};
 document.addEventListener('input',e=>{let x=e.target;if(x.dataset.extraIndex===undefined)return;let o=state.extraIncomes[+x.dataset.extraIndex];o[x.dataset.extraField]=x.dataset.extraField==='amount'?num(x.value):x.dataset.extraField==='day'?day(x.value):x.value;renderSummary();renderCashflow()});
 document.addEventListener('click',e=>{let b=e.target.closest('[data-remove-extra]');if(!b)return;state.extraIncomes.splice(+b.dataset.removeExtra,1);renderExtraIncomes();renderSummary();renderCashflow()});
+const flowYear=new Date().getFullYear();
+$('flowMonth').innerHTML=Array.from({length:12},(_,i)=>`<option value="${flowYear}-${String(i+1).padStart(2,'0')}">${new Date(flowYear,i,1).toLocaleDateString('de-DE',{month:'long'})}</option>`).join('');
 $('flowMonth').value=monthNow();
 function renderCashflow(){
  const month=($('flowMonth').value||monthNow());const [y,m]=month.split('-').map(Number);
@@ -62,12 +63,9 @@ function renderCashflow(){
   events.push({d:clamp(x.day||1),label:x.name,amount:-num(x.amount),i,j,group:g.name});
  }));
  events.sort((a,b)=>a.d-b.d||(b.amount-a.amount));
- const example=state.flowStartMode!=='custom';
- $('flowStartMode').value=example?'example':'custom';
- $('flowStart').readOnly=example;
- if(example)$('flowStart').value=num(state.income);
- else if(document.activeElement!==$('flowStart'))$('flowStart').value=Number(state.flowStart)||0;
- $('flowStartHint').textContent=example?'Beispielannahme: Am Monatsanfang ist ein Monatsgehalt aus dem Vormonat vorhanden. Für eine persönliche Planung wähle deinen tatsächlichen Kontostand.':'Trage den tatsächlichen Kontostand zu Beginn des gewählten Monats ein – vor den Buchungen dieses Monats.';
+ if(state.flowStart===undefined)state.flowStart=num(state.income);
+ if(document.activeElement!==$('flowStart'))$('flowStart').value=Number(state.flowStart)||0;
+ $('flowStartHint').textContent='Beispielsweise dein Gehaltseingang aus dem Vormonat, abzüglich bereits bezahlter Ausgaben.';
  let cumulative=0,minimum=0,beforeSalary=0,beforeMinimum=0;
  for(const event of events){cumulative+=event.amount;minimum=Math.min(minimum,cumulative);if(event.d<clamp(salaryDay)){beforeSalary+=event.amount;beforeMinimum=Math.min(beforeMinimum,beforeSalary);}}
  $('flowRequired').textContent=(num(state.income)?'Bis zum Gehalt am '+clamp(salaryDay)+'. benötigst du mindestens '+euro(-beforeMinimum)+' am Monatsanfang. ':'')+'Für den gesamten Monat sind mindestens '+euro(-minimum)+' Startguthaben nötig, um nicht ins Minus zu rutschen.';
@@ -77,8 +75,7 @@ function renderCashflow(){
  $('flowClosing').textContent=euro(balance);$('flowLowest').textContent=euro(lowest);
 }
 $('flowMonth').addEventListener('change',renderCashflow);
-$('flowStartMode').addEventListener('change',e=>{state.flowStartMode=e.target.value;if(state.flowStartMode==='custom'&&state.flowStart===undefined)state.flowStart=Number($('flowStart').value)||0;renderCashflow()});
-$('flowStart').addEventListener('input',e=>{state.flowStartMode='custom';state.flowStart=Number(e.target.value)||0;renderCashflow()});
+$('flowStart').addEventListener('input',e=>{state.flowStart=Number(e.target.value)||0;renderCashflow()});
 $('incomeDay').addEventListener('input',e=>{state.incomeDay=day(e.target.value);renderCashflow()});
 document.addEventListener('change',e=>{const x=e.target;if(x.dataset.editFlow){const [i,k]=x.dataset.editFlow.split(':').map(Number);state.groups[i].items[k].day=day(x.value);renderCashflow()}else if(x.dataset.editExtra!==undefined){state.extraIncomes[+x.dataset.editExtra].day=day(x.value);renderCashflow()}else if(x.dataset.editIncome){state[x.dataset.editIncome==='income'?'incomeDay':'extraDay']=day(x.value);if(x.dataset.editIncome==='income')$('incomeDay').value=state.incomeDay;renderCashflow()}});
 document.addEventListener('click',e=>{const btn=e.target.closest('[data-flow],[data-flow-income],[data-flow-extra]');if(!btn)return;
@@ -95,11 +92,12 @@ function renderAccountFlow(){
  const unit=$('accountFlow').dataset.unit||'eur',selected=Number($('accountFlow').dataset.selected??-1);
  const fmt=v=>unit==='pct'?(income?(v/income*100).toLocaleString('de-DE',{maximumFractionDigits:1})+' %':'–'):euro(v);
  const labels=['Grundbedarf','Alltag & Freizeit','Sparen & Rücklagen','Puffer','Noch frei'],colors=['#236448','#c59b32','#80a68a','#84979f','#c4cdbd'];
- const targets=t.map((value,i)=>({value,i,label:labels[i],color:colors[i]}));if(rest>0)targets.push({value:rest,i:4,label:labels[4],color:colors[4]});
+ const groupTargets=t.map((value,i)=>({value,i,label:labels[i],color:colors[i]}));if(rest>0)groupTargets.push({value:rest,i:4,label:labels[4],color:colors[4]});
+ const targets=$('sankeyLevel').value==='items'?state.groups.flatMap((g,i)=>g.items.map(x=>({value:monthly(x),i,label:x.name,color:colors[i]}))).concat(rest>0?[groupTargets[groupTargets.length-1]]:[]):groupTargets;
  const visible=targets.filter(x=>x.value>0),scale=total?280/total:0;
  const sources=[{value:income,label:'Einnahmen',color:'#236448'}];if(rest<0)sources.push({value:-rest,label:'Fehlbetrag',color:'#b24d35'});
  let sy=45; sources.forEach(x=>{x.y=sy;x.height=x.value*scale;x.offset=0;sy+=x.height+22});
- let ty=30;visible.forEach(x=>{x.y=ty;x.height=x.value*scale;ty+=x.height+24});
+ let ty=30;visible.forEach(x=>{x.y=ty;x.height=x.value*scale;ty+=x.height+36});
  const height=Math.max(360,ty+10,sy+10);
  let paths='',nodes='';
  for(const target of visible){let offset=0;for(const source of sources){const amount=total?target.value*source.value/total:0,h=amount*scale;if(!h)continue;
@@ -109,7 +107,7 @@ function renderAccountFlow(){
  }
  const sourceNodes=sources.filter(x=>x.value>0).map(x=>`<rect x="166" y="${x.y}" width="14" height="${x.height}" fill="${x.color}"/><text x="150" y="${x.y+x.height/2-3}" text-anchor="end" font-size="14" fill="${x.color}" font-weight="700">${esc(x.label)}</text><text x="150" y="${x.y+x.height/2+16}" text-anchor="end" font-size="13" fill="#587064">${esc(fmt(x.value))}</text>`).join('');
  const group=state.groups[selected];
- $('accountFlow').innerHTML=(total?`<div class="sankey-scroll"><svg viewBox="0 0 740 ${height}" role="img" aria-label="Monatliche Budgetverteilung"><title>Monatliche Budgetverteilung</title>${paths}${sourceNodes}${nodes}</svg></div>`:'<p>Trage Einnahmen oder Ausgaben ein, um die Verteilung zu sehen.</p>')+`<div class="sankey-categories" aria-label="Bereich auswählen">${targets.map(x=>`<button type="button" data-sankey-group="${x.i}" aria-expanded="${selected===x.i}" aria-controls="sankeyDetail"><span style="background:${x.color}" aria-hidden="true"></span>${esc(x.label)} <b>${esc(fmt(x.value))}</b></button>`).join('')}</div><div id="sankeyDetail">${selected>=0?`<h3>${esc(labels[selected])}</h3>${group?group.items.map(x=>`<div class="account-row"><span>${esc(x.name)}</span><b>${esc(fmt(monthly(x)))}</b></div>`).join(''):'<p>Dieser Betrag ist noch keinem Budgetbereich zugewiesen.</p>'}`:''}</div>${rest<0?`<p class="af-deficit">Deine Ausgaben übersteigen die Einnahmen um ${euro(-rest)} pro Monat. Der rote Geldstrom zeigt diesen ungedeckten Betrag.</p>`:''}${unit==='pct'?'<p class="help">Prozentwerte beziehen sich auf die Einnahmen. Bei einer Überplanung liegt die Summe über 100 %. Ohne Einnahmen sind Prozentwerte nicht definiert.</p>':''}`;
+ $('accountFlow').innerHTML=(total?`<div class="sankey-scroll"><svg viewBox="0 0 740 ${height}" role="img" aria-label="Monatliche Budgetverteilung"><title>Monatliche Budgetverteilung</title>${paths}${sourceNodes}${nodes}</svg></div>`:'<p>Trage Einnahmen oder Ausgaben ein, um die Verteilung zu sehen.</p>')+`<div class="sankey-categories" aria-label="Bereich auswählen">${groupTargets.map(x=>`<button type="button" data-sankey-group="${x.i}" aria-expanded="${selected===x.i}" aria-controls="sankeyDetail"><span style="background:${x.color}" aria-hidden="true"></span>${esc(x.label)} <b>${esc(fmt(x.value))}</b></button>`).join('')}</div><div id="sankeyDetail">${selected>=0?`<h3>${esc(labels[selected])}</h3>${group?group.items.map(x=>`<div class="account-row"><span>${esc(x.name)}</span><b>${esc(fmt(monthly(x)))}</b></div>`).join(''):'<p>Dieser Betrag ist noch keinem Budgetbereich zugewiesen.</p>'}`:''}</div>${rest<0?`<p class="af-deficit">Deine Ausgaben übersteigen die Einnahmen um ${euro(-rest)} pro Monat. Der rote Geldstrom zeigt diesen ungedeckten Betrag.</p>`:''}${unit==='pct'?'<p class="help">Prozentwerte beziehen sich auf die Einnahmen. Bei einer Überplanung liegt die Summe über 100 %. Ohne Einnahmen sind Prozentwerte nicht definiert.</p>':''}`;
 }
 document.addEventListener('click',e=>{
  const button=e.target.closest('[data-sankey-unit],[data-sankey-group]');if(!button)return;
@@ -119,3 +117,5 @@ document.addEventListener('click',e=>{
  // Preserve keyboard focus when the selected area's buttons are re-rendered.
  if(button.dataset.sankeyGroup!==undefined)document.querySelector(`[data-sankey-group="${button.dataset.sankeyGroup}"]`)?.focus();
 });
+
+$('sankeyLevel').addEventListener('change',renderAccountFlow);
