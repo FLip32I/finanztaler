@@ -45,7 +45,6 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 .book-art.has-cover{aspect-ratio:auto;min-height:0;align-self:start;overflow:visible;border-radius:0;justify-content:flex-start;gap:8px}
 .book-art.has-cover img{width:100%;height:auto;object-fit:contain;border-radius:0}
 .book-cover-credit{font-size:.68rem;line-height:1.45;color:#53685d;overflow-wrap:anywhere;font-weight:400;letter-spacing:normal;text-transform:none}
-.book-cover-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 </style>
 <script type="text/plain" data-cookieconsent="marketing" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5554850334897452" crossorigin="anonymous"></script><link rel="canonical" href="https://www.finanztaler.de/buchempfehlungen/">
 </head>
@@ -98,10 +97,7 @@ for (const buch of BUECHER) {
     art.classList.add("has-cover"); art.append(img);
     if (buch.coverQuelle && buch.coverVerlag) {
       const credit = element("span", "book-cover-credit");
-      const source = element("a", "", "Cover: " + buch.coverVerlag);
-      source.href = buch.coverQuelle;
-      source.target = "_blank";
-      source.rel = "noopener noreferrer";
+      const source = element("span", "", "Cover: " + buch.coverVerlag);
       credit.append(source);
       if (buch.coverIsbn) credit.append(document.createElement("br"), document.createTextNode("ISBN " + buch.coverIsbn));
       art.append(credit);
