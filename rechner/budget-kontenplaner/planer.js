@@ -40,9 +40,18 @@ const extraSum=()=>state.extraIncomes.reduce((s,x)=>s+num(x.amount),0);
 function renderExtraIncomes(){
  $('extraIncomeRows').innerHTML=state.extraIncomes.map((x,i)=>`<div class="extra-income-row"><input aria-label="Einnahme" data-extra-index="${i}" data-extra-field="name" value="${esc(x.name)}"><input aria-label="Betrag" type="number" min="0" step="0.01" data-extra-index="${i}" data-extra-field="amount" value="${num(x.amount)}"><input class="cf-day" aria-label="Zahlungstag" type="number" min="1" max="31" data-extra-index="${i}" data-extra-field="day" value="${day(x.day||1)}"><button type="button" data-remove-extra="${i}" aria-label="Einnahme entfernen">×</button></div>`).join('');
 }
-function setCashflowActive(active){cfActive=active;$('cashContent').hidden=true;$('cashToggle').setAttribute('aria-expanded','false');document.querySelectorAll('.cf-only').forEach(x=>x.hidden=!active);$('cashflow').hidden=!active;$('cashOption').checked=active;document.body.classList.toggle('cf-active',active);if(active)renderCashflow()}
+function setCashflowActive(active){
+ cfActive=active;$('cashflow').hidden=false;
+ $('cashToggle').disabled=!active;
+ $('cashToggle').setAttribute('aria-expanded',String(active));
+ $('cashContent').hidden=!active;
+ $('cashLockedHint').hidden=active;
+ document.querySelectorAll('.cf-only').forEach(x=>x.hidden=!active);
+ $('cashOption').checked=active;document.body.classList.toggle('cf-active',active);
+ if(active)renderCashflow();
+}
 $('cashOption').addEventListener('change',e=>setCashflowActive(e.target.checked));
-$('cashToggle').onclick=()=>{const expanded=$('cashContent').hidden;$('cashContent').hidden=!expanded;$('cashToggle').setAttribute('aria-expanded',String(expanded));if(expanded)renderCashflow()};
+$('cashToggle').onclick=()=>{if(!cfActive)return;const expanded=$('cashContent').hidden;$('cashContent').hidden=!expanded;$('cashToggle').setAttribute('aria-expanded',String(expanded));if(expanded)renderCashflow()};
 $('addExtraIncome').onclick=()=>{state.extraIncomes.push({name:'Weitere Einnahme',amount:0,day:1});renderExtraIncomes();renderSummary();renderCashflow()};
 document.addEventListener('input',e=>{let x=e.target;if(x.dataset.extraIndex===undefined)return;let o=state.extraIncomes[+x.dataset.extraIndex];o[x.dataset.extraField]=x.dataset.extraField==='amount'?num(x.value):x.dataset.extraField==='day'?day(x.value):x.value;renderSummary();renderCashflow()});
 document.addEventListener('click',e=>{let b=e.target.closest('[data-remove-extra]');if(!b)return;state.extraIncomes.splice(+b.dataset.removeExtra,1);renderExtraIncomes();renderSummary();renderCashflow()});
