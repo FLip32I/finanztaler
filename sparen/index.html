@@ -191,18 +191,11 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 .sp-income-summary{background:#f3f7f1;border:1px solid #e0e9e0;border-radius:14px;padding:18px 20px}
 .sp-income-summary p{margin:6px 0 0}
 
-    .sp-money-flow{margin:26px 0;color:#163f34}
-    .sp-flow-income{text-align:center;font-weight:750;margin-bottom:12px}.sp-flow-income>span{display:block;font-size:26px;color:#528669}
-    .sp-flow-main{display:flex;align-items:center;gap:20px;max-width:660px;margin:auto;padding:24px;border:1px solid #c8dbcf;border-radius:18px;background:#edf5ee}
-    .sp-flow-symbol{display:grid;place-items:center;flex-shrink:0;width:48px;height:48px;border-radius:14px;background:#fff;color:#276449;font-size:26px;font-weight:750;border:1px solid #dbe7da}
-    .sp-money-flow h3{margin:0 0 8px}.sp-money-flow p{margin:0;font-size:.93rem;line-height:1.65}.sp-money-flow .sp-step-index{margin-bottom:8px;font-size:.72rem}
-    .sp-flow-transfer{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 0;color:#597565;font-size:.84rem;font-weight:700}.sp-flow-transfer>span{font-size:27px}
-    .sp-flow-branches{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-top:18px}.sp-flow-branches:before{content:"";position:absolute;top:0;left:25%;right:25%;height:16px;border:solid #a7c4af;border-width:2px 2px 0;border-radius:10px 10px 0 0}
-    .sp-flow-target{padding:24px;border:1px solid #ebdfbd;border-radius:18px;background:#fcf8ec}.sp-flow-target:last-child{border-color:#d6e4d8;background:#f4f8f2}.sp-flow-target>.sp-flow-symbol{margin-bottom:16px}.sp-flow-target>.sp-step-index{display:block}
-    .sp-flow-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}.sp-flow-tags span{padding:5px 9px;border-radius:7px;background:#ffffffb3;border:1px solid #dfdfcf;font-size:.74rem;font-weight:650}
     .sp-planner-callout{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:24px;padding:26px;border:1px solid #d8b75d;border-radius:18px;background:linear-gradient(115deg,#fbf6e5,#f6edcc)}
     .sp-planner-callout h3{margin:8px 0;font-size:1.25rem}.sp-planner-callout p{margin:0;font-size:.93rem}.sp-planner-button{display:inline-flex;align-items:center;justify-content:center;gap:18px;flex-shrink:0;padding:15px 20px;border-radius:11px;background:#174f3d;color:#fff!important;font-weight:800;text-decoration:none!important;box-shadow:0 4px 10px #174f3d14;transition:background .15s,transform .15s}.sp-planner-button:hover{background:#236b51;transform:translateY(-2px)}.sp-planner-button:focus-visible{outline:3px solid #b58b22;outline-offset:4px}
     @media(max-width:700px){.sp-flow-branches{grid-template-columns:1fr;padding-top:0;gap:12px}.sp-flow-branches:before{display:none}.sp-flow-main{padding:20px;align-items:flex-start;gap:13px}.sp-flow-main>.sp-flow-symbol{width:38px;height:38px}.sp-flow-target{padding:20px}.sp-flow-transfer{font-size:.77rem}.sp-planner-callout{flex-direction:column;align-items:stretch;padding:22px;gap:18px}.sp-planner-button{width:100%;box-sizing:border-box}}
+
+.sp-account-model{margin:24px 0 18px}.sp-account-diagram{display:block;width:100%;max-width:960px;height:auto;margin:auto;font-family:inherit}.sp-account-model figcaption{font-size:.82rem;line-height:1.6;color:#587564;margin-top:8px}.sp-account-mobile{display:none}@media(max-width:650px){.sp-account-diagram{display:none}.sp-account-mobile{display:block}.sp-account-origin{padding:20px;border-radius:14px;background:#174f3d;color:#fff}.sp-account-mobile h3{margin:0 0 6px;font-size:1rem}.sp-account-mobile p{margin:0;font-size:.88rem;line-height:1.6}.sp-account-destinations{margin:0 0 0 18px;padding:18px 0 0 20px;border-left:2px solid #bdd1bf;display:grid;gap:12px}.sp-account-destinations>div{position:relative;padding:15px;border:1px solid #dbe6d5;border-radius:12px;background:#f2f7ef}.sp-account-destinations>div:before{content:"";position:absolute;left:-22px;top:25px;width:20px;border-top:2px solid #bdd1bf}.sp-account-destinations>div:nth-child(2){background:#fbf6e6;border-color:#eadbb4}.sp-account-destinations>div:nth-child(3){background:#edf5f0}}
 </style>
 <link href="https://www.finanztaler.de/sparen/" rel="canonical"/>
 </head>
@@ -349,16 +342,22 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <section aria-labelledby="sp-h-konten" class="sp-section" id="kontenmodell">
 <span class="sp-kicker">07 · Ordnung schaffen</span>
 <h2 id="sp-h-konten">Das Kontenmodell: Gib jedem Euro einen Platz.</h2>
-<p>Ein Kontenmodell trennt Geld für den Alltag von Geld für deine Ziele. Das macht Budgets sichtbar und verhindert, dass Rücklagen versehentlich im Alltag ausgegeben werden. Schon drei Konten beziehungsweise Unterkonten können reichen.</p>
-<div class="sp-money-flow" aria-label="Geldfluss: Einkommen auf das Gehaltskonto, von dort feste Beträge für Alltag und Rücklagen">
-<div class="sp-flow-income"><span aria-hidden="true">↓</span> Dein monatliches Einkommen</div>
-<div class="sp-flow-main"><span class="sp-flow-symbol" aria-hidden="true">€</span><div><span class="sp-step-index">KONTO 01 · GELDEINGANG</span><h3>Gehalts- &amp; Fixkostenkonto</h3><p>Hier kommt dein Gehalt an. Miete, Versicherungen und andere feste Verpflichtungen gehen direkt ab.</p></div></div>
-<div class="sp-flow-transfer"><span aria-hidden="true">↓</span> Feste Beträge per Dauerauftrag verteilen</div>
-<div class="sp-flow-branches">
-<div class="sp-flow-target"><span class="sp-flow-symbol" aria-hidden="true">↗</span><span class="sp-step-index">KONTO 02 · AUSGEBEN</span><h3>Alltagskonto</h3><p>Dein Budget für Einkäufe, Freizeit und persönliche Wünsche.</p><div class="sp-flow-tags"><span>Lebensmittel</span><span>Freizeit</span><span>Wünsche</span></div></div>
-<div class="sp-flow-target"><span class="sp-flow-symbol" aria-hidden="true">◎</span><span class="sp-step-index">KONTO 03 · ZURÜCKLEGEN</span><h3>Rücklagen &amp; Ziele</h3><p>Geld für Sicherheit und geplante Ausgaben – aufgeteilt in eigene Spartöpfe.</p><div class="sp-flow-tags"><span>Notgroschen</span><span>Jahreskosten</span><span>Sparziele</span></div></div>
-</div>
-</div>
+<p>Ein Kontenmodell trennt Geld für den Alltag von Geld für deine Ziele. Das macht Budgets sichtbar und verhindert, dass Rücklagen versehentlich im Alltag ausgegeben werden. Ein Geldeingangskonto, ein Sparkonto, ein Spaßkonto und ein Depot geben deinem Geld klare Aufgaben.</p>
+<figure class="sp-account-model">
+<svg class="sp-account-diagram" viewBox="0 0 960 350" role="img" aria-labelledby="sp-model-title sp-model-desc">
+<title id="sp-model-title">Vom Geldeingangskonto zu Sparkonto, Spaßkonto und Depot</title>
+<desc id="sp-model-desc">Gehalt und weitere Einnahmen gehen auf dem Geldeingangskonto ein. Fixkosten werden hier bezahlt. Feste Beträge gehen auf das Sparkonto für Notgroschen, Jahreskosten und Sparziele, auf das Spaßkonto für Freizeit und Wünsche und ins Depot für den langfristigen Vermögensaufbau. Die Breiten sind schematisch.</desc>
+<path d="M290 112 C430 112 470 40 610 40 L610 100 C470 100 430 166 290 166Z" fill="#90b48f" opacity=".62"/>
+<path d="M290 166 C430 166 470 145 610 145 L610 205 C470 205 430 220 290 220Z" fill="#d6b450" opacity=".62"/>
+<path d="M290 220 C430 220 470 250 610 250 L610 310 C470 310 430 274 290 274Z" fill="#629482" opacity=".54"/>
+<rect x="272" y="112" width="18" height="162" rx="4" fill="#174f3d"/>
+<g fill="#174f3d" text-anchor="end"><text x="252" y="157" font-size="21" font-weight="750">Geldeingangskonto</text><text x="252" y="184" font-size="14">Gehalt &amp; weitere Einnahmen</text><text x="252" y="210" font-size="14">Fixkosten werden hier bezahlt</text></g>
+<rect x="610" y="40" width="16" height="60" rx="3" fill="#83a47f"/><rect x="610" y="145" width="16" height="60" rx="3" fill="#c49f31"/><rect x="610" y="250" width="16" height="60" rx="3" fill="#467a65"/>
+<g fill="#174f3d"><text x="647" y="65" font-size="22" font-weight="750">Sparkonto</text><text x="647" y="88" font-size="14">Notgroschen · Jahreskosten · Sparziele</text><text x="647" y="170" font-size="22" font-weight="750">Spaßkonto</text><text x="647" y="193" font-size="14">Freizeit · Hobbys · Wünsche</text><text x="647" y="275" font-size="22" font-weight="750">Depot</text><text x="647" y="298" font-size="14">Langfristiger Vermögensaufbau</text></g>
+</svg>
+<div class="sp-account-mobile"><div class="sp-account-origin"><h3>Geldeingangskonto</h3><p>Gehalt &amp; weitere Einnahmen.<br>Fixkosten werden hier bezahlt.</p></div><div class="sp-account-destinations"><div><h3>Sparkonto</h3><p>Notgroschen, Jahreskosten &amp; Sparziele</p></div><div><h3>Spaßkonto</h3><p>Freizeit, Hobbys &amp; Wünsche</p></div><div><h3>Depot</h3><p>Langfristiger Vermögensaufbau</p></div></div></div>
+<figcaption>Verteile feste Beträge per Dauerauftrag. Die Darstellung ist schematisch – deine Aufteilung bestimmst du selbst.</figcaption>
+</figure>
 <div class="sp-note"><strong>Ein Topf pro Ziel:</strong> Trenne den Notgroschen von planbaren Ausgaben wie Urlaub, Jahresversicherungen oder einem neuen Auto. Unterkonten reichen dafür häufig aus – du brauchst nicht für jedes Ziel eine eigene Bank.</div>
 <div class="sp-planner-callout"><div><span class="sp-kicker">JETZT SELBST PLANEN</span><h3>Dein Budget. Deine Konten. Dein Plan.</h3><p>Teile dein monatliches Budget auf und lege passende Rücklagentöpfe fest.</p></div><a class="sp-planner-button" href="../rechner/budget-kontenplaner/">Zum Kontenplaner <span aria-hidden="true">→</span></a></div>
 </section>
