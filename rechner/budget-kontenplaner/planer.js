@@ -23,6 +23,7 @@ $('print').onclick=()=>window.print();
 $('csv').onclick=()=>{const rows=[['Kategorie','Position','Betrag','Zeitraum','Monatlich','Zahlungstag','Fälligkeitsmonat']];state.groups.forEach(g=>g.items.forEach(x=>rows.push([g.name,x.name,x.amount,x.period==='year'?'Jährlich':'Monatlich',monthly(x),day(x.day||1),x.period==='year'?(x.dueMonth||1):''])));rows.push(['','Einnahmen',num(state.income)+num(state.extra)+extraSum(),'Monatlich','']);const blob=new Blob(['\uFEFF'+rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='finanztaler-budget.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 function sync(){
  state.extraIncomes=Array.isArray(state.extraIncomes)?state.extraIncomes:[];
+ if(num(state.extra)){state.extraIncomes.push({name:'Weitere regelmäßige Einnahmen',amount:num(state.extra),day:day(state.extraDay||1)});state.extra=0;}
  state.incomeDay=day(state.incomeDay||28);state.extraDay=day(state.extraDay||1);
  state.salaryTiming=['start','end','custom'].includes(state.salaryTiming)?state.salaryTiming:'end';
  document.querySelectorAll('[data-key]').forEach(x=>x.value=state[x.dataset.key]);
