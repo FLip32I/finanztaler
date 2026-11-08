@@ -89,9 +89,33 @@ document.addEventListener('click',e=>{const btn=e.target.closest('[data-flow],[d
 sync();
 setCashflowActive(false);
 
+
 function renderAccountFlow(){
- const t=totals(),income=num(state.income)+num(state.extra)+extraSum(),rest=income-t.reduce((a,b)=>a+b,0);
- const branches=[['⌂','Girokonto / Grundbedarf',t[0],'Bleibt für Wohnen, Lebensmittel und Mobilität'],['↗','Alltagskonto',t[1],'Budget für Konsum und Freizeit'],['◎','Sparen & Rücklagen',t[2],'Für Investments, Notgroschen und Sparziele'],['+','Puffer',t[3],'Für ungeplante Ausgaben']];
- if(rest>0)branches.push(['€','Noch frei',rest,'Noch keinem Bereich zugewiesen']);
- $('accountFlow').innerHTML=`<div class="af-source"><span>Einnahmen pro Monat</span><strong>${euro(income)}</strong></div><div class="af-arrow" aria-hidden="true">↓</div><div class="af-hub"><span>Gehaltskonto</span><strong>Von hier aus verteilen</strong></div><div class="af-arrow" aria-hidden="true">↓</div><div class="af-branches">${branches.map(([icon,label,amount,hint])=>`<div class="af-branch"><span class="af-direction" aria-hidden="true">↓</span><span class="af-icon" aria-hidden="true">${icon}</span><h3>${label}</h3><strong>${euro(amount)}<small> / Monat</small></strong><p>${hint}</p></div>`).join('')}</div>${rest<0?`<p class="af-deficit" role="status">Deine Verteilung übersteigt die Einnahmen um ${euro(-rest)} pro Monat. Passe deine Beträge an.</p>`:''}`;
+ const t=totals(),income=num(state.income)+num(state.extra)+extraSum(),expenses=t.reduce((a,b)=>a+b,0),rest=income-expenses,total=Math.max(income,expenses);
+ const unit=$('accountFlow').dataset.unit||'eur',selected=Number($('accountFlow').dataset.selected??-1);
+ const fmt=v=>unit==='pct'?(income?(v/income*100).toLocaleString('de-DE',{maximumFractionDigits:1})+' %':'–'):euro(v);
+ const labels=['Grundbedarf','Alltag & Freizeit','Sparen & Rücklagen','Puffer','Noch frei'],colors=['#236448','#c59b32','#80a68a','#84979f','#c4cdbd'];
+ const targets=t.map((value,i)=>({value,i,label:labels[i],color:colors[i]}));if(rest>0)targets.push({value:rest,i:4,label:labels[4],color:colors[4]});
+ const visible=targets.filter(x=>x.value>0),scale=total?280/total:0;
+ const sources=[{value:income,label:'Einnahmen',color:'#236448'}];if(rest<0)sources.push({value:-rest,label:'Fehlbetrag',color:'#b24d35'});
+ let sy=45; sources.forEach(x=>{x.y=sy;x.height=x.value*scale;x.offset=0;sy+=x.height+22});
+ let ty=30;visible.forEach(x=>{x.y=ty;x.height=x.value*scale;ty+=x.height+24});
+ const height=Math.max(360,ty+10,sy+10);
+ let paths='',nodes='';
+ for(const target of visible){let offset=0;for(const source of sources){const amount=total?target.value*source.value/total:0,h=amount*scale;if(!h)continue;
+ const y1=source.y+source.offset,y2=target.y+offset;
+ paths+=`<path d="M 180 ${y1} C 320 ${y1},360 ${y2},500 ${y2} L 500 ${y2+h} C 360 ${y2+h},320 ${y1+h},180 ${y1+h} Z" fill="${source.label==='Fehlbetrag'?source.color:target.color}" opacity=".32"><title>${esc(source.label)} → ${esc(target.label)}: ${esc(fmt(amount))}</title></path>`;source.offset+=h;offset+=h;}
+ nodes+=`<rect x="500" y="${target.y}" width="14" height="${target.height}" fill="${target.color}"/><text x="528" y="${target.y+target.height/2-3}" fill="#163c31" font-size="14" font-weight="700">${esc(target.label)}</text><text x="528" y="${target.y+target.height/2+16}" fill="#587064" font-size="13">${esc(fmt(target.value))}</text>`;
+ }
+ const sourceNodes=sources.filter(x=>x.value>0).map(x=>`<rect x="166" y="${x.y}" width="14" height="${x.height}" fill="${x.color}"/><text x="150" y="${x.y+x.height/2-3}" text-anchor="end" font-size="14" fill="${x.color}" font-weight="700">${esc(x.label)}</text><text x="150" y="${x.y+x.height/2+16}" text-anchor="end" font-size="13" fill="#587064">${esc(fmt(x.value))}</text>`).join('');
+ const group=state.groups[selected];
+ $('accountFlow').innerHTML=(total?`<div class="sankey-scroll"><svg viewBox="0 0 740 ${height}" role="img" aria-label="Monatliche Budgetverteilung"><title>Monatliche Budgetverteilung</title>${paths}${sourceNodes}${nodes}</svg></div>`:'<p>Trage Einnahmen oder Ausgaben ein, um die Verteilung zu sehen.</p>')+`<div class="sankey-categories" aria-label="Bereich auswählen">${targets.map(x=>`<button type="button" data-sankey-group="${x.i}" aria-expanded="${selected===x.i}" aria-controls="sankeyDetail"><span style="background:${x.color}" aria-hidden="true"></span>${esc(x.label)} <b>${esc(fmt(x.value))}</b></button>`).join('')}</div><div id="sankeyDetail">${selected>=0?`<h3>${esc(labels[selected])}</h3>${group?group.items.map(x=>`<div class="account-row"><span>${esc(x.name)}</span><b>${esc(fmt(monthly(x)))}</b></div>`).join(''):'<p>Dieser Betrag ist noch keinem Budgetbereich zugewiesen.</p>'}`:''}</div>${rest<0?`<p class="af-deficit">Deine Ausgaben übersteigen die Einnahmen um ${euro(-rest)} pro Monat. Der rote Geldstrom zeigt diesen ungedeckten Betrag.</p>`:''}${unit==='pct'?'<p class="help">Prozentwerte beziehen sich auf die Einnahmen. Bei einer Überplanung liegt die Summe über 100 %. Ohne Einnahmen sind Prozentwerte nicht definiert.</p>':''}`;
 }
+document.addEventListener('click',e=>{
+ const button=e.target.closest('[data-sankey-unit],[data-sankey-group]');if(!button)return;
+ if(button.dataset.sankeyUnit){$('accountFlow').dataset.unit=button.dataset.sankeyUnit;document.querySelectorAll('[data-sankey-unit]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}
+ else {const next=button.dataset.sankeyGroup;$('accountFlow').dataset.selected=$('accountFlow').dataset.selected===next?'-1':next;}
+ renderAccountFlow();
+ // Preserve keyboard focus when the selected area's buttons are re-rendered.
+ if(button.dataset.sankeyGroup!==undefined)document.querySelector(`[data-sankey-group="${button.dataset.sankeyGroup}"]`)?.focus();
+});
