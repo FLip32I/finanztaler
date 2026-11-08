@@ -168,8 +168,8 @@ for (const buch of BUECHER) {
 const buttons=[document.getElementById('choose-books'),document.getElementById('choose-favorites')];
 const panels=[document.getElementById('recommend-books'),document.getElementById('recommend-favorites')];
 function select(index){buttons.forEach((button,i)=>{button.setAttribute('aria-pressed',String(i===index));panels[i].hidden=i!==index;});}
-buttons.forEach((button,index)=>button.addEventListener('click',()=>{select(index);history.replaceState(null,'',index?'#lieblingsstuecke':'#buecher');}));
-function fromHash(){select(['#lieblingsstuecke','#kaffee','#technik','#hobbys'].includes(location.hash)?1:0);}
+buttons.forEach((button,index)=>button.addEventListener('click',()=>{select(index);history.replaceState(null,'',location.pathname+location.search);}));
+function fromHash(){select(['#lieblingsstuecke','#kaffee','#technik','#hobbys'].includes(location.hash)?1:0);if(['#buecher','#lieblingsstuecke'].includes(location.hash)){history.replaceState(null,'',location.pathname+location.search);}}
 window.addEventListener('hashchange',fromHash);fromHash();
 })();
 </script></body></html>
