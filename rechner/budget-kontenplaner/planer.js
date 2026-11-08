@@ -27,7 +27,7 @@ function sync(){
  state.incomeDay=day(state.incomeDay||28);state.extraDay=day(state.extraDay||1);
  state.salaryTiming=['start','end','custom'].includes(state.salaryTiming)?state.salaryTiming:'end';
  document.querySelectorAll('[data-key]').forEach(x=>x.value=state[x.dataset.key]);
- $('incomeDay').value=state.incomeDay;$('salaryTiming').value=state.salaryTiming;render();
+ $('incomeDay').value=state.incomeDay;render();
 }
 
 
@@ -46,15 +46,16 @@ $('cashOption').addEventListener('change',e=>setCashflowActive(e.target.checked)
 $('addExtraIncome').onclick=()=>{state.extraIncomes.push({name:'Weitere Einnahme',amount:0,day:1});renderExtraIncomes();renderSummary();renderCashflow()};
 document.addEventListener('input',e=>{let x=e.target;if(x.dataset.extraIndex===undefined)return;let o=state.extraIncomes[+x.dataset.extraIndex];o[x.dataset.extraField]=x.dataset.extraField==='amount'?num(x.value):x.dataset.extraField==='day'?day(x.value):x.value;renderSummary();renderCashflow()});
 document.addEventListener('click',e=>{let b=e.target.closest('[data-remove-extra]');if(!b)return;state.extraIncomes.splice(+b.dataset.removeExtra,1);renderExtraIncomes();renderSummary();renderCashflow()});
-$('salaryTiming').value=state.salaryTiming;
-$('salaryTiming').addEventListener('change',e=>{state.salaryTiming=e.target.value;renderCashflow()});
 $('flowMonth').value=monthNow();
 function renderCashflow(){
  const month=($('flowMonth').value||monthNow());const [y,m]=month.split('-').map(Number);
  if(!y||!m)return;
  const last=new Date(y,m,0).getDate();const clamp=v=>Math.min(last,day(v));
  const events=[];
- if(num(state.income))events.push({d:state.salaryTiming==='start'?1:state.salaryTiming==='end'?last:clamp(state.incomeDay||28),label:'Gehalt',amount:num(state.income),kind:'income'});
+ const salaryDay=day(state.incomeDay||28),priorSalary=salaryDay>=25;
+ const prevLast=new Date(y,m-1,0).getDate();
+ const previousMonth=new Date(y,m-2,1).toLocaleDateString('de-DE',{month:'short',year:'numeric'});
+ if(num(state.income))events.push({d:priorSalary?Math.min(prevLast,salaryDay):clamp(salaryDay),label:priorSalary?'Gehalt aus dem Vormonat':'Gehalt',amount:num(state.income),kind:'income',prior:priorSalary});
  if(num(state.extra))events.push({d:clamp(state.extraDay||1),label:'Weitere regelmäßige Einnahmen',amount:num(state.extra),kind:'extra'});
  state.extraIncomes.forEach((x,k)=>{if(num(x.amount))events.push({d:clamp(x.day||1),label:x.name||'Weitere Einnahme',amount:num(x.amount),kind:'added',k})});
  state.groups.forEach((g,i)=>g.items.forEach((x,j)=>{
@@ -62,16 +63,16 @@ function renderCashflow(){
   if(!num(x.amount))return;
   events.push({d:clamp(x.day||1),label:x.name,amount:-num(x.amount),i,j,group:g.name});
  }));
- events.sort((a,b)=>a.d-b.d||(b.amount-a.amount));
+ events.sort((a,b)=>Number(!!b.prior)-Number(!!a.prior)||a.d-b.d||(b.amount-a.amount));
  let balance=Number($('flowStart').value)||0,lowest=balance;
  $('flowOpening').textContent=euro(balance);
- $('flowEvents').innerHTML=events.map(e=>{balance+=e.amount;lowest=Math.min(lowest,balance);const ref=e.i!==undefined?`data-flow="${e.i}:${e.j}"`:e.k!==undefined?`data-flow-extra="${e.k}"`:`data-flow-income="${e.kind}"`;const locked=e.kind==='income'&&state.salaryTiming!=='custom';const dayEdit=`<input class="flow-day-edit" aria-label="Tag für ${esc(e.label)}" type="number" min="1" max="31" value="${e.d}" ${locked?'disabled title="Für einen eigenen Gehaltstag oben Eigener Tag wählen"':''} ${e.i!==undefined?`data-edit-flow="${e.i}:${e.j}"`:e.k!==undefined?`data-edit-extra="${e.k}"`:`data-edit-income="${e.kind}"`}>`;return `<div class="flow-event">${dayEdit}<button type="button" class="flow-event-name" ${ref}>${esc(e.label)}<small>${e.group?esc(e.group):'Einnahme'}</small></button><strong class="${e.amount<0?'flow-out':'flow-in'}">${e.amount>0?'+':''}${euro(e.amount)}</strong><strong class="${balance<0?'negative':''}">${euro(balance)}</strong></div>`}).join('')||'<p class="help">Keine Ereignisse in diesem Monat.</p>';
+ $('flowEvents').innerHTML=events.map(e=>{balance+=e.amount;lowest=Math.min(lowest,balance);const ref=e.i!==undefined?`data-flow="${e.i}:${e.j}"`:e.k!==undefined?`data-flow-extra="${e.k}"`:`data-flow-income="${e.kind}"`;const dayEdit=`<input class="flow-day-edit" aria-label="Tag für ${esc(e.label)}" type="number" min="1" max="31" value="${e.d}" ${e.i!==undefined?`data-edit-flow="${e.i}:${e.j}"`:e.k!==undefined?`data-edit-extra="${e.k}"`:`data-edit-income="${e.kind}"`}>`;return `<div class="flow-event"><div>${dayEdit}${e.prior?`<small class="flow-month-label">${esc(previousMonth)}</small>`:''}</div><button type="button" class="flow-event-name" ${ref}>${esc(e.label)}<small>${e.group?esc(e.group):e.prior?'Für das Budget dieses Monats':'Einnahme'}</small></button><strong class="${e.amount<0?'flow-out':'flow-in'}">${e.amount>0?'+':''}${euro(e.amount)}</strong><strong class="${balance<0?'negative':''}">${euro(balance)}</strong></div>`}).join('')||'<p class="help">Keine Ereignisse in diesem Monat.</p>';
  $('flowClosing').textContent=euro(balance);$('flowLowest').textContent=euro(lowest);
 }
 $('flowMonth').addEventListener('change',renderCashflow);
 $('flowStart').addEventListener('input',renderCashflow);
 $('incomeDay').addEventListener('input',e=>{state.incomeDay=day(e.target.value);renderCashflow()});
-document.addEventListener('change',e=>{const x=e.target;if(x.dataset.editFlow){const [i,k]=x.dataset.editFlow.split(':').map(Number);state.groups[i].items[k].day=day(x.value);renderCashflow()}else if(x.dataset.editExtra!==undefined){state.extraIncomes[+x.dataset.editExtra].day=day(x.value);renderCashflow()}else if(x.dataset.editIncome){state[x.dataset.editIncome==='income'?'incomeDay':'extraDay']=day(x.value);renderCashflow()}});
+document.addEventListener('change',e=>{const x=e.target;if(x.dataset.editFlow){const [i,k]=x.dataset.editFlow.split(':').map(Number);state.groups[i].items[k].day=day(x.value);renderCashflow()}else if(x.dataset.editExtra!==undefined){state.extraIncomes[+x.dataset.editExtra].day=day(x.value);renderCashflow()}else if(x.dataset.editIncome){state[x.dataset.editIncome==='income'?'incomeDay':'extraDay']=day(x.value);if(x.dataset.editIncome==='income')$('incomeDay').value=state.incomeDay;renderCashflow()}});
 document.addEventListener('click',e=>{const btn=e.target.closest('[data-flow],[data-flow-income],[data-flow-extra]');if(!btn)return;
  if(btn.dataset.flowExtra!==undefined){document.querySelector(`[data-extra-index="${btn.dataset.flowExtra}"][data-extra-field="name"]`)?.focus();document.querySelector('#eingaben').scrollIntoView({behavior:'smooth'});return;}
  if(btn.dataset.flowIncome){document.querySelector('[data-key="'+(btn.dataset.flowIncome==='income'?'income':'extra')+'"]').focus();document.querySelector('#eingaben').scrollIntoView({behavior:'smooth'});return;}
