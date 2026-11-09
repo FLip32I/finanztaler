@@ -9,7 +9,7 @@ const monthly=x=>num(x.amount)/(x.period==='year'?12:1);
 function totals(){return state.groups.map(g=>g.items.reduce((a,x)=>a+monthly(x),0))}
 function renderGroups(){const totalsNow=totals();$('groups').innerHTML=state.groups.map((g,i)=>`<article class="budget-group"><button class="group-toggle" type="button" data-toggle="${i}" aria-expanded="${opened.has(i)}"><span class="group-icon">${['⌂','◈','€','+'][i]}</span><span class="group-name">${esc(g.name)}<small>${g.items.length} Positionen</small></span><strong>${euro(totalsNow[i])}</strong><span class="chevron">${opened.has(i)?'⌃':'⌄'}</span></button>${opened.has(i)?`<div class="group-body"><div class="row-label"><span>Bezeichnung</span><span>Betrag</span><span>Zeitraum</span><span class="cf-day-label">Tag</span></div>${g.items.map((x,j)=>`<div class="budget-row"><input aria-label="Bezeichnung" data-g="${i}" data-j="${j}" data-field="name" value="${esc(x.name)}"><input aria-label="Betrag in Euro" type="number" min="0" step="0.01" data-g="${i}" data-j="${j}" data-field="amount" value="${x.amount}"><select aria-label="Zeitraum" data-g="${i}" data-j="${j}" data-field="period"><option value="month" ${x.period==='month'?'selected':''}>Monat</option><option value="year" ${x.period==='year'?'selected':''}>Jahr</option></select><input class="cf-day" aria-label="Zahlungstag" type="number" min="1" max="31" data-g="${i}" data-j="${j}" data-field="day" value="${day(x.day||1)}">${x.period==='year'?`<select aria-label="Fälligkeitsmonat" class="due-month" data-g="${i}" data-j="${j}" data-field="dueMonth">${Array.from({length:12},(_,k)=>`<option value="${k+1}" ${Number(x.dueMonth||1)===k+1?'selected':''}>${new Date(2026,k,1).toLocaleDateString('de-DE',{month:'short'})}</option>`).join('')}</select>`:''}<button class="delete-row" data-delete="${i}:${j}" aria-label="Position entfernen">×</button></div>`).join('')}<button class="add" data-add="${i}">+ Position hinzufügen</button></div>`:''}</article>`).join('')}
 function renderSummary(){renderAccountFlow();const t=totals(),inc=num(state.income)+num(state.extra)+extraSum(),sum=t.reduce((a,b)=>a+b,0),rest=inc-sum; $('incomeTotal').textContent=euro(inc);$('expenseTotal').textContent=euro(sum);$('remaining').textContent=euro(rest);$('remaining').className=rest<0?'negative':'positive';$('summaryHint').textContent=rest<0?'Dein Budget ist überplant. Passe die Beträge an.':'Noch nicht zugewiesener Betrag – du kannst ihn als Puffer einplanen.';const colors=['#236448','#d5a73c','#91bca0','#9aaab1'];$('distribution').innerHTML=t.map((v,i)=>`<span style="width:${inc?Math.max(0,Math.min(100,v/inc*100)):0}%;background:${colors[i]}"></span>`).join('');$('comparison').innerHTML=[['Grundbedarf',50,t[0]],['Freizeit',30,t[1]],['Sparen',20,t[2]]].map(([label,target,value])=>`<div class="comparison-row"><span>${label}</span><span>${target} %</span><strong>${inc?(value/inc*100).toLocaleString('de-DE',{maximumFractionDigits:1}):'0'} %</strong></div>`).join('');$('accountPlan').innerHTML=[['Girokonto / Grundbedarf',t[0]],['Spaßkonto',t[1]],['Spar- & Rücklagenkonto',t[2]],['Puffer',t[3]]].map(([label,v])=>`<div class="account-row"><span>${label}</span><b>${euro(v)} / Monat</b></div>`).join('')}
-function render(){renderGroups();renderSummary();renderExtraIncomes();renderCashflow()}
+function render(){renderGroups();renderSummary();renderExtraIncomes();renderAssignments();renderCashflow()}
 document.addEventListener('input',e=>{const el=e.target;if(el.dataset.key){state[el.dataset.key]=num(el.value);renderSummary();renderCashflow()}else if(el.dataset.field){const item=state.groups[+el.dataset.g].items[+el.dataset.j];item[el.dataset.field]=el.dataset.field==='amount'?num(el.value):el.dataset.field==='day'?day(el.value):el.value;if(el.dataset.field==='period')renderGroups();
  document.querySelectorAll('[data-toggle]').forEach(b=>{const i=+b.dataset.toggle;b.querySelector('strong').textContent=euro(totals()[i])});
  renderSummary();renderCashflow()}});
@@ -20,8 +20,9 @@ $('save').onclick=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));$('no
 $('load').onclick=()=>{try{const s=JSON.parse(localStorage.getItem(KEY));if(!valid(s))throw Error();state=s;sync();$('notice').textContent='Gespeicherter Plan geladen.'}catch{$('notice').textContent='Kein gültiger gespeicherter Plan gefunden.'}};
 $('reset').onclick=()=>{if(confirm('Aktuelle Eingaben auf das Beispiel zurücksetzen?')){state=seed();opened=new Set([0]);sync();$('notice').textContent='Beispiel wiederhergestellt.'}};
 $('print').onclick=()=>window.print();
-$('csv').onclick=()=>{const rows=[['Kategorie','Position','Betrag','Zeitraum','Monatlich','Zahlungstag','Fälligkeitsmonat']];state.groups.forEach(g=>g.items.forEach(x=>rows.push([g.name,x.name,x.amount,x.period==='year'?'Jährlich':'Monatlich',monthly(x),day(x.day||1),x.period==='year'?(x.dueMonth||1):''])));rows.push(['','Einnahmen',num(state.income)+num(state.extra)+extraSum(),'Monatlich','']);const blob=new Blob(['\uFEFF'+rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='finanztaler-budget.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+$('csv').onclick=()=>{const rows=[['Kategorie','Position','Betrag','Zeitraum','Monatlich','Zahlungstag','Fälligkeitsmonat']];if(state.accountsEnabled)rows[0].push('Konto','Verwendung','Zahlungsart','Übertragstag');state.groups.forEach((g,i)=>g.items.forEach(x=>{const row=[g.name,x.name,x.amount,x.period==='year'?'Jährlich':'Monatlich',monthly(x),day(x.day||1),x.period==='year'?(x.dueMonth||1):''];if(state.accountsEnabled){const a=assignmentFor(x,i);row.push(accountName(a.id),a.mode==='saving'?'Sparen / Investieren':'Ausgabe',a.method,a.id==='giro'?'':a.transferDay)}rows.push(row)}));rows.push(['','Einnahmen',num(state.income)+num(state.extra)+extraSum(),'Monatlich','']);const blob=new Blob(['\uFEFF'+rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='finanztaler-budget.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 function sync(){
+ normalizeAccounts();
  state.extraIncomes=Array.isArray(state.extraIncomes)?state.extraIncomes:[];
  if(num(state.extra)){state.extraIncomes.push({name:'Weitere regelmäßige Einnahmen',amount:num(state.extra),day:day(state.extraDay||1)});state.extra=0;}
  state.incomeDay=day(state.incomeDay||28);state.extraDay=day(state.extraDay||1);
@@ -61,6 +62,7 @@ $('flowMonth').value=monthNow();
 function renderCashflow(){
  const month=($('flowMonth').value||monthNow());const [y,m]=month.split('-').map(Number);
  if(!y||!m)return;
+ if(state.accountsEnabled){renderMultiCashflow(y,m);return;}
  const last=new Date(y,m,0).getDate();const clamp=v=>Math.min(last,day(v));
  const events=[];
  const salaryDay=day(state.incomeDay||28);
@@ -85,7 +87,7 @@ function renderCashflow(){
  $('flowClosing').textContent=euro(balance);$('flowLowest').textContent=euro(lowest);
 }
 $('flowMonth').addEventListener('change',renderCashflow);
-$('flowStart').addEventListener('input',e=>{state.flowStart=Number(e.target.value)||0;renderCashflow()});
+$('flowStart').addEventListener('input',e=>{if(state.accountsEnabled){const a=accountById($('flowAccount').value);a.opening=Number(e.target.value)||0;if(a.id==='giro')state.flowStart=a.opening}else{state.flowStart=Number(e.target.value)||0;if(state.accounts)accountById('giro').opening=state.flowStart}renderCashflow()});
 $('incomeDay').addEventListener('input',e=>{state.incomeDay=day(e.target.value);renderCashflow()});
 document.addEventListener('change',e=>{const x=e.target;if(x.dataset.editFlow){const [i,k]=x.dataset.editFlow.split(':').map(Number);state.groups[i].items[k].day=day(x.value);renderCashflow()}else if(x.dataset.editExtra!==undefined){state.extraIncomes[+x.dataset.editExtra].day=day(x.value);renderCashflow()}else if(x.dataset.editIncome){state[x.dataset.editIncome==='income'?'incomeDay':'extraDay']=day(x.value);if(x.dataset.editIncome==='income')$('incomeDay').value=state.incomeDay;renderCashflow()}});
 document.addEventListener('click',e=>{const btn=e.target.closest('[data-flow],[data-flow-income],[data-flow-extra]');if(!btn)return;
@@ -93,6 +95,7 @@ document.addEventListener('click',e=>{const btn=e.target.closest('[data-flow],[d
  if(btn.dataset.flowIncome){document.querySelector('[data-key="'+(btn.dataset.flowIncome==='income'?'income':'extra')+'"]').focus();document.querySelector('#eingaben').scrollIntoView({behavior:'smooth'});return;}
  const [i,j]=btn.dataset.flow.split(':').map(Number);opened.add(i);renderGroups();const input=document.querySelector(`[data-g="${i}"][data-j="${j}"][data-field="name"]`);if(input){input.scrollIntoView({behavior:'smooth',block:'center'});input.focus()}
 });
+initAccountControls();
 sync();
 setCashflowActive(false);
 
@@ -129,3 +132,83 @@ document.addEventListener('click',e=>{
 });
 
 $('sankeyLevel').addEventListener('change',renderAccountFlow);
+
+// Konten bleiben vollständig optional; manuelle Zuordnungen überleben Umbenennungen.
+function normalizeAccounts(){
+ const defaults=[['giro','Girokonto','giro'],['fun','Spaßkonto','fun'],['savings','Sparkonto','savings'],['depot','Depot 1','depot']];
+ if(!Array.isArray(state.accounts))state.accounts=[];
+ for(const [id,name,type] of defaults)if(!state.accounts.some(a=>a.id===id))state.accounts.push({id,name,type,opening:id==='giro'?Number(state.flowStart??state.income)||0:0});
+ state.accounts=state.accounts.filter(a=>a&&typeof a.id==='string').map(a=>({...a,name:typeof a.name==='string'?a.name:'',type:['giro','fun','savings','depot','other'].includes(a.type)?a.type:'other',opening:Number(a.opening)||0}));
+ state.accountsEnabled=state.accountsEnabled===true;
+}
+function accountById(id){return state.accounts.find(a=>a.id===id)||state.accounts.find(a=>a.id==='giro')}
+function accountName(id){const a=accountById(id);return a.name.trim()||({giro:'Girokonto',fun:'Spaßkonto',savings:'Sparkonto',depot:'Depot'}[a.type]||'Eigenes Konto')}
+function automaticAccount(x,i){
+ const n=x.name.toLocaleLowerCase('de-DE');let type='giro';
+ if(/notgroschen|rücklag|ruecklag|sparkonto|urlaub|reserve/.test(n))type='savings';
+ else if(/sparrate|depot|etf|aktie|invest|fonds|wertpapier/.test(n))type='depot';
+ else if(/spaß|spass|freizeit|hobb|kino|restaurant|shopping/.test(n))type='fun';
+ else if(i===2)type='savings';
+ return state.accounts.find(a=>a.type===type)?.id||'giro';
+}
+function assignmentFor(x,i){const id=state.accounts.some(a=>a.id===x.accountId)?x.accountId:automaticAccount(x,i);return {id,mode:x.accountMode|| (i===2||/notgroschen|sparrate|rücklag|ruecklag|reserve|depot|invest|etf|fonds/.test(x.name.toLocaleLowerCase('de-DE'))?'saving':'expense'),method:x.accountMethod|| (id==='giro'?'Lastschrift':'Dauerauftrag'),transferDay:day(x.transferDay??(day(state.incomeDay||28)%31+1))}}
+function optionsAccount(selected){return state.accounts.map(a=>`<option value="${esc(a.id)}" ${selected===a.id?'selected':''}>${esc(accountName(a.id))}</option>`).join('')}
+function renderAssignments(){
+ normalizeAccounts();$('accountsOption').checked=state.accountsEnabled;$('accountsDetails').hidden=!state.accountsEnabled;$('flowAccountLabel').hidden=!state.accountsEnabled;
+ const selected=$('flowAccount').value||'giro';$('flowAccount').innerHTML=optionsAccount(selected);
+ if(!state.accountsEnabled)return;
+ $('accountEditors').innerHTML=state.accounts.map(a=>`<div class="account-editor"><label>Kontotyp<select data-account-id="${esc(a.id)}" data-account-field="type" ${['giro','fun','savings','depot'].includes(a.id)?'disabled':''}>${[['giro','Girokonto'],['fun','Spaßkonto'],['savings','Sparkonto'],['depot','Depot'],['other','Sonstiges']].map(([v,t])=>`<option value="${v}" ${a.type===v?'selected':''}>${t}</option>`).join('')}</select></label><label>Eigener Name (optional)<input data-account-id="${esc(a.id)}" data-account-field="name" value="${esc(a.name)}" placeholder="${esc(accountName(a.id))}" maxlength="80"></label><label>Monatsanfang (€)<input type="number" step="0.01" data-account-id="${esc(a.id)}" data-account-field="opening" value="${a.opening}"></label>${['giro','fun','savings','depot'].includes(a.id)?'<span></span>':`<button type="button" data-remove-account="${esc(a.id)}">Entfernen</button>`}</div>`).join('');
+ $('assignmentRows').innerHTML=state.groups.map((g,i)=>g.items.map((x,j)=>{const a=assignmentFor(x,i),attrs=`data-assignment="${i}:${j}"`;return `<article class="assignment-card"><header><div><strong>${esc(x.name)}</strong><small>${esc(g.name)} · ${euro(monthly(x))} / Monat · ${x.accountId?'Manuell zugeordnet':'Automatisch vorgeschlagen'}</small></div><button type="button" class="auto-reset" data-auto-account="${i}:${j}">Automatisch</button></header><div class="assignment-fields"><label>${a.mode==='saving'?'Zielkonto':'Ausgabenkonto'}<select ${attrs} data-assignment-field="accountId">${optionsAccount(a.id)}</select></label><label>Verwendung<select ${attrs} data-assignment-field="accountMode"><option value="expense" ${a.mode==='expense'?'selected':''}>Ausgabe</option><option value="saving" ${a.mode==='saving'?'selected':''}>Sparen / Investieren (Übertrag)</option></select></label><label>Zahlungsart ${a.id==='giro'?'':'des Übertrags'}<select ${attrs} data-assignment-field="accountMethod">${(a.id==='giro'?['Lastschrift','Überweisung','Dauerauftrag','Kartenzahlung','Barzahlung']:['Lastschrift','Überweisung','Dauerauftrag']).map(v=>`<option ${a.method===v?'selected':''}>${v}</option>`).join('')}</select></label>${a.id!=='giro'?`<label>Übertrag vom Girokonto am Tag<input ${attrs} data-assignment-field="transferDay" type="number" min="1" max="31" value="${a.transferDay}"></label>`:''}${a.mode==='saving'?'':`<label>Zahlungstag<input ${attrs} data-assignment-field="day" type="number" min="1" max="31" value="${day(x.day||1)}"></label>`}</div></article>`}).join('')).join('');
+}
+function initAccountControls(){
+ $('accountsOption').onchange=e=>{normalizeAccounts();state.accountsEnabled=e.target.checked;if(state.accountsEnabled){$('accountsDetails').open=true}renderAssignments();renderCashflow()};
+ $('flowAccount').onchange=renderCashflow;
+ $('addAccount').onclick=()=>{state.accounts.push({id:'custom-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),name:'',type:'other',opening:0});renderAssignments();$('accountEditors').lastElementChild.querySelector('input').focus()};
+ document.addEventListener('change',e=>{
+  const el=e.target;
+  if(el.dataset.accountId){const a=accountById(el.dataset.accountId),field=el.dataset.accountField;a[field]=field==='opening'?Number(el.value)||0:el.value;if(a.id==='giro'&&field==='opening')state.flowStart=a.opening;renderAssignments();renderCashflow()}
+  if(el.dataset.assignment){const [i,j]=el.dataset.assignment.split(':').map(Number),x=state.groups[i].items[j],f=el.dataset.assignmentField;x[f]=['transferDay','day'].includes(f)?day(el.value):el.value;renderAssignments();if(f==='day')renderGroups();renderCashflow()}
+  if(el.dataset.field==='name')renderAssignments();
+ });
+ document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.removeAccount){const id=b.dataset.removeAccount;state.accounts=state.accounts.filter(a=>a.id!==id);state.groups.forEach(g=>g.items.forEach(x=>{if(x.accountId===id)delete x.accountId}));renderAssignments();renderCashflow()}
+  if(b.dataset.autoAccount){const [i,j]=b.dataset.autoAccount.split(':').map(Number),x=state.groups[i].items[j];for(const f of ['accountId','accountMode','accountMethod','transferDay'])delete x[f];renderAssignments();renderCashflow()}
+ });
+}
+function multiEvents(y,m){
+ const last=new Date(y,m,0).getDate(),clamp=v=>Math.min(last,day(v)),events=[];
+ const push=(account,d,label,amount,detail,ref,transfer=false)=>events.push({account,d:clamp(d),label,amount,detail,ref,transfer});
+ if(num(state.income))push('giro',state.incomeDay||28,'Gehalt',num(state.income),'Einnahme', 'income:income');
+ state.extraIncomes.forEach((x,k)=>{if(num(x.amount))push('giro',x.day||1,x.name||'Weitere Einnahme',num(x.amount),'Einnahme','extra:'+k)});
+ state.groups.forEach((g,i)=>g.items.forEach((x,j)=>{
+  if(!num(x.amount)||(x.period==='year'&&Number(x.dueMonth||1)!==m))return;
+  const a=assignmentFor(x,i),ref=i+':'+j;
+  if(a.mode==='saving'&&a.id==='giro')return;
+  if(a.id!=='giro'){
+   const detail=accountName('giro')+' → '+accountName(a.id)+' · '+a.method;
+   push('giro',a.transferDay,x.name,-num(x.amount),detail,ref,true);
+   push(a.id,a.transferDay,x.name,num(x.amount),detail,ref,true);
+   if(a.mode==='saving')return;
+  }
+  push(a.id,x.day||1,x.name,-num(x.amount),g.name+' · '+(a.id==='giro'?a.method:'Ausgabe'),ref);
+ }));
+ return events.sort((a,b)=>a.d-b.d||b.amount-a.amount);
+}
+function renderMultiCashflow(y,m){
+ const selected=$('flowAccount').value||'giro',a=accountById(selected),events=multiEvents(y,m).filter(e=>e.account===a.id);
+ if(document.activeElement!==$('flowStart'))$('flowStart').value=a.opening;
+ $('flowStartHint').textContent='Startguthaben für '+accountName(a.id)+'. Interne Überträge werden auf beiden Konten gebucht, aber nicht doppelt als Ausgabe gezählt.';
+ let balance=a.opening,lowest=balance,cumulative=0,minimum=0;
+ $('flowOpening').textContent=euro(balance);
+ $('flowEvents').innerHTML=events.map(e=>{balance+=e.amount;lowest=Math.min(lowest,balance);cumulative+=e.amount;minimum=Math.min(minimum,cumulative);let attrs='';
+ if(e.transfer)attrs=`data-edit-transfer="${e.ref}"`;
+ else if(e.ref.startsWith('income:'))attrs='data-edit-income="income"';
+ else if(e.ref.startsWith('extra:'))attrs=`data-edit-extra="${e.ref.split(':')[1]}"`;
+ else attrs=`data-edit-flow="${e.ref}"`;
+ const btn=e.ref.startsWith('income:')?'data-flow-income="income"':e.ref.startsWith('extra:')?`data-flow-extra="${e.ref.split(':')[1]}"`:`data-flow="${e.ref}"`;
+ return `<div class="flow-event"><div><input class="flow-day-edit" type="number" min="1" max="31" aria-label="Tag für ${esc(e.label)}" value="${e.d}" ${attrs}></div><button type="button" class="flow-event-name" ${btn}>${esc(e.label)}<small>${esc(e.detail)}</small>${e.transfer?'<small class="account-transfer">Interner Übertrag</small>':''}</button><strong class="${e.amount<0?'flow-out':'flow-in'}">${e.amount>0?'+':''}${euro(e.amount)}</strong><strong class="${balance<0?'negative':''}">${euro(balance)}</strong></div>`
+ }).join('')||'<p class="help">Keine Ereignisse auf diesem Konto im gewählten Monat.</p>';
+ $('flowClosing').textContent=euro(balance);$('flowLowest').textContent=euro(lowest);$('flowRequired').textContent=accountName(a.id)+': Mindestens '+euro(Math.max(0,-minimum))+' Startguthaben für diesen Monat erforderlich. Überträge für mehrere Positionen werden einzeln gezeigt.';
+}
+document.addEventListener('change',e=>{const el=e.target;if(el.dataset.editTransfer){const [i,j]=el.dataset.editTransfer.split(':').map(Number);state.groups[i].items[j].transferDay=day(el.value);renderAssignments();renderCashflow()}});
