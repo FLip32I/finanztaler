@@ -62,6 +62,7 @@ $('flowMonth').value=monthNow();
 function renderCashflow(){
  const month=($('flowMonth').value||monthNow());const [y,m]=month.split('-').map(Number);
  if(!y||!m)return;
+ $('flowStart').closest('label').hidden=false;
  if(state.accountsEnabled){renderMultiCashflow(y,m);return;}
  const last=new Date(y,m,0).getDate();const clamp=v=>Math.min(last,day(v));
  const events=[];
@@ -154,11 +155,11 @@ function automaticAccount(x,i){
 function assignmentFor(x,i){const id=state.accounts.some(a=>a.id===x.accountId)?x.accountId:automaticAccount(x,i);return {id,mode:x.accountMode|| (i===2||/notgroschen|sparrate|rücklag|ruecklag|reserve|depot|invest|etf|fonds/.test(x.name.toLocaleLowerCase('de-DE'))?'saving':'expense'),method:x.accountMethod|| (id==='giro'?'Lastschrift':'Dauerauftrag'),transferDay:day(x.transferDay??(day(state.incomeDay||28)%31+1))}}
 function optionsAccount(selected){return state.accounts.map(a=>`<option value="${esc(a.id)}" ${selected===a.id?'selected':''}>${esc(accountName(a.id))}</option>`).join('')}
 function renderAssignments(){
- normalizeAccounts();$('accountsOption').checked=state.accountsEnabled;$('accountsDetails').hidden=!state.accountsEnabled;$('flowAccountLabel').hidden=!state.accountsEnabled;
- const selected=$('flowAccount').value||'giro';$('flowAccount').innerHTML=optionsAccount(selected);
+ normalizeAccounts();document.body.classList.toggle('accounts-active',state.accountsEnabled);$('paymentPlan').hidden=!state.accountsEnabled;$('accountsOption').checked=state.accountsEnabled;$('accountsDetails').hidden=!state.accountsEnabled;$('flowAccountLabel').hidden=!state.accountsEnabled;
+ const selected=$('flowAccount').value||'all';$('flowAccount').innerHTML='<option value="all">Alle Konten</option>'+optionsAccount(selected);$('flowAccount').value=state.accounts.some(a=>a.id===selected)?selected:'all';
  if(!state.accountsEnabled)return;
  $('accountEditors').innerHTML=state.accounts.map(a=>`<div class="account-editor"><label>Kontotyp<select data-account-id="${esc(a.id)}" data-account-field="type" ${['giro','fun','savings','depot'].includes(a.id)?'disabled':''}>${[['giro','Girokonto'],['fun','Spaßkonto'],['savings','Sparkonto'],['depot','Depot'],['other','Sonstiges']].map(([v,t])=>`<option value="${v}" ${a.type===v?'selected':''}>${t}</option>`).join('')}</select></label><label>Eigener Name (optional)<input data-account-id="${esc(a.id)}" data-account-field="name" value="${esc(a.name)}" placeholder="${esc(accountName(a.id))}" maxlength="80"></label><label>Monatsanfang (€)<input type="number" step="0.01" data-account-id="${esc(a.id)}" data-account-field="opening" value="${a.opening}"></label>${['giro','fun','savings','depot'].includes(a.id)?'<span></span>':`<button type="button" data-remove-account="${esc(a.id)}">Entfernen</button>`}</div>`).join('');
- $('assignmentRows').innerHTML=state.groups.map((g,i)=>g.items.map((x,j)=>{const a=assignmentFor(x,i),attrs=`data-assignment="${i}:${j}"`;return `<article class="assignment-card"><header><div><strong>${esc(x.name)}</strong><small>${esc(g.name)} · ${euro(monthly(x))} / Monat · ${x.accountId?'Manuell zugeordnet':'Automatisch vorgeschlagen'}</small></div><button type="button" class="auto-reset" data-auto-account="${i}:${j}">Automatisch</button></header><div class="assignment-fields"><label>${a.mode==='saving'?'Zielkonto':'Ausgabenkonto'}<select ${attrs} data-assignment-field="accountId">${optionsAccount(a.id)}</select></label><label>Verwendung<select ${attrs} data-assignment-field="accountMode"><option value="expense" ${a.mode==='expense'?'selected':''}>Ausgabe</option><option value="saving" ${a.mode==='saving'?'selected':''}>Sparen / Investieren (Übertrag)</option></select></label><label>Zahlungsart ${a.id==='giro'?'':'des Übertrags'}<select ${attrs} data-assignment-field="accountMethod">${(a.id==='giro'?['Lastschrift','Überweisung','Dauerauftrag','Kartenzahlung','Barzahlung']:['Lastschrift','Überweisung','Dauerauftrag']).map(v=>`<option ${a.method===v?'selected':''}>${v}</option>`).join('')}</select></label>${a.id!=='giro'?`<label>Übertrag vom Girokonto am Tag<input ${attrs} data-assignment-field="transferDay" type="number" min="1" max="31" value="${a.transferDay}"></label>`:''}${a.mode==='saving'?'':`<label>Zahlungstag<input ${attrs} data-assignment-field="day" type="number" min="1" max="31" value="${day(x.day||1)}"></label>`}</div></article>`}).join('')).join('');
+
 }
 function initAccountControls(){
  $('accountsOption').onchange=e=>{normalizeAccounts();state.accountsEnabled=e.target.checked;if(state.accountsEnabled){$('accountsDetails').open=true}renderAssignments();renderCashflow()};
@@ -184,7 +185,7 @@ function multiEvents(y,m){
  state.groups.forEach((g,i)=>g.items.forEach((x,j)=>{
   if(!num(x.amount)||(x.period==='year'&&Number(x.dueMonth||1)!==m))return;
   const a=assignmentFor(x,i),ref=i+':'+j;
-  if(a.mode==='saving'&&a.id==='giro')return;
+  if(a.mode==='saving'&&a.id==='giro'){push('giro',x.day||1,x.name,0,'Reserve auf dem Girokonto',ref);return;}
   if(a.id!=='giro'){
    const detail=accountName('giro')+' → '+accountName(a.id)+' · '+a.method;
    push('giro',a.transferDay,x.name,-num(x.amount),detail,ref,true);
@@ -195,20 +196,59 @@ function multiEvents(y,m){
  }));
  return events.sort((a,b)=>a.d-b.d||b.amount-a.amount);
 }
-function renderMultiCashflow(y,m){
- const selected=$('flowAccount').value||'giro',a=accountById(selected),events=multiEvents(y,m).filter(e=>e.account===a.id);
- if(document.activeElement!==$('flowStart'))$('flowStart').value=a.opening;
- $('flowStartHint').textContent='Startguthaben für '+accountName(a.id)+'. Interne Überträge werden auf beiden Konten gebucht, aber nicht doppelt als Ausgabe gezählt.';
- let balance=a.opening,lowest=balance,cumulative=0,minimum=0;
- $('flowOpening').textContent=euro(balance);
- $('flowEvents').innerHTML=events.map(e=>{balance+=e.amount;lowest=Math.min(lowest,balance);cumulative+=e.amount;minimum=Math.min(minimum,cumulative);let attrs='';
- if(e.transfer)attrs=`data-edit-transfer="${e.ref}"`;
- else if(e.ref.startsWith('income:'))attrs='data-edit-income="income"';
- else if(e.ref.startsWith('extra:'))attrs=`data-edit-extra="${e.ref.split(':')[1]}"`;
- else attrs=`data-edit-flow="${e.ref}"`;
- const btn=e.ref.startsWith('income:')?'data-flow-income="income"':e.ref.startsWith('extra:')?`data-flow-extra="${e.ref.split(':')[1]}"`:`data-flow="${e.ref}"`;
- return `<div class="flow-event"><div><input class="flow-day-edit" type="number" min="1" max="31" aria-label="Tag für ${esc(e.label)}" value="${e.d}" ${attrs}></div><button type="button" class="flow-event-name" ${btn}>${esc(e.label)}<small>${esc(e.detail)}</small>${e.transfer?'<small class="account-transfer">Interner Übertrag</small>':''}</button><strong class="${e.amount<0?'flow-out':'flow-in'}">${e.amount>0?'+':''}${euro(e.amount)}</strong><strong class="${balance<0?'negative':''}">${euro(balance)}</strong></div>`
- }).join('')||'<p class="help">Keine Ereignisse auf diesem Konto im gewählten Monat.</p>';
- $('flowClosing').textContent=euro(balance);$('flowLowest').textContent=euro(lowest);$('flowRequired').textContent=accountName(a.id)+': Mindestens '+euro(Math.max(0,-minimum))+' Startguthaben für diesen Monat erforderlich. Überträge für mehrere Positionen werden einzeln gezeigt.';
+function inlineAccountCells(e){
+ if(!/^\d+:\d+$/.test(e.ref))return `<div class="cf-account-column flow-account-cell">${esc(accountName('giro'))}</div><div class="cf-account-column">Geldeingang</div>`;
+ const [i,j]=e.ref.split(':').map(Number),x=state.groups[i].items[j],a=assignmentFor(x,i),ref=esc(e.ref);
+ const origin=e.transfer?`<small>${esc(accountName('giro'))} →</small>`:'';
+ const konto=`${origin}<select data-inline-ref="${ref}" data-inline-field="accountId" aria-label="Konto für ${esc(x.name)}"><option value="" ${!x.accountId?'selected':''}>Automatisch: ${esc(accountName(automaticAccount(x,i)))}</option>${optionsAccount(x.accountId||'')}</select>`;
+ const method=e.transfer?a.method:(x.expenseMethod||(a.id==='giro'?a.method:'Lastschrift'));
+ const field=e.transfer||a.id==='giro'?'accountMethod':'expenseMethod';
+ const methods=e.transfer?['Lastschrift','Überweisung','Dauerauftrag']:['Lastschrift','Überweisung','Dauerauftrag','Kartenzahlung','Barzahlung'];
+ return `<div class="cf-account-column flow-account-cell">${konto}</div><div class="cf-account-column flow-method-cell"><select data-inline-ref="${ref}" data-inline-field="${field}" aria-label="Zahlungsart für ${esc(x.name)}">${methods.map(m=>`<option ${method===m?'selected':''}>${m}</option>`).join('')}</select><details><summary>Verwendung</summary><select data-inline-ref="${ref}" data-inline-field="accountMode" aria-label="Verwendung für ${esc(x.name)}"><option value="expense" ${a.mode==='expense'?'selected':''}>Ausgabe</option><option value="saving" ${a.mode==='saving'?'selected':''}>Sparen / Investieren</option></select></details></div>`;
 }
+function renderPaymentPlan(events){
+ const rows=events.filter(e=>e.amount<0||(!e.transfer&&e.amount>0)).map(e=>{
+  let from,to,method;
+  if(e.ref.startsWith('income:')||e.ref.startsWith('extra:')){from='Einnahme';to=accountName('giro');method='Geldeingang'}
+  else {const [i,j]=e.ref.split(':').map(Number),x=state.groups[i].items[j],a=assignmentFor(x,i);from=accountName(e.account);to=e.transfer?accountName(a.id):'Extern: '+e.label;method=e.transfer?a.method:(x.expenseMethod||(a.id==='giro'?a.method:'Lastschrift'));}
+  return `<tr><td>${e.d}.</td><td>${esc(e.label)}${e.transfer?'<small class="account-transfer"> · Übertrag</small>':''}</td><td>${esc(from)}</td><td>${esc(to)}</td><td>${esc(method)}</td><td>${euro(Math.abs(e.amount))}</td></tr>`
+ });
+ $('paymentPlanTable').innerHTML=rows.length?`<table class="cf-payments"><thead><tr><th>Tag</th><th>Zweck</th><th>Von Konto</th><th>Nach / Empfänger</th><th>Zahlungsart</th><th>Betrag</th></tr></thead><tbody>${rows.join('')}</tbody></table>`:'<p class="help">Keine Zahlungen im gewählten Monat.</p>';
+}
+function renderMultiCashflow(y,m){
+ const selected=$('flowAccount').value||'all',all=selected==='all',account=accountById(selected),events=multiEvents(y,m);
+ const balances=Object.fromEntries(state.accounts.map(a=>[a.id,a.opening]));
+ const minimums={...balances};let total=state.accounts.reduce((sum,a)=>sum+a.opening,0),lowestTotal=total;
+ const opening=all?total:account.opening;let running=0,required=0;
+ $('flowStart').closest('label').hidden=all;
+ if(!all&&document.activeElement!==$('flowStart'))$('flowStart').value=account.opening;
+ $('flowStartHint').textContent=all?'Alle Konten: Der Kontostand in jeder Zeile gehört zum zahlenden Konto, bei Einnahmen zum empfangenden Konto. Startguthaben kannst du unter „Deine Konten bearbeiten“ ändern.':'Startguthaben für '+accountName(account.id)+'. Interne Überträge werden auf beiden Konten berücksichtigt.';
+ $('flowOpening').textContent=euro(opening);
+ const rows=[];
+ for(const e of events){
+  balances[e.account]+=e.amount;minimums[e.account]=Math.min(minimums[e.account],balances[e.account]);
+  if(!e.transfer){total+=e.amount;lowestTotal=Math.min(lowestTotal,total)}
+  if(e.account===account.id){running+=e.amount;required=Math.min(required,running)}
+  if(all?(e.transfer&&e.amount>0):e.account!==account.id)continue;
+  let attrs='';
+  if(e.transfer)attrs=`data-edit-transfer="${e.ref}"`;
+  else if(e.ref.startsWith('income:'))attrs='data-edit-income="income"';
+  else if(e.ref.startsWith('extra:'))attrs=`data-edit-extra="${e.ref.split(':')[1]}"`;
+  else attrs=`data-edit-flow="${e.ref}"`;
+  const btn=e.ref.startsWith('income:')?'data-flow-income="income"':e.ref.startsWith('extra:')?`data-flow-extra="${e.ref.split(':')[1]}"`:`data-flow="${e.ref}"`;
+  rows.push(`<div class="flow-event"><div><input class="flow-day-edit" type="number" min="1" max="31" aria-label="Tag für ${esc(e.label)}" value="${e.d}" ${attrs}></div><button type="button" class="flow-event-name" ${btn}>${esc(e.label)}<small>${esc(e.detail)}</small>${e.transfer?'<small class="account-transfer">Interner Übertrag</small>':''}</button>${inlineAccountCells(e)}<strong class="${e.amount<0?'flow-out':'flow-in'}">${e.amount>0?'+':''}${euro(e.amount)}</strong><strong class="${balances[e.account]<0?'negative':''}">${euro(balances[e.account])}${all?`<small>${esc(accountName(e.account))}</small>`:''}</strong></div>`);
+ }
+ $('flowEvents').innerHTML=rows.join('')||'<p class="help">Keine Ereignisse im gewählten Monat.</p>';
+ $('flowClosing').textContent=euro(all?total:balances[account.id]);$('flowLowest').textContent=euro(all?lowestTotal:minimums[account.id]);
+ const overdrawn=state.accounts.filter(a=>minimums[a.id]<0);
+ $('flowRequired').textContent=all?('Summen oben: alle Konten inklusive Sparen und Depot; interne Überträge verändern diese Summe nicht. '+(overdrawn.length?'Konten mit negativem Zwischenstand: '+overdrawn.map(a=>accountName(a.id)+' ('+euro(minimums[a.id])+')').join(', ')+'.':'Kein Konto fällt im Monatsverlauf unter null.')):accountName(account.id)+': Mindestens '+euro(Math.max(0,-required))+' Startguthaben für diesen Monat erforderlich.';
+ renderPaymentPlan(events);
+}
+document.addEventListener('change',e=>{
+ const el=e.target;if(!el.dataset.inlineRef)return;
+ const [i,j]=el.dataset.inlineRef.split(':').map(Number),x=state.groups[i].items[j],field=el.dataset.inlineField;
+ if(field==='accountId'&&!el.value)delete x.accountId;else x[field]=el.value;
+ renderAssignments();renderCashflow();
+});
+
 document.addEventListener('change',e=>{const el=e.target;if(el.dataset.editTransfer){const [i,j]=el.dataset.editTransfer.split(':').map(Number);state.groups[i].items[j].transferDay=day(el.value);renderAssignments();renderCashflow()}});
