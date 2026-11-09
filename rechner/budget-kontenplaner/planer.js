@@ -158,7 +158,7 @@ function renderAssignments(){
  normalizeAccounts();document.body.classList.toggle('accounts-active',state.accountsEnabled);$('paymentPlan').hidden=!state.accountsEnabled;$('accountsOption').checked=state.accountsEnabled;$('accountsDetails').hidden=!state.accountsEnabled;$('flowAccountLabel').hidden=!state.accountsEnabled;
  const selected=$('flowAccount').value||'all';$('flowAccount').innerHTML='<option value="all">Alle Konten</option>'+optionsAccount(selected);$('flowAccount').value=state.accounts.some(a=>a.id===selected)?selected:'all';
  if(!state.accountsEnabled)return;
- $('accountEditors').innerHTML=state.accounts.map(a=>`<div class="account-editor"><label>Kontotyp<select data-account-id="${esc(a.id)}" data-account-field="type" ${['giro','fun','savings','depot'].includes(a.id)?'disabled':''}>${[['giro','Girokonto'],['fun','Spaßkonto'],['savings','Sparkonto'],['depot','Depot'],['other','Sonstiges']].map(([v,t])=>`<option value="${v}" ${a.type===v?'selected':''}>${t}</option>`).join('')}</select></label><label>Eigener Name (optional)<input data-account-id="${esc(a.id)}" data-account-field="name" value="${esc(a.name)}" placeholder="${esc(accountName(a.id))}" maxlength="80"></label><label>Monatsanfang (€)<input type="number" step="0.01" data-account-id="${esc(a.id)}" data-account-field="opening" value="${a.opening}"></label>${['giro','fun','savings','depot'].includes(a.id)?'<span></span>':`<button type="button" data-remove-account="${esc(a.id)}">Entfernen</button>`}</div>`).join('');
+ $('accountEditors').innerHTML=state.accounts.map(a=>`<div class="account-editor"><label>Kontotyp<select data-account-id="${esc(a.id)}" data-account-field="type" ${['giro','fun','savings','depot'].includes(a.id)?'disabled':''}>${[['giro','Girokonto'],['fun','Spaßkonto'],['savings','Sparkonto'],['depot','Depot'],['other','Sonstiges']].map(([v,t])=>`<option value="${v}" ${a.type===v?'selected':''}>${t}</option>`).join('')}</select></label><label>Eigener Name (optional)<input data-account-id="${esc(a.id)}" data-account-field="name" value="${esc(a.name)}" placeholder="${esc(accountName(a.id))}" maxlength="80"></label>${['giro','fun','savings','depot'].includes(a.id)?'<span></span>':`<button type="button" data-remove-account="${esc(a.id)}">Entfernen</button>`}</div>`).join('');
 
 }
 function initAccountControls(){
@@ -207,7 +207,10 @@ function inlineAccountCells(e){
  return `<div class="cf-account-column flow-account-cell">${konto}</div><div class="cf-account-column flow-method-cell"><select data-inline-ref="${ref}" data-inline-field="${field}" aria-label="Zahlungsart für ${esc(x.name)}">${methods.map(m=>`<option ${method===m?'selected':''}>${m}</option>`).join('')}</select><details><summary>Verwendung</summary><select data-inline-ref="${ref}" data-inline-field="accountMode" aria-label="Verwendung für ${esc(x.name)}"><option value="expense" ${a.mode==='expense'?'selected':''}>Ausgabe</option><option value="saving" ${a.mode==='saving'?'selected':''}>Sparen / Investieren</option></select></details></div>`;
 }
 function renderPaymentPlan(events){
- const rows=events.filter(e=>e.amount<0||(!e.transfer&&e.amount>0)).map(e=>{
+ const sourceName=e=>!e.transfer&&e.amount>0?'Einnahme':accountName(e.account);
+ const rows=events.filter(e=>e.amount<0||(!e.transfer&&e.amount>0))
+  .sort((a,b)=>sourceName(a).localeCompare(sourceName(b),'de')||a.d-b.d||a.label.localeCompare(b.label,'de'))
+  .map(e=>{
   let from,to,method;
   if(e.ref.startsWith('income:')||e.ref.startsWith('extra:')){from='Einnahme';to=accountName('giro');method='Geldeingang'}
   else {const [i,j]=e.ref.split(':').map(Number),x=state.groups[i].items[j],a=assignmentFor(x,i);from=accountName(e.account);to=e.transfer?accountName(a.id):'Extern: '+e.label;method=e.transfer?a.method:(x.expenseMethod||(a.id==='giro'?a.method:'Lastschrift'));}
@@ -222,7 +225,7 @@ function renderMultiCashflow(y,m){
  const opening=all?total:account.opening;let running=0,required=0;
  $('flowStart').closest('label').hidden=all;
  if(!all&&document.activeElement!==$('flowStart'))$('flowStart').value=account.opening;
- $('flowStartHint').textContent=all?'Alle Konten: Der Kontostand in jeder Zeile gehört zum zahlenden Konto, bei Einnahmen zum empfangenden Konto. Startguthaben kannst du unter „Deine Konten bearbeiten“ ändern.':'Startguthaben für '+accountName(account.id)+'. Interne Überträge werden auf beiden Konten berücksichtigt.';
+ $('flowStartHint').textContent=all?'Alle Konten: Der Kontostand in jeder Zeile gehört zum zahlenden Konto, bei Einnahmen zum empfangenden Konto. Wähle ein einzelnes Konto, um dessen Startguthaben im Cashflow zu ändern.':'Startguthaben für '+accountName(account.id)+'. Interne Überträge werden auf beiden Konten berücksichtigt.';
  $('flowOpening').textContent=euro(opening);
  const rows=[];
  for(const e of events){
