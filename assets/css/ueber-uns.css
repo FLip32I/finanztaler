@@ -116,3 +116,7 @@ main.about-page .about-journey{margin-top:0}
   .about-step h3 .about-title-break,
   .about-step h3 .about-title-hyphen{display:none}
 }
+
+/* Trennstriche ausschließlich im Desktop-Layout erzeugen. */
+@media(min-width:651px){.about-step h3 .about-title-hyphen::before{content:"-"}}
+@media(max-width:650px){.about-step h3 .about-title-hyphen::before{content:none}}
