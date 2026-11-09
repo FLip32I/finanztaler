@@ -34,3 +34,14 @@
 @media(max-width:800px){.account-flow{grid-template-columns:minmax(0,1fr) 225px;gap:14px}.sankey-scroll svg{max-height:290px}}
 @media(max-width:650px){.bp .account-flow-section{padding:15px}.budget-sankey summary #account-flow-heading{font-size:18px}.sankey-toggle-label{padding:8px;font-size:11px;gap:6px}.account-flow{grid-template-columns:1fr;gap:12px}.account-flow .sankey-scroll{grid-column:1;grid-row:auto;border:0}.sankey-scroll svg{min-width:430px;max-height:none}.account-flow .sankey-categories{grid-column:1;grid-template-columns:repeat(2,minmax(0,1fr))}.account-flow #sankeyDetail{grid-column:1}.bp .sankey-categories button{flex-wrap:wrap;gap:5px}.sankey-categories b{font-size:11px}.sankey-content .sankey-controls{max-width:none}.account-flow .sankey-scroll.items-view{max-height:380px}}
 @media(max-width:380px){.budget-sankey>summary{align-items:flex-start}.sankey-toggle-label{white-space:normal;max-width:125px}.account-flow .sankey-categories{grid-template-columns:1fr}}
+
+/* Geldfluss etwas größer innerhalb der kompakten Kachel. */
+.account-flow .sankey-scroll:not(.items-view) svg{max-height:390px}
+@media(min-width:801px){.account-flow{grid-template-columns:minmax(0,1fr) 245px;column-gap:18px}}
+@media(min-width:651px) and (max-width:800px){.account-flow .sankey-scroll:not(.items-view) svg{max-height:350px}}
+@media(max-width:650px){.account-flow .sankey-scroll:not(.items-view) svg{max-height:none;min-width:480px}}
+
+/* Geldfluss ist ein dauerhaft sichtbares, dynamisches Ergebnis. */
+.bp .budget-sankey-visible #account-flow-heading{font-size:21px;line-height:1.3;margin:0 0 10px;letter-spacing:-.025em}
+.budget-sankey-visible .sankey-content{padding-top:0}
+@media(max-width:650px){.bp .budget-sankey-visible #account-flow-heading{font-size:19px}}
