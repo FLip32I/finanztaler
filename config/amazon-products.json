@@ -1,0 +1,108 @@
+{
+  "partnerTag": "finanztaler09-21",
+  "credentialVersion": "3.2",
+  "products": [
+    {
+      "id": "favorite-01",
+      "name": "Melitta BellaCrema La Crema",
+      "link": "https://link.amazon/B05HyAhCy",
+      "asin": ""
+    },
+    {
+      "id": "favorite-02",
+      "name": "Melitta Kaffeebohnen",
+      "link": "https://link.amazon/B0iDHaPH4",
+      "asin": ""
+    },
+    {
+      "id": "favorite-03",
+      "name": "De’Longhi Dinamica ECAM 350.35.SB",
+      "link": "https://link.amazon/B0cr7pHlA",
+      "asin": ""
+    },
+    {
+      "id": "favorite-04",
+      "name": "De’Longhi Magnifica S ECAM 22.110.B",
+      "link": "https://link.amazon/B02aAS3uO",
+      "asin": ""
+    },
+    {
+      "id": "favorite-05",
+      "name": "Maxxi Clean Entkalker",
+      "link": "https://link.amazon/B0dHRqI8G",
+      "asin": ""
+    },
+    {
+      "id": "favorite-06",
+      "name": "Soundcore Life Q30",
+      "link": "https://link.amazon/B03xOYj8O",
+      "asin": ""
+    },
+    {
+      "id": "favorite-07",
+      "name": "Google Pixel Buds Pro",
+      "link": "https://link.amazon/B0df1oBas",
+      "asin": ""
+    },
+    {
+      "id": "favorite-08",
+      "name": "Jabra Speak 510",
+      "link": "https://link.amazon/B01UyNaMI",
+      "asin": ""
+    },
+    {
+      "id": "favorite-09",
+      "name": "Logitech MX Master 4",
+      "link": "https://link.amazon/B09Yyc1ZL",
+      "asin": ""
+    },
+    {
+      "id": "favorite-10",
+      "name": "Logitech MX Master – Modell 2025",
+      "link": "https://link.amazon/B0fVtO0d5",
+      "asin": ""
+    },
+    {
+      "id": "favorite-11",
+      "name": "Hobonichi Techo Clear Cover – Weeks",
+      "link": "https://link.amazon/B09flZfEU",
+      "asin": ""
+    },
+    {
+      "id": "favorite-12",
+      "name": "D-RECT Prospekthüllen",
+      "link": "https://link.amazon/B0gysZ3Bs",
+      "asin": ""
+    },
+    {
+      "id": "favorite-13",
+      "name": "FIDLOCK Flaschenhalter",
+      "link": "https://link.amazon/B02oE5JgY",
+      "asin": ""
+    },
+    {
+      "id": "favorite-14",
+      "name": "Leatt Gravity Helm",
+      "link": "https://link.amazon/B004VcoJl",
+      "asin": ""
+    },
+    {
+      "id": "favorite-15",
+      "name": "Leatt Body Protector AirFit Hybrid",
+      "link": "https://link.amazon/B05H75N27",
+      "asin": ""
+    },
+    {
+      "id": "favorite-16",
+      "name": "ION K-Pact Knieschoner",
+      "link": "https://link.amazon/B0c4khwIo",
+      "asin": ""
+    },
+    {
+      "id": "favorite-17",
+      "name": "La Sportiva Tarantula Boulder",
+      "link": "https://link.amazon/B0dTeOcni",
+      "asin": ""
+    }
+  ]
+}
