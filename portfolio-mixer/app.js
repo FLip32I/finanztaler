@@ -5,6 +5,7 @@ let timelineState=null;
 const locks=new Map();
 let selected=[1],w=[1],period='10',rows=[],mu=[],cov=[],curve=[];
 let compareMode='vol';
+let benchmark='optimum';
 let referenceWeights=[];
 const $=id=>document.getElementById(id),pct=x=>(x*100).toLocaleString('de-DE',{maximumFractionDigits:1})+' %',eur=x=>x.toLocaleString('de-DE',{maximumFractionDigits:0})+' €';
 function month(i){return (2000+Math.floor(i/12))+'-'+String(((i%12)+12)%12+1).padStart(2,'0')}function idx(s){let [y,m]=s.split('-').map(Number);return (y-2000)*12+m-1}
@@ -54,9 +55,12 @@ function emptyState(message){
  $('coverage').textContent=message;
  for(const id of ['weights','frontier','growth','metrics','asset-legend','compare-values'])$(id).innerHTML='';
  $('targetvalue').textContent='';
+ $('benchmark').disabled=true;
+ $('compare-delta').innerHTML='';
+ $('compare-note').textContent='';
  for(const id of ['equal','min','optimum','target'])$(id).disabled=true;
 }
-function recalc(reset=true){
+function recalc(reset=true,preserveWeights=false){
  $('dates').classList.toggle('hidden',period!=='custom');
  if(!dataset.length){emptyState('Noch keine Monatsrenditen vorhanden. Bitte pfmxdaten.xlsx befüllen oder eine befüllte Excel-Datei laden.');return;}
  const complete=dataset.filter(r=>selected.every(i=>Number.isFinite(r.values[i])));
@@ -97,12 +101,13 @@ function recalc(reset=true){
  $('coverage').textContent=`Auswertung: ${block[0].month} bis ${block.at(-1).month} · ${rows.length} gemeinsame Monatsrenditen`+(cropped?' · Auf verfügbare gemeinsame Daten gekürzt.':'')+(period!=='custom'&&blocks.length>1?' · Neuester lückenloser Abschnitt; frühere Datenlücken wurden nicht überbrückt.':'');
  for(const id of ['equal','min','optimum','target'])$(id).disabled=freeIndices().length<2||remainingWeight()<1e-10;
  if(reset){
-  // A is the initial benchmark; B starts at A and is subsequently user-controlled.
-  $('target').value=50;
+  // Re-optimize A for the current data; period changes preserve the user's B weights.
   referenceWeights=[...curve[25].w];
-  w=[...referenceWeights];
+  if(!preserveWeights)w=[...referenceWeights];
  }
  // On lock changes, keep A unchanged. It is not linked to the target control.
+ updateBenchmarkOptions();
+ syncTargetToMix();
  draw();
 }
 function draw(){
@@ -112,7 +117,7 @@ function draw(){
  $('weights').querySelectorAll('[data-weight-number]').forEach(el=>el.onchange=()=>{if(!Number.isFinite(el.valueAsNumber)){draw();return;}adjustWeight(+el.dataset.weightNumber,el.valueAsNumber/100);draw();});
  $('lock-note').textContent=locks.size?'Fixierte Anteile bleiben unverändert. Kurve und Mischungen berücksichtigen die Fixierung; Einzelanlagen dienen als Vergleich.':'Fixiere einzelne Anteile, damit nur die übrigen Anlagen angepasst werden.';
  let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(dot(w,mu)*12);drawFrontier();drawComparison();}
-$('periods').innerHTML=[['5','5 Jahre'],['10','10 Jahre'],['15','15 Jahre'],['20','20 Jahre'],['max','Maximal'],['custom','Eigener Zeitraum']].map(([v,l])=>`<button data-v="${v}" class="${v===period?'active':''}">${l}</button>`).join('');$('periods').querySelectorAll('button').forEach(b=>b.onclick=()=>{period=b.dataset.v;$('periods').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));recalc()});$('start').onchange=$('end').onchange=recalc;$('equal').onclick=()=>{w=equalWeights();draw()};$('min').onclick=()=>{w=[...optimize(null)];syncTargetToMix();draw()};$('optimum').onclick=()=>{w=[...referenceWeights];syncTargetToMix();draw()};
+$('periods').innerHTML=[['5','5 Jahre'],['10','10 Jahre'],['15','15 Jahre'],['20','20 Jahre'],['max','Maximal'],['custom','Eigener Zeitraum']].map(([v,l])=>`<button data-v="${v}" class="${v===period?'active':''}">${l}</button>`).join('');$('periods').querySelectorAll('button').forEach(b=>b.onclick=()=>{period=b.dataset.v;$('periods').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));recalc(true,true)});$('start').onchange=$('end').onchange=()=>recalc(true,true);$('equal').onclick=()=>{w=equalWeights();draw()};$('min').onclick=()=>{w=[...optimize(null)];syncTargetToMix();draw()};$('optimum').onclick=()=>{w=[...referenceWeights];syncTargetToMix();draw()};
 function setMixFromCurve(i){
  const index=Math.max(0,Math.min(curve.length-1,Math.round(i)));
  w=[...curve[index].w];$('target').value=index*2;draw();
@@ -147,7 +152,9 @@ function drawFrontier(){
  });
  const points=mixes.map(v=>{const candidate=constrainMix(v);return {w:candidate,s:risk(candidate),r:dot(candidate,mu)*12};});
  const assets=selected.map((j,i)=>({s:Math.sqrt(cov[i][i]*12),r:mu[i]*12,name:names[j]}));
+ const benchmarkPoint=currentBenchmark();
  const all=[...points,...assets,...curve,{s:risk(w),r:dot(w,mu)*12}];
+ if(benchmarkPoint.stat)all.push({s:benchmarkPoint.stat.volatility,r:benchmarkPoint.stat.annualReturn});
  // Center the entire feasible curve and the individual assets with symmetric padding.
  // Bounds depend on the selected assets and dataset, not on slider movement.
  const xs=all.map(p=>p.s),ys=all.map(p=>p.r);
@@ -165,7 +172,7 @@ function drawFrontier(){
  svg+=`<path d="${curve.map((p,i)=>(i?'L':'M')+X(p.s)+','+Y(p.r)).join(' ')}" fill="none" stroke="#237c55" stroke-width="3"/>`;
  curve.forEach((p,i)=>{svg+=`<circle data-efficient="${i}" cx="${X(p.s)}" cy="${Y(p.r)}" r="7" fill="transparent" style="cursor:pointer"><title>Portfoliokurve: ${pct(p.r)} Rendite · ${pct(p.s)} Risiko</title></circle>`;});
  assets.forEach((p,i)=>{svg+=`<circle cx="${X(p.s)}" cy="${Y(p.r)}" r="7" fill="${colors[i]}" stroke="white" stroke-width="2"><title>${p.name}: ${pct(p.r)} Rendite · ${pct(p.s)} Risiko</title></circle><text x="${X(p.s)}" y="${Y(p.r)-13}" text-anchor="middle">${i+1}</text>`;});
- svg+=`<circle cx="${X(risk(referenceWeights))}" cy="${Y(dot(referenceWeights,mu)*12)}" r="8" fill="#17644b" stroke="white" stroke-width="2"><title>Portfolio A · Feste Benchmark</title></circle>`;
+ if(benchmarkPoint.stat)svg+=`<circle cx="${X(benchmarkPoint.stat.volatility)}" cy="${Y(benchmarkPoint.stat.annualReturn)}" r="8" fill="#17644b" stroke="white" stroke-width="2"><title>Portfolio A · ${benchmarkPoint.name}</title></circle>`;
  svg+=`<circle cx="${X(risk(w))}" cy="${Y(dot(w,mu)*12)}" r="9" fill="#d4ad48" stroke="#fff" stroke-width="3"><title>Deine Mischung</title></circle><text x="520" y="443" text-anchor="middle">Risiko / Schwankung p. a. →</text>`;
  $('frontier').innerHTML=svg;
  $('asset-legend').innerHTML=assets.map((p,i)=>`<span style="color:${colors[i]}">● ${i+1} · ${p.name}</span>`).join('');
@@ -194,48 +201,73 @@ function adjustWeight(index,value){
  w=w.map((v,i)=>i===index?value:locks.has(selected[i])?locks.get(selected[i]):total>1e-12?v*left/total:left/others.length);
 }
 
-// A: initial fixed benchmark; never modified by the target slider or B weights.
+// A: benchmark optimized for the current period; independent of B weight edits.
 // B: currently selected weights. Annual returns are permanently visible.
-function comparisonStats(weights){
+function monthlyStats(returns){
  let capital=1,peak=1,maxDrawdown=0;
- for(const r of rows){
-  capital*=1+dot(r,weights);
+ for(const value of returns){
+  capital*=1+value;
   peak=Math.max(peak,capital);
   maxDrawdown=Math.min(maxDrawdown,capital/peak-1);
  }
- const annualReturn=dot(weights,mu)*12;
- const volatility=risk(weights);
+ const mean=returns.reduce((sum,value)=>sum+value,0)/returns.length;
+ const annualReturn=mean*12;
+ const volatility=Math.sqrt(returns.reduce((sum,value)=>sum+(value-mean)**2,0)/returns.length*12);
  return {annualReturn,volatility,drawdown:-maxDrawdown,ratio:volatility>1e-12?annualReturn/volatility:null};
 }
+function comparisonStats(weights){return monthlyStats(rows.map(r=>dot(r,weights)));}
+function allocationNote(weights){
+ return selected.map((id,i)=>weights[i]>1e-10?names[id]+' '+pct(weights[i]):'').filter(Boolean).join(' · ');
+}
+function benchmarkReturns(id){
+ const byMonth=new Map(dataset.map(r=>[r.month,r.values[id]]));
+ const returns=activeMonths.map(m=>byMonth.get(m));
+ return returns.length&&returns.every(Number.isFinite)?returns:null;
+}
+function currentBenchmark(){
+ if(benchmark==='optimum')return {name:'Optimum',stat:comparisonStats(referenceWeights),allocation:allocationNote(referenceWeights)};
+ const id=Number(benchmark),returns=benchmarkReturns(id);
+ return {name:names[id],stat:returns?monthlyStats(returns):null,allocation:'100 % '+names[id]};
+}
+function updateBenchmarkOptions(){
+ $('benchmark').disabled=false;
+ $('benchmark').innerHTML='<option value="optimum">Optimum</option>'+names.map((name,id)=>`<option value="${id}">${name}${benchmarkReturns(id)?'':' (Daten fehlen)'}</option>`).join('');
+ $('benchmark').value=benchmark;
+}
+$('benchmark').onchange=()=>{benchmark=$('benchmark').value;draw();};
 function drawComparison(){
  if(!rows.length||!mu.length)return;
  const b=comparisonStats(w);
- const a=comparisonStats(referenceWeights);
+ const chosen=currentBenchmark(),a=chosen.stat;
  // Comparison B minus A: higher return is favorable, higher volatility unfavorable.
- const deltaReturn=(b.annualReturn-a.annualReturn)*100;
- const deltaRisk=(b.volatility-a.volatility)*100;
+ const deltaReturn=a?(b.annualReturn-a.annualReturn)*100:0;
+ const deltaRisk=a?(b.volatility-a.volatility)*100:0;
  const formatDelta=x=>{const rounded=Math.round(x*10)/10;return (rounded>0?'+':'')+rounded.toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1})+' %';};
  const classify=(x,higherBetter)=>Math.abs(x)<0.05?'neutral':((x>0)===higherBetter?'good':'bad');
  const retClass=classify(deltaReturn,true),riskClass=classify(deltaRisk,false);
  const riskHeight=Math.min(19,Math.max(3,Math.abs(deltaRisk)*8));
  const retHeight=Math.min(19,Math.max(3,Math.abs(deltaReturn)*8));
  const bar=(x,height,klass,left)=>Math.abs(x)<0.05?'':`<span class="delta-column ${x>=0?'up':'down'}" style="left:${left}px;height:${height}px;background:${klass==='good'?'#237c55':klass==='bad'?'#b94a42':'#9aa79f'}"></span>`;
- $('compare-delta').innerHTML=`<span class="delta-label">Deine Mischung<br>gegenüber Optimum</span><span class="delta-cross" aria-hidden="true">${bar(deltaRisk,riskHeight,riskClass,9)}${bar(deltaReturn,retHeight,retClass,26)}</span><span class="delta-text"><span class="delta-${riskClass}">Risiko <strong>${formatDelta(deltaRisk)}</strong></span><span class="delta-${retClass}">Rendite <strong>${formatDelta(deltaReturn)}</strong></span></span>`;
+ $('compare-delta').setAttribute('aria-label','Differenz deiner Mischung gegenüber '+chosen.name);
+ $('compare-delta').innerHTML=a?`<span class="delta-label">Deine Mischung<br>gegenüber ${chosen.name}</span><span class="delta-cross" aria-hidden="true">${bar(deltaRisk,riskHeight,riskClass,9)}${bar(deltaReturn,retHeight,retClass,26)}</span><span class="delta-text"><span class="delta-${riskClass}">Risiko <strong>${formatDelta(deltaRisk)}</strong></span><span class="delta-${retClass}">Rendite <strong>${formatDelta(deltaReturn)}</strong></span></span>`:'<span class="delta-label">Vergleich nicht verfügbar</span>';
  const metric=compareMode==='dd'?'drawdown':compareMode==='ratio'?'ratio':'volatility';
- const maxValue=Math.max(a[metric]||0,b[metric]||0,0.0001);
+ const maxValue=Math.max(a?.[metric]||0,b[metric]||0,0.0001);
  const show=x=>metric==='ratio'?(x===null?'–':x.toLocaleString('de-DE',{maximumFractionDigits:2})):pct(metric==='drawdown'?-x:x);
  $('comparison').querySelectorAll('[data-compare]').forEach(button=>button.classList.toggle('active',button.dataset.compare===compareMode));
  $('compare-values').innerHTML=[
-  {label:'Portfolio A · Optimum',stat:a,color:'#19815d'},
-  {label:'Portfolio B · Deine Mischung',stat:b,color:'#c99b30'}
- ].map(({label,stat,color})=>`<div>
+  {label:'Portfolio A · '+chosen.name,stat:a,color:'#19815d',allocation:chosen.allocation},
+  {label:'Portfolio B · Deine Mischung',stat:b,color:'#c99b30',allocation:allocationNote(w)}
+ ].map(({label,stat,color,allocation})=>`<div>
    <div class="compare-name">${label}</div>
-   <div class="compare-value">${show(stat[metric])}</div>
-   <div class="compare-bar"><div style="width:${Math.max(0,Math.min(100,(stat[metric]||0)/maxValue*100))}%;background:${color}"></div></div>
-   <div class="compare-return">Rendite: <strong>${pct(stat.annualReturn)} p. a.</strong></div>
+   <div class="compare-value">${stat?show(stat[metric]):'–'}</div>
+   <div class="compare-bar"><div style="width:${Math.max(0,Math.min(100,(stat?.[metric]||0)/maxValue*100))}%;background:${color}"></div></div>
+   <div class="compare-return">Rendite: <strong>${stat?pct(stat.annualReturn)+' p. a.':'–'}</strong></div>
+   <div class="compare-allocation">${allocation}</div>
  </div>`).join('');
- $('compare-note').textContent=compareMode==='vol'
-  ?'Historische annualisierte Volatilität. Portfolio A bleibt die feste Benchmark; B ist deine aktuelle Mischung.'
+ $('compare-note').textContent=!a
+  ?'Für '+chosen.name+' fehlen vollständige Monatsdaten im gewählten Zeitraum. Bitte einen anderen Benchmark oder Zeitraum wählen.'
+  :compareMode==='vol'
+  ?'Historische annualisierte Volatilität. Beide Portfolios verwenden denselben Zeitraum.'
   :compareMode==='dd'
   ?'Größter historischer Rückgang vom bisherigen Höchststand; monatliches Rebalancing.'
   :'Rendite / Volatilität bei 0 % Referenzzins (vereinfachte Sharpe-ähnliche Kennzahl).';
@@ -280,7 +312,7 @@ function commitTimeline(){
  if(!timelineState)return;
  period='custom';$('start').value=month(timelineState.start);$('end').value=month(timelineState.end);
  $('periods').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.v==='custom'));
- recalc();
+ recalc(true,true);
 }
 function setupTimeline(){
  for(const [id,mode] of [['time-start','start'],['time-end','end'],['time-window','move']]){

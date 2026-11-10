@@ -28,6 +28,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d4ad
 .weight-edit{display:inline-flex;align-items:center;gap:3px}.weight .weight-edit input{width:69px;margin:0;padding:5px 6px;border:1px solid #dce4db;border-radius:7px;color:var(--g);text-align:right;font-size:13px}.target-entry{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;color:#607269}.target-entry input{width:82px;padding:6px;border:1px solid #dce4db;border-radius:7px;color:var(--g)}.compare{margin-top:12px;border-top:1px solid #e8ede5;padding-top:15px}
 .compare-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
 .compare-title{font-size:16px;font-weight:750}
+.compare-controls{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;min-width:0}
+.benchmark-picker{display:flex;align-items:center;gap:6px;font-size:12px;color:#607269;max-width:100%}
+.benchmark-picker select{width:180px;max-width:100%;min-width:0;font-size:12px;padding:6px 8px}
+.compare-grid>div{min-width:0}
+.compare-allocation{font-size:11px;line-height:1.5;color:#718178;margin-top:6px;overflow-wrap:anywhere}
+select:focus-visible{outline:3px solid #d4ad48;outline-offset:3px}
 .delta-widget{display:flex;align-items:center;gap:10px;font-size:11px;color:#607269}
 .delta-label{font-size:10px;line-height:1.2;max-width:90px}
 .delta-cross{position:relative;width:44px;height:44px;flex-shrink:0}
@@ -123,19 +129,19 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d4ad
 </strong>
 <input class="range" type="range" id="target" min="0" max="100" step="2" value="50">
 </label>
-<p class="note">Start: mittlere erreichbare Zielrendite. Der Regler verschiebt Portfolio B entlang der gesamten Kurve. Portfolio A bleibt die feste Benchmark. Alle Gewichte ergeben zusammen 100 %.</p>
+<p class="note">Start: mittlere erreichbare Zielrendite. Der Regler verschiebt Portfolio B entlang der gesamten Kurve. Portfolio A zeigt den gewählten Benchmark; beim Zeitraumwechsel wird das Optimum neu berechnet. Alle Gewichte ergeben zusammen 100 %.</p>
 </section>
 <section class="panel">
 <div class="heading">
 <h2>04 &nbsp; Effizienter Rand</h2>
 </div>
-<p class="note">Wähle eine Mischung auf der Kurve und vergleiche ihr Risiko mit dem Optimum.</p>
+<p class="note">Wähle eine Mischung auf der Kurve und vergleiche ihr Risiko mit dem gewählten Benchmark.</p>
 <svg id="frontier" viewBox="0 0 1000 450" role="img" aria-label="Risiko-Rendite-Diagramm">
 </svg>
 <div class="legend"><span style="color:#a9c8b6">● Mögliche Mischungen</span><span style="color:#237c55">━ Effizienter Rand</span><span style="color:#d4ad48">● Deine Mischung</span></div><div class="legend" id="asset-legend" style="margin-top:12px"></div>
 <p class="note">Rendite = Monatsmittel × 12 · Risiko = Populationsstandardabweichung × √12</p>
 <div class="compare" id="comparison">
-<div class="compare-head"><div class="compare-title">Portfolio-Vergleich</div><div class="delta-widget" id="compare-delta" aria-live="polite" aria-label="Differenz deiner Mischung gegenüber dem Optimum"></div></div>
+<div class="compare-head"><div class="compare-controls"><div class="compare-title">Portfolio-Vergleich</div><label class="benchmark-picker" for="benchmark">Benchmark <select id="benchmark" disabled><option value="optimum" selected>Optimum</option></select></label></div><div class="delta-widget" id="compare-delta" aria-live="polite" aria-label="Differenz deiner Mischung gegenüber dem Optimum"></div></div>
 <div class="compare-tabs" role="group" aria-label="Risikokennzahl">
 <button type="button" class="active" data-compare="vol">Schwankung</button>
 <button type="button" data-compare="dd">Drawdown</button>
@@ -165,7 +171,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d4ad
 <footer>Finanztaler · Portfolio-Mixer · Bedienbare Konzeptvorschau</footer>
 <script src="excel.js">
 </script>
-<script src="app.js">
+<script src="app.js?v=20261110-benchmark">
 </script>
 </body>
 </html>
