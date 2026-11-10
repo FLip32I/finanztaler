@@ -1,2 +1,2 @@
 # finanztaler
-Finanztaler – Finanzwissen und Finanzrechner
+Finanztaler - Finanzwissen und Finanzrechner
