@@ -6,6 +6,9 @@ const locks=new Map();
 let selected=[1],w=[1],period='10',rows=[],mu=[],cov=[],curve=[];
 let compareMode='vol';
 let benchmark='optimum';
+const savedMixKey='finanztaler.portfolio-mixer.benchmarks.v1';
+let savedConfigurations=loadSavedConfigurations(),savedBenchmark='optimum',saveSlot='';
+let storageAvailable=true;
 let referenceWeights=[];
 const $=id=>document.getElementById(id),pct=x=>(x*100).toLocaleString('de-DE',{maximumFractionDigits:1})+' %',eur=x=>x.toLocaleString('de-DE',{maximumFractionDigits:0})+' €';
 function month(i){return (2000+Math.floor(i/12))+'-'+String(((i%12)+12)%12+1).padStart(2,'0')}function idx(s){let [y,m]=s.split('-').map(Number);return (y-2000)*12+m-1}
@@ -58,6 +61,7 @@ function emptyState(message){
  $('benchmark').disabled=true;
  $('compare-delta').innerHTML='';
  $('compare-note').textContent='';
+ drawSavedComparison();
  for(const id of ['equal','min','optimum','target'])$(id).disabled=true;
 }
 function recalc(reset=true,preserveWeights=false){
@@ -116,7 +120,7 @@ function draw(){
  $('weights').querySelectorAll('[data-weight]').forEach(el=>el.oninput=()=>{adjustWeight(+el.dataset.weight,+el.value/100);draw();});
  $('weights').querySelectorAll('[data-weight-number]').forEach(el=>el.onchange=()=>{if(!Number.isFinite(el.valueAsNumber)){draw();return;}adjustWeight(+el.dataset.weightNumber,el.valueAsNumber/100);draw();});
  $('lock-note').textContent=locks.size?'Fixierte Anteile bleiben unverändert. Kurve und Mischungen berücksichtigen die Fixierung; Einzelanlagen dienen als Vergleich.':'Fixiere einzelne Anteile, damit nur die übrigen Anlagen angepasst werden.';
- let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(dot(w,mu)*12);drawFrontier();drawComparison();}
+ let val=10000,peak=val,dd=0,values=[val];rows.forEach(r=>{val*=1+dot(r,w);peak=Math.max(peak,val);dd=Math.min(dd,val/peak-1);values.push(val)});let cagr=(val/10000)**(12/rows.length)-1;$('metrics').innerHTML=[['Jahresrendite geometrisch',pct(cagr)],['Schwankung p. a.',pct(risk(w))],['Größter Verlust',pct(dd)],['Endvermögen',eur(val)]].map(([l,v])=>`<div class="metric"><small>${l}</small><strong>${v}</strong></div>`).join('');let low=Math.min(...values)*.95,high=Math.max(...values)*1.05;let gy=v=>210-(v-low)/(high-low)*180;$('growth').innerHTML=[0,1,2].map(i=>{let v=low+(high-low)*i/2;return `<path d="M90 ${gy(v)}H980" stroke="#e8ede5"/><text x="80" y="${gy(v)+4}" text-anchor="end">${eur(v)}</text>`}).join('')+`<path d="M${values.map((v,i)=>`${90+i/(values.length-1)*890},${gy(v)}`).join(' L')}" fill="none" stroke="#237c55" stroke-width="3"/><text x="90" y="240">${activeMonths[0]}</text><text x="980" y="240" text-anchor="end">${activeMonths.at(-1)}</text>`;$('targetvalue').textContent=pct(dot(w,mu)*12);drawFrontier();drawComparison();drawSavedComparison();}
 $('periods').innerHTML=[['5','5 Jahre'],['10','10 Jahre'],['15','15 Jahre'],['20','20 Jahre'],['max','Maximal'],['custom','Eigener Zeitraum']].map(([v,l])=>`<button data-v="${v}" class="${v===period?'active':''}">${l}</button>`).join('');$('periods').querySelectorAll('button').forEach(b=>b.onclick=()=>{period=b.dataset.v;$('periods').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));recalc(true,true)});$('start').onchange=$('end').onchange=()=>recalc(true,true);$('equal').onclick=()=>{w=equalWeights();draw()};$('min').onclick=()=>{w=[...optimize(null)];syncTargetToMix();draw()};$('optimum').onclick=()=>{w=[...referenceWeights];syncTargetToMix();draw()};
 function setMixFromCurve(i){
  const index=Math.max(0,Math.min(curve.length-1,Math.round(i)));
@@ -217,7 +221,7 @@ function monthlyStats(returns){
 }
 function comparisonStats(weights){return monthlyStats(rows.map(r=>dot(r,weights)));}
 function allocationNote(weights){
- return selected.map((id,i)=>weights[i]>1e-10?names[id]+' '+pct(weights[i]):'').filter(Boolean).join(' · ');
+ return selected.map((id,i)=>weights[i]>1e-10?names[id]+' '+pct(weights[i]):'').filter(Boolean).map(line=>'<span class="allocation-line">'+line+'</span>').join('');
 }
 function benchmarkReturns(id){
  const byMonth=new Map(dataset.map(r=>[r.month,r.values[id]]));
@@ -233,6 +237,8 @@ function updateBenchmarkOptions(){
  $('benchmark').disabled=false;
  $('benchmark').innerHTML='<option value="optimum">Optimum</option>'+names.map((name,id)=>`<option value="${id}">${name}${benchmarkReturns(id)?'':' (Daten fehlen)'}</option>`).join('');
  $('benchmark').value=benchmark;
+ $('saved-benchmark').innerHTML=$('benchmark').innerHTML;
+ $('saved-benchmark').value=savedBenchmark;
 }
 $('benchmark').onchange=()=>{benchmark=$('benchmark').value;draw();};
 function drawComparison(){
@@ -335,3 +341,73 @@ function setupTimeline(){
   });
  }
 }
+
+
+// Saved mixes retain asset identities and exact ratios; metrics use the active period.
+function loadSavedConfigurations(){
+ try{
+  const stored=JSON.parse(window.localStorage.getItem(savedMixKey)||'null');
+  if(!Array.isArray(stored))return [null,null,null];
+  return Array.from({length:3},(_,i)=>{
+   const mix=stored[i];
+   if(!mix||!Array.isArray(mix.assets)||!Array.isArray(mix.weights)||mix.assets.length<1||mix.assets.length>5||mix.assets.length!==mix.weights.length)return null;
+   if(new Set(mix.assets).size!==mix.assets.length||!mix.assets.every(id=>Number.isInteger(id)&&id>=0&&id<names.length))return null;
+   if(!mix.weights.every(x=>Number.isFinite(x)&&x>=0&&x<=1)||Math.abs(mix.weights.reduce((a,b)=>a+b,0)-1)>1e-7)return null;
+   return {assets:[...mix.assets],weights:[...mix.weights]};
+  });
+ }catch{return [null,null,null];}
+}
+function persistSavedConfigurations(){
+ try{window.localStorage.setItem(savedMixKey,JSON.stringify(savedConfigurations));storageAvailable=true;}
+ catch{storageAvailable=false;}
+}
+function savedMixStats(mix){
+ if(!rows.length)return null;
+ const byMonth=new Map(dataset.map(r=>[r.month,r.values]));
+ const returns=[];
+ for(const m of activeMonths){
+  const values=byMonth.get(m);
+  if(!values||!mix.assets.every((id,i)=>mix.weights[i]===0||Number.isFinite(values[id])))return null;
+  returns.push(mix.assets.reduce((sum,id,i)=>sum+(mix.weights[i]===0?0:values[id]*mix.weights[i]),0));
+ }
+ return returns.length?monthlyStats(returns):null;
+}
+function savedAllocation(mix){
+ return mix.assets.map((id,i)=>mix.weights[i]>1e-10?'<span class="allocation-line">'+names[id]+' '+pct(mix.weights[i])+'</span>':'').join('');
+}
+function drawSavedComparison(){
+ const count=savedConfigurations.filter(Boolean).length;
+ $('saved-count').textContent=count+' von 3 gespeichert';
+ $('save-slot').innerHTML='<option value="">'+(count===3?'Speicherplatz zum Ersetzen wählen':'Nächster freier Speicherplatz')+'</option>'+savedConfigurations.map((mix,i)=>`<option value="${i}">Mischung ${i+1}${mix?' · ersetzen':' · frei'}</option>`).join('');
+ $('save-slot').value=saveSlot;
+ $('save-benchmark').disabled=!rows.length||(count===3&&saveSlot==='');
+ $('saved-benchmark').disabled=!rows.length;
+ $('saved-period').textContent=rows.length?'Zeitraum: '+activeMonths[0]+' bis '+activeMonths.at(-1)+' · Alle Kennzahlen werden für diesen Zeitraum neu berechnet.':'Bitte einen gültigen Zeitraum mit mindestens 12 gemeinsamen Monaten wählen.';
+ $('saved-storage').textContent=storageAvailable?'Gespeicherte Mischungen bleiben in diesem Browser erhalten.':'Die Mischungen bleiben nur bis zum Neuladen verfügbar; der Browser erlaubt kein dauerhaftes Speichern.';
+ let baseline={name:'Optimum',allocation:'',stat:null};
+ if(rows.length){
+  if(savedBenchmark==='optimum')baseline={name:'Optimum',allocation:allocationNote(referenceWeights),stat:comparisonStats(referenceWeights)};
+  else{const returns=benchmarkReturns(Number(savedBenchmark));baseline={name:names[Number(savedBenchmark)],allocation:'100 % '+names[Number(savedBenchmark)],stat:returns?monthlyStats(returns):null};}
+ }
+ const entries=[{name:'Basiswert · '+baseline.name,allocation:baseline.allocation,stat:baseline.stat}];
+ savedConfigurations.forEach((mix,i)=>entries.push({name:'Mischung '+(i+1),allocation:mix?savedAllocation(mix):'Noch nicht gespeichert',stat:mix?savedMixStats(mix):null,slot:i,empty:!mix}));
+ $('saved-rows').innerHTML=entries.map(entry=>`<tr>
+  <th scope="row">${entry.name}${entry.slot!==undefined&&!entry.empty?'<button type="button" class="saved-remove" data-remove-saved="'+entry.slot+'" aria-label="Mischung '+(entry.slot+1)+' entfernen">Entfernen</button>':''}</th>
+  <td class="saved-allocation">${entry.allocation}${!entry.empty&&!entry.stat?'<span class="saved-missing">Keine vollständigen Daten im gewählten Zeitraum.</span>':''}</td>
+  <td>${entry.stat?pct(entry.stat.annualReturn):'–'}</td><td>${entry.stat?pct(entry.stat.volatility):'–'}</td><td>${entry.stat?pct(-entry.stat.drawdown):'–'}</td>
+ </tr>`).join('');
+ $('saved-rows').querySelectorAll('[data-remove-saved]').forEach(button=>button.onclick=()=>{
+  const slot=Number(button.dataset.removeSaved);savedConfigurations[slot]=null;saveSlot='';persistSavedConfigurations();drawSavedComparison();$('save-status').textContent='Mischung '+(slot+1)+' entfernt.';
+ });
+}
+$('save-slot').onchange=()=>{saveSlot=$('save-slot').value;drawSavedComparison();};
+$('saved-benchmark').onchange=()=>{savedBenchmark=$('saved-benchmark').value;drawSavedComparison();};
+$('save-benchmark').onclick=()=>{
+ if(!rows.length)return;
+ const slot=saveSlot===''?savedConfigurations.findIndex(mix=>!mix):Number(saveSlot);
+ if(!Number.isInteger(slot)||slot<0||slot>2)return;
+ savedConfigurations[slot]={assets:[...selected],weights:[...w]};
+ persistSavedConfigurations();saveSlot='';drawSavedComparison();
+ $('saved-comparison').open=true;
+ $('save-status').textContent='Konfiguration als Mischung '+(slot+1)+' gespeichert.';
+};

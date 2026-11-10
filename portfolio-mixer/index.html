@@ -32,6 +32,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d4ad
 .benchmark-picker{display:flex;align-items:center;gap:6px;font-size:12px;color:#607269;max-width:100%}
 .benchmark-picker select{width:180px;max-width:100%;min-width:0;font-size:12px;padding:6px 8px}
 .compare-grid>div{min-width:0}
+.allocation-line{display:block}
 .compare-allocation{font-size:11px;line-height:1.5;color:#718178;margin-top:6px;overflow-wrap:anywhere}
 select:focus-visible{outline:3px solid #d4ad48;outline-offset:3px}
 .delta-widget{display:flex;align-items:center;gap:10px;font-size:11px;color:#607269}
@@ -64,6 +65,29 @@ select:focus-visible{outline:3px solid #d4ad48;outline-offset:3px}
 .time-ticks{margin:16px 12px 0;height:34px;font-size:12px;font-variant-numeric:tabular-nums}.time-ticks span:before{content:'';position:absolute;top:-10px;left:50%;width:1px;height:5px;background:#a6b6aa}.time-ticks span:first-child:before{left:0}.time-ticks span:last-child:before{left:auto;right:0}
 .dates label{display:flex;align-items:center;gap:8px;font-size:13px}.dates input{font-variant-numeric:tabular-nums}
 @media(max-width:600px){.time-editor{padding:18px 14px 12px}.time-summary strong{font-size:15px}.time-summary span{font-size:11px}.time-handle{width:26px;height:36px}.dates label{flex:1;min-width:130px}.dates input{min-width:0;width:100%}}
+
+.benchmark-save{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-top:22px}
+.benchmark-save button{font-size:12px;background:var(--g);color:white}
+.benchmark-save button:disabled{opacity:.5;cursor:default}
+.save-slot-label{display:flex;align-items:center;gap:6px;font-size:11px;color:#718178;max-width:100%}
+.save-slot-label select{font-size:11px;max-width:220px;min-width:0}
+.save-status{font-size:11px;color:#607269;margin:8px 0 0;min-height:1.5em}
+.saved-comparison{margin-top:26px;border-top:1px solid #e1e7dd;padding-top:18px}
+.saved-comparison summary{cursor:pointer;font-size:16px;font-weight:750;color:var(--g)}
+.saved-count{font-size:11px;font-weight:400;color:#718178;margin-left:10px;white-space:nowrap}
+.saved-toolbar{margin:16px 0 10px}
+.saved-table-wrap{overflow-x:auto;border:1px solid #e1e7dd;border-radius:10px;margin-top:14px}
+.saved-table{border-collapse:collapse;width:100%;min-width:690px;font-size:12px;text-align:left}
+.saved-table th,.saved-table td{padding:14px 12px;vertical-align:top;border-bottom:1px solid #e8ede5}
+.saved-table thead{background:#f4f7f0;font-size:11px}
+.saved-table tbody tr:last-child>*{border-bottom:0}
+.saved-table th[scope=row]{width:150px;font-weight:650}
+.saved-table td:nth-last-child(-n+3){white-space:nowrap;font-variant-numeric:tabular-nums}
+.saved-allocation{min-width:230px;color:#607269;font-size:11px;line-height:1.7}
+.saved-missing{display:block;color:#936a21;margin-top:6px;max-width:240px}
+.saved-remove{display:block;border:0;background:none;padding:6px 0 0;font-size:10px;color:#718178;text-decoration:underline}
+.saved-table-wrap:focus-visible{outline:3px solid #d4ad48;outline-offset:3px}
+
 </style>
 <link rel="canonical" href="https://www.finanztaler.de/portfolio-mixer/">
 
@@ -149,6 +173,11 @@ select:focus-visible{outline:3px solid #d4ad48;outline-offset:3px}
 </div>
 <div class="compare-grid" id="compare-values" aria-live="polite"></div>
 <p class="compare-note" id="compare-note"></p>
+<div class="benchmark-save">
+<button type="button" id="save-benchmark" disabled>Konfiguration für Benchmark speichern</button>
+<label class="save-slot-label" for="save-slot">Speicherplatz <select id="save-slot"><option value="">Nächster freier Speicherplatz</option></select></label>
+</div>
+<p class="save-status" id="save-status" role="status"></p>
 </div>
 </section>
 </div>
@@ -157,6 +186,16 @@ select:focus-visible{outline:3px solid #d4ad48;outline-offset:3px}
 <h2>05 &nbsp; Deine Mischung im Überblick</h2>
 <div class="metrics" id="metrics">
 </div>
+<details class="saved-comparison" id="saved-comparison">
+<summary>Benchmark-Vergleich <span class="saved-count" id="saved-count">0 von 3 gespeichert</span></summary>
+<div class="saved-toolbar"><label class="benchmark-picker" for="saved-benchmark">Basiswert <select id="saved-benchmark" disabled><option value="optimum" selected>Optimum</option></select></label></div>
+<p class="note" id="saved-period"></p>
+<div class="saved-table-wrap" tabindex="0" role="region" aria-label="Basiswert und gespeicherte Mischungen vergleichen">
+<table class="saved-table"><thead><tr><th scope="col">Portfolio</th><th scope="col">Mix</th><th scope="col">Rendite p. a.</th><th scope="col">Schwankung p. a.</th><th scope="col">Max. Drawdown</th></tr></thead><tbody id="saved-rows"></tbody></table>
+</div>
+<p class="note">Rendite: Monatsmittel × 12 · Schwankung: Populationsstandardabweichung × √12 · Max. Drawdown auf Monatsbasis, mit monatlichem Rebalancing.</p>
+<p class="note" id="saved-storage"></p>
+</details>
 <h2 style="margin-top:30px">Was wäre aus 10.000 € geworden?</h2>
 <svg id="growth" viewBox="0 0 1000 250" role="img" aria-label="Wertentwicklung aus importierten Monatsrenditen">
 </svg>
@@ -171,7 +210,7 @@ select:focus-visible{outline:3px solid #d4ad48;outline-offset:3px}
 <footer>Finanztaler · Portfolio-Mixer · Bedienbare Konzeptvorschau</footer>
 <script src="excel.js">
 </script>
-<script src="app.js?v=20261110-benchmark">
+<script src="app.js?v=20261110-saved-benchmarks">
 </script>
 </body>
 </html>
