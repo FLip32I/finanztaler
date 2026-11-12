@@ -53,6 +53,7 @@ function optimize(target,side=1){
  return v;
 }
 function emptyState(message){
+ syncRolling15();
  rows=[];curve=[];mu=[];cov=[];
  $('time-editor').classList.add('hidden');
  $('coverage').textContent=message;
@@ -115,6 +116,7 @@ function recalc(reset=true,preserveWeights=false){
  draw();
 }
 function draw(){
+ syncRolling15();
  $('weights').innerHTML=selected.map((id,i)=>`<div class="weight"><label for="w${i}">${names[id]} <span class="weight-edit"><input data-weight-number="${i}" type="number" min="0" max="${(remainingWeight()*100).toFixed(4)}" step="0.1" value="${(w[i]*100).toFixed(1)}" ${locks.has(id)||freeIndices().length<2?'disabled':''} aria-label="${names[id]} Gewichtung in Prozent"> %</span></label><input id="w${i}" data-weight="${i}" type="range" min="0" max="${locks.has(id)?100:(remainingWeight()*100).toFixed(8)}" step="0.1" value="${w[i]*100}" ${locks.has(id)||freeIndices().length<2?'disabled':''}><label class="fix-control"><input type="checkbox" data-lock="${i}" ${locks.has(id)?'checked':''}> ${locks.has(id)?'Fixiert':'Fixieren'}</label></div>`).join('');
  $('weights').querySelectorAll('[data-lock]').forEach(el=>el.onchange=()=>{const i=+el.dataset.lock,id=selected[i];if(el.checked)locks.set(id,w[i]);else locks.delete(id);recalc(false);});
  $('weights').querySelectorAll('[data-weight]').forEach(el=>el.oninput=()=>{adjustWeight(+el.dataset.weight,+el.value/100);draw();});
