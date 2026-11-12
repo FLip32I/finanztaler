@@ -6,14 +6,42 @@ from datetime import datetime, timezone, timedelta
 ROOT = Path(__file__).resolve().parents[1]
 ASIN = re.compile(r'(?:/dp/|/gp/product/|[?&]asin=)([A-Z0-9]{10})(?:[/?&#]|$)', re.I)
 
-def request_json(url, data, headers=None):
+def request_json(url, data, headers=None, *, stage):
     req = urllib.request.Request(url, data=json.dumps(data).encode(), headers={'Content-Type':'application/json', **(headers or {})})
     try:
         with urllib.request.urlopen(req, timeout=30) as response:
             return json.load(response)
     except urllib.error.HTTPError as error:
-        # Don't log payloads, credentials or complete authentication responses.
-        raise RuntimeError(f'Amazon HTTP {error.code}; Zugang, Berechtigung und API-Limit prüfen.') from None
+        # Only expose bounded machine-readable error codes; never raw responses.
+        codes = []
+        try:
+            payload = json.loads(error.read(65536))
+            if isinstance(payload, dict):
+                candidates = [payload.get('error'), payload.get('code'), payload.get('Code')]
+                for key in ('errors', 'Errors'):
+                    entries = payload.get(key, [])
+                    if isinstance(entries, list):
+                        for entry in entries[:10]:
+                            if isinstance(entry, dict):
+                                candidates.extend([entry.get('code'), entry.get('Code')])
+                secrets = [os.environ.get(key, '') for key in
+                           ('AMAZON_CREATORS_CLIENT_ID', 'AMAZON_CREATORS_CLIENT_SECRET')]
+                auth = (headers or {}).get('Authorization', '')
+                if auth:
+                    secrets.append(auth.removeprefix('Bearer '))
+                for value in candidates:
+                    if (isinstance(value, str)
+                            and re.fullmatch(r'[A-Za-z][A-Za-z0-9_.:-]{0,95}', value)
+                            and not any(secret and secret in value for secret in secrets)):
+                        if value not in codes:
+                            codes.append(value)
+        except (ValueError, OSError):
+            pass
+        detail = ', '.join(codes) if codes else 'kein auswertbarer Fehlercode'
+        raise RuntimeError(
+            f'Amazon HTTP {error.code} beim Schritt {stage}; Amazon-Code: {detail}. '
+            'Keine Zugangsdaten oder Antwortinhalte protokolliert.'
+        ) from None
 
 def asin_from_url(url):
     match = ASIN.search(url)
@@ -56,7 +84,7 @@ def main():
     token = request_json('https://api.amazon.co.uk/auth/o2/token', {
         'grant_type':'client_credentials','client_id':client_id,
         'client_secret':secret,'scope':'creatorsapi::default'
-    }).get('access_token')
+    }, stage='Zugriffstoken anfordern').get('access_token')
     if not token:
         raise RuntimeError('Amazon hat keinen Zugriffstoken geliefert.')
     output = {}
@@ -70,7 +98,8 @@ def main():
             'itemIds':unique[start:start+10], 'itemIdType':'ASIN',
             'marketplace':'www.amazon.de','partnerTag':config['partnerTag'],
             'resources':['images.primary.medium','images.primary.large']
-        }, {'Authorization':'Bearer '+token,'x-marketplace':'www.amazon.de'})
+        }, {'Authorization':'Bearer '+token,'x-marketplace':'www.amazon.de'},
+           stage='Produktbilder abrufen')
         for item in data.get('itemsResult', {}).get('items', []):
             fetched[item.get('asin')] = item
         failed += len(data.get('errors', []))
