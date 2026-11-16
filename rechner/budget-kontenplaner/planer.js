@@ -19,7 +19,6 @@ $('reset').onclick=()=>{if(confirm('Aktuelle Eingaben auf das Beispiel zurückse
 $('print').onclick=()=>window.print();
 function downloadPlanFile(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function planSnapshot(){return {format:'finanztaler-budget',version:1,state:JSON.parse(JSON.stringify(state)),view:{opened:[...opened],cashflow:cfActive,cashExpanded:!$('cashContent').hidden,month:$('flowMonth').value,account:$('flowAccount').value,level:$('sankeyLevel').value,unit:$('accountFlow').dataset.unit||'eur',selected:$('accountFlow').dataset.selected||'-1',accountsOpen:$('accountsDetails').open}};}
-$('exportPlan').onclick=()=>downloadPlanFile('finanztaler-plan.json',JSON.stringify(planSnapshot(),null,2),'application/json');
 $('csv').onclick=()=>{const rows=[['Kategorie','Position','Betrag','Zeitraum','Monatlich','Zahlungstag','Fälligkeitsmonat']];if(state.accountsEnabled)rows[0].push('Konto','Verwendung','Zahlungsart','Übertragstag');state.groups.forEach((g,i)=>g.items.forEach(x=>{const row=[g.name,x.name,x.amount,x.period==='year'?'Jährlich':'Monatlich',monthly(x),day(x.day||1),x.period==='year'?(x.dueMonth||1):''];if(state.accountsEnabled){const a=assignmentFor(x,i);row.push(accountName(a.id),a.mode==='saving'?'Sparen / Investieren':'Ausgabe',a.method,a.id==='giro'?'':a.transferDay)}rows.push(row)}));rows.push(['','Einnahmen',num(state.income)+num(state.extra)+extraSum(),'Monatlich','']);rows.push(['#FINANZTALER-PLAN-V1',JSON.stringify(planSnapshot())]);const blob=new Blob(['\uFEFF'+rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='finanztaler-budget.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 function sync(){
  normalizeAccounts();
@@ -306,13 +305,14 @@ $('templateFile').addEventListener('change',async e=>{
  const file=e.target.files[0];if(!file)return;
  try{
   if(file.size>2000000)throw Error('Größe');
-  const text=await file.text();const imported=file.name.toLowerCase().endsWith('.json')?JSON.parse(text):parseTemplateCSV(text);
+  const text=await file.text();if(!file.name.toLowerCase().endsWith('.csv'))throw Error('CSV erforderlich');
+  const imported=parseTemplateCSV(text);
   const next=imported.format==='finanztaler-budget'&&imported.version===1?imported.state:imported;
   if(!valid(next))throw Error('Vorlage');
   if(!confirm('Aktuelle Eingaben durch die Vorlage ersetzen?'))return;
   restorePlan(next,imported.view);
   $('notice').textContent='Plan übernommen. Einzelpositionen und gespeicherte Einstellungen wurden wiederhergestellt.';
- }catch{$('notice').textContent='Vorlage konnte nicht gelesen werden. Nutze einen CSV-Export dieses Planers oder eine passende JSON-Datei.';}
+ }catch{$('notice').textContent='Vorlage konnte nicht gelesen werden. Nutze eine CSV-Datei aus „Plan exportieren“.';}
  finally{e.target.value='';}
 });
 
