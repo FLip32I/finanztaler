@@ -255,3 +255,16 @@ document.addEventListener('change',e=>{
 });
 
 document.addEventListener('change',e=>{const el=e.target;if(el.dataset.editTransfer){const [i,j]=el.dataset.editTransfer.split(':').map(Number);state.groups[i].items[j].transferDay=day(el.value);renderAssignments();renderCashflow()}});
+
+// Optional income handed over by the Sparen mini calculator; never saved automatically.
+(() => {
+ const params = new URLSearchParams(location.hash.slice(1));
+ const raw = params.get('income');
+ if (raw === null) return;
+ const amount = Number(raw);
+ if (raw.trim() && Number.isFinite(amount) && amount >= 0 && amount <= 1000000) {
+   state.income = amount; sync();
+   $('notice').textContent = 'Dein Nettoeinkommen wurde übernommen. Die Ausgaben sind Beispiele – passe sie an dein Budget an.';
+ }
+ history.replaceState(null, '', location.pathname + location.search);
+})();
