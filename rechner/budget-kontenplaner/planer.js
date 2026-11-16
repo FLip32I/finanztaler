@@ -20,13 +20,16 @@ $('print').onclick=()=>window.print();
 function downloadPlanFile(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function planSnapshot(){return {format:'finanztaler-budget',version:1,state:JSON.parse(JSON.stringify(state)),view:{opened:[...opened],cashflow:cfActive,cashExpanded:!$('cashContent').hidden,month:$('flowMonth').value,account:$('flowAccount').value,level:$('sankeyLevel').value,unit:$('accountFlow').dataset.unit||'eur',selected:$('accountFlow').dataset.selected||'-1',accountsOpen:$('accountsDetails').open}};}
 function buildPlanCSV(){
- const rows=[['Kategorie','Position','Betrag','Zeitraum','Zahlungstag','Fälligkeitsmonat','Konto','Verwendung','Zahlungsart','Übertragstag','Typ','Details']];
+ const rows=[['Kategorie','Position','Betrag','Zeitraum','Zahlungstag','Fälligkeitsmonat','Konto','Verwendung','Zahlungsart','Übertragstag','Typ','Abweichende Zahlungsart']];
  rows.push(['Einnahmen','Nettogehalt',state.income,'Monatlich',state.incomeDay||28,'','','','','','Gehalt','']);
  (state.extraIncomes||[]).forEach(x=>rows.push(['Einnahmen',x.name,x.amount,'Monatlich',x.day||1,'','','','','','Weitere Einnahme','']));
  if(state.extra)rows.push(['Einnahmen','Weitere Einnahme',state.extra,'Monatlich',state.extraDay||1,'','','','','','Weitere Einnahme','']);
- state.groups.forEach((g,i)=>g.items.forEach(x=>{const assignment=assignmentFor(x,i);rows.push([g.name,x.name,x.amount,x.period==='year'?'Jährlich':'Monatlich',x.day||1,x.dueMonth||1,accountName(assignment.id),assignment.mode,assignment.method,assignment.transferDay,'Ausgabe',JSON.stringify({expenseMethod:x.expenseMethod||''})]);}));
- const snapshot=planSnapshot();delete snapshot.state.groups;delete snapshot.state.income;delete snapshot.state.extra;delete snapshot.state.extraIncomes;
- rows.push(['#FINANZTALER-EINSTELLUNGEN-V2',JSON.stringify(snapshot)]);
+ state.groups.forEach((g,i)=>g.items.forEach(x=>{const assignment=assignmentFor(x,i);rows.push([g.name,x.name,x.amount,x.period==='year'?'Jährlich':'Monatlich',x.day||1,x.dueMonth||1,accountName(assignment.id),assignment.mode==='saving'?'Sparen / Investieren':'Ausgabe',assignment.method,assignment.transferDay,'Ausgabe',x.expenseMethod||'']);}));
+ const snapshot=planSnapshot();
+ const settings=[['Kontenzuordnung aktiv',state.accountsEnabled===true],['Startguthaben',state.flowStart??0],['Gehaltszeitpunkt',state.salaryTiming||'end'],['Cashflow aktiv',snapshot.view.cashflow],['Cashflow geöffnet',snapshot.view.cashExpanded],['Monat',snapshot.view.month],['Angezeigtes Konto',snapshot.view.account],['Grafikdarstellung',snapshot.view.level],['Grafikeinheit',snapshot.view.unit],['Grafikbereich',snapshot.view.selected],['Geöffnete Bereiche',snapshot.view.opened.join(',')],['Kontenbearbeitung geöffnet',snapshot.view.accountsOpen]];
+ rows.push([]);
+ (state.accounts||[]).forEach(account=>rows.push(['#Konto',account.name,account.opening,account.type,'','',account.id]));
+ settings.forEach(([name,value])=>rows.push(['#Einstellung',name,typeof value==='boolean'?(value?'Ja':'Nein'):value]));
  return '\uFEFF'+rows.map(row=>row.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(';')).join('\r\n');
 }
 $('csv').onclick=()=>downloadPlanFile('finanztaler-budget.csv',buildPlanCSV(),'text/csv;charset=utf-8');
@@ -291,10 +294,22 @@ function parseTemplateCSV(text){
  }
  if(quoted)throw Error('CSV');
  row.push(field);if(row.some(x=>x.trim()))rows.push(row);
- if(rows.length<2||rows[0][0]!=='Kategorie'||rows[0][1]!=='Position')throw Error('CSV');
+ const headerIndex=rows.findIndex(row=>row[0]==='Kategorie'&&row[1]==='Position');if(headerIndex<0)throw Error('CSV');
+ const header=rows.splice(headerIndex,1)[0];rows.unshift(header);
  const settings=rows.find(row=>['#FINANZTALER-EINSTELLUNGEN-V2','#FINANZTALER-PLAN-V1'].includes(row[0]));
  const snapshot=settings?JSON.parse(settings[1]):null;
  const next=snapshot?JSON.parse(JSON.stringify(snapshot.state)):seed();
+ const view=snapshot?.view||{};
+ const settingRows=rows.filter(row=>row[0]==='#Einstellung');
+ const lookup=new Map(settingRows.map(row=>[row[1],row[2]]));
+ const accountRows=rows.filter(row=>row[0]==='#Konto');
+ if(accountRows.length)next.accounts=accountRows.map(row=>({id:row[6],name:row[1],opening:Number(String(row[2]).replace(',','.'))||0,type:row[3]}));
+ if(settingRows.length){
+  next.accountsEnabled=lookup.get('Kontenzuordnung aktiv')==='Ja';
+  next.flowStart=Number(lookup.get('Startguthaben'))||0;next.salaryTiming=lookup.get('Gehaltszeitpunkt')||'end';
+  Object.assign(view,{cashflow:lookup.get('Cashflow aktiv')==='Ja',cashExpanded:lookup.get('Cashflow geöffnet')==='Ja',month:lookup.get('Monat'),account:lookup.get('Angezeigtes Konto'),level:lookup.get('Grafikdarstellung'),unit:lookup.get('Grafikeinheit'),selected:lookup.get('Grafikbereich'),opened:String(lookup.get('Geöffnete Bereiche')||'').split(',').filter(x=>x!=='').map(Number),accountsOpen:lookup.get('Kontenbearbeitung geöffnet')==='Ja'});
+ }
+
  next.groups=seed().groups.map(g=>({...g,items:[]}));next.income=0;next.extra=0;next.extraIncomes=[];
  if(!Array.isArray(next.accounts))next.accounts=[];
  const headers=rows[0],idx=name=>headers.indexOf(name),get=(row,name)=>idx(name)>=0?(row[idx(name)]||''):'';
@@ -328,11 +343,12 @@ function parseTemplateCSV(text){
   const mode=get(row,'Verwendung');if(mode)item.accountMode=['saving','Sparen / Investieren'].includes(mode)?'saving':'expense';
   if(get(row,'Zahlungsart'))item.accountMethod=get(row,'Zahlungsart');
   if(get(row,'Übertragstag'))item.transferDay=day(get(row,'Übertragstag'));
+  if(get(row,'Abweichende Zahlungsart'))item.expenseMethod=get(row,'Abweichende Zahlungsart');
   const details=get(row,'Details');if(details){const d=JSON.parse(details);if(typeof d.expenseMethod==='string'&&d.expenseMethod)item.expenseMethod=d.expenseMethod;}
   next.groups[index].items.push(item);
  }
  if(!valid(next))throw Error('Vorlage');
- return {format:'finanztaler-budget',version:1,state:next,view:snapshot?.view||{}};
+ return {format:'finanztaler-budget',version:1,state:next,view};
 }
 
 $('importPlan').onclick=()=>$('templateFile').click();
