@@ -82,3 +82,9 @@
  .account-flow .sankey-scroll,.account-flow .sankey-scroll.items-view{height:360px;max-height:none;overflow:visible;scrollbar-gutter:auto}
  .account-flow .sankey-scroll svg,.account-flow .sankey-scroll.items-view svg,.account-flow .sankey-scroll:not(.items-view) svg{width:100%;height:360px;min-width:0;max-height:360px;object-fit:contain}
 }
+
+/* Slightly larger complete chart, without an internal scrollbar. */
+@media(min-width:651px){
+ .account-flow .sankey-scroll,.account-flow .sankey-scroll.items-view{height:440px;max-height:none;overflow:visible}
+ .account-flow .sankey-scroll svg,.account-flow .sankey-scroll.items-view svg,.account-flow .sankey-scroll:not(.items-view) svg{width:100%;height:440px;max-height:440px;min-width:0}
+}
