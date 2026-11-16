@@ -19,7 +19,17 @@ $('reset').onclick=()=>{if(confirm('Aktuelle Eingaben auf das Beispiel zurückse
 $('print').onclick=()=>window.print();
 function downloadPlanFile(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function planSnapshot(){return {format:'finanztaler-budget',version:1,state:JSON.parse(JSON.stringify(state)),view:{opened:[...opened],cashflow:cfActive,cashExpanded:!$('cashContent').hidden,month:$('flowMonth').value,account:$('flowAccount').value,level:$('sankeyLevel').value,unit:$('accountFlow').dataset.unit||'eur',selected:$('accountFlow').dataset.selected||'-1',accountsOpen:$('accountsDetails').open}};}
-$('csv').onclick=()=>{const rows=[['Kategorie','Position','Betrag','Zeitraum','Monatlich','Zahlungstag','Fälligkeitsmonat']];if(state.accountsEnabled)rows[0].push('Konto','Verwendung','Zahlungsart','Übertragstag');state.groups.forEach((g,i)=>g.items.forEach(x=>{const row=[g.name,x.name,x.amount,x.period==='year'?'Jährlich':'Monatlich',monthly(x),day(x.day||1),x.period==='year'?(x.dueMonth||1):''];if(state.accountsEnabled){const a=assignmentFor(x,i);row.push(accountName(a.id),a.mode==='saving'?'Sparen / Investieren':'Ausgabe',a.method,a.id==='giro'?'':a.transferDay)}rows.push(row)}));rows.push(['','Einnahmen',num(state.income)+num(state.extra)+extraSum(),'Monatlich','']);rows.push(['#FINANZTALER-PLAN-V1',JSON.stringify(planSnapshot())]);const blob=new Blob(['\uFEFF'+rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='finanztaler-budget.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+function buildPlanCSV(){
+ const rows=[['Kategorie','Position','Betrag','Zeitraum','Zahlungstag','Fälligkeitsmonat','Konto','Verwendung','Zahlungsart','Übertragstag','Typ','Details']];
+ rows.push(['Einnahmen','Nettogehalt',state.income,'Monatlich',state.incomeDay||28,'','','','','','Gehalt','']);
+ (state.extraIncomes||[]).forEach(x=>rows.push(['Einnahmen',x.name,x.amount,'Monatlich',x.day||1,'','','','','','Weitere Einnahme','']));
+ if(state.extra)rows.push(['Einnahmen','Weitere Einnahme',state.extra,'Monatlich',state.extraDay||1,'','','','','','Weitere Einnahme','']);
+ state.groups.forEach((g,i)=>g.items.forEach(x=>{const assignment=assignmentFor(x,i);rows.push([g.name,x.name,x.amount,x.period==='year'?'Jährlich':'Monatlich',x.day||1,x.dueMonth||1,accountName(assignment.id),assignment.mode,assignment.method,assignment.transferDay,'Ausgabe',JSON.stringify({expenseMethod:x.expenseMethod||''})]);}));
+ const snapshot=planSnapshot();delete snapshot.state.groups;delete snapshot.state.income;delete snapshot.state.extra;delete snapshot.state.extraIncomes;
+ rows.push(['#FINANZTALER-EINSTELLUNGEN-V2',JSON.stringify(snapshot)]);
+ return '\uFEFF'+rows.map(row=>row.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(';')).join('\r\n');
+}
+$('csv').onclick=()=>downloadPlanFile('finanztaler-budget.csv',buildPlanCSV(),'text/csv;charset=utf-8');
 function sync(){
  normalizeAccounts();
  state.extraIncomes=Array.isArray(state.extraIncomes)?state.extraIncomes:[];
@@ -282,24 +292,49 @@ function parseTemplateCSV(text){
  if(quoted)throw Error('CSV');
  row.push(field);if(row.some(x=>x.trim()))rows.push(row);
  if(rows.length<2||rows[0][0]!=='Kategorie'||rows[0][1]!=='Position')throw Error('CSV');
- const snapshot=rows.find(row=>row[0]==='#FINANZTALER-PLAN-V1');if(snapshot)return JSON.parse(snapshot[1]);
- const next=seed();next.groups.forEach(g=>g.items=[]);let hasIncome=false;const mappings=new Map();
- const value=x=>{const n=Number(String(x).trim().replace(',','.'));if(!Number.isFinite(n)||n<0)throw Error('Betrag');return n;};
+ const settings=rows.find(row=>['#FINANZTALER-EINSTELLUNGEN-V2','#FINANZTALER-PLAN-V1'].includes(row[0]));
+ const snapshot=settings?JSON.parse(settings[1]):null;
+ const next=snapshot?JSON.parse(JSON.stringify(snapshot.state)):seed();
+ next.groups=seed().groups.map(g=>({...g,items:[]}));next.income=0;next.extra=0;next.extraIncomes=[];
+ if(!Array.isArray(next.accounts))next.accounts=[];
+ const headers=rows[0],idx=name=>headers.indexOf(name),get=(row,name)=>idx(name)>=0?(row[idx(name)]||''):'';
+ const value=x=>{let text=String(x).trim().replace(/\s|€/g,'');if(text.includes(','))text=text.replace(/\./g,'').replace(',','.');const n=Number(text);if(!text||!Number.isFinite(n)||n<0)throw Error('Betrag');return n;};
+ const mappings=new Map();let salaryFound=false;
  for(const row of rows.slice(1)){
-  if(row[0]===''&&row[1]==='Einnahmen'){next.income=value(row[2]);hasIncome=true;continue;}
-  let group=next.groups.find(g=>g.name===row[0]);
-  if(!group){
-   if(!mappings.has(row[0])){
-    const answer=prompt('Unbekannte Kategorie: '+row[0]+'\nBitte zuordnen: 1 Grundbedarf · 2 Freizeit · 3 Sparen · 4 Puffer');
-    if(answer===null)throw Error('Abgebrochen');
-    const index=Number(answer)-1;if(!Number.isInteger(index)||index<0||index>3)throw Error('Kategorie');mappings.set(row[0],index);
-   }group=next.groups[mappings.get(row[0])];
+  if(row[0].startsWith('#'))continue;
+  const category=get(row,'Kategorie'),name=get(row,'Position'),amount=value(get(row,'Betrag')),period=get(row,'Zeitraum'),type=get(row,'Typ');
+  if(!['Monatlich','Jährlich'].includes(period))throw Error('Zeitraum');
+  if(category==='Einnahmen'||(!category&&name==='Einnahmen')){
+   if(period!=='Monatlich')throw Error('Einnahmen monatlich');
+   if(type==='Gehalt'||(!category&&name==='Einnahmen')){if(salaryFound)throw Error('Mehrfaches Gehalt');next.income=amount;next.incomeDay=day(get(row,'Zahlungstag')||28);salaryFound=true;}
+   else next.extraIncomes.push({name,amount,day:day(get(row,'Zahlungstag')||1)});
+   continue;
   }
-  if(!['Jährlich','Monatlich'].includes(row[3]))throw Error('Zeitraum');
-  group.items.push({name:row[1],amount:value(row[2]),period:row[3]==='Jährlich'?'year':'month',day:day(row[5]||1),dueMonth:Math.max(1,Math.min(12,Number(row[6])||1))});
+  let index=next.groups.findIndex(g=>g.name===category);
+  if(index<0){
+   if(!mappings.has(category)){
+    const answer=prompt('Unbekannte Kategorie: '+category+'\nBitte zuordnen: 1 Grundbedarf · 2 Freizeit · 3 Sparen · 4 Puffer');
+    if(answer===null)throw Error('Abgebrochen');const n=Number(answer)-1;
+    if(!Number.isInteger(n)||n<0||n>3)throw Error('Kategorie');mappings.set(category,n);
+   }index=mappings.get(category);
+  }
+  const item={name,amount,period:period==='Jährlich'?'year':'month',day:day(get(row,'Zahlungstag')||1),dueMonth:Math.max(1,Math.min(12,Number(get(row,'Fälligkeitsmonat'))||1))};
+  const accountNameCSV=get(row,'Konto');
+  if(accountNameCSV){
+   let account=next.accounts.find(a=>a.name===accountNameCSV);
+   if(!account){account={id:'csv-'+next.accounts.length,name:accountNameCSV,type:'other',opening:0};next.accounts.push(account);}
+   item.accountId=account.id;
+  }
+  const mode=get(row,'Verwendung');if(mode)item.accountMode=['saving','Sparen / Investieren'].includes(mode)?'saving':'expense';
+  if(get(row,'Zahlungsart'))item.accountMethod=get(row,'Zahlungsart');
+  if(get(row,'Übertragstag'))item.transferDay=day(get(row,'Übertragstag'));
+  const details=get(row,'Details');if(details){const d=JSON.parse(details);if(typeof d.expenseMethod==='string'&&d.expenseMethod)item.expenseMethod=d.expenseMethod;}
+  next.groups[index].items.push(item);
  }
- if(!hasIncome||!valid(next))throw Error('Vorlage');return next;
+ if(!valid(next))throw Error('Vorlage');
+ return {format:'finanztaler-budget',version:1,state:next,view:snapshot?.view||{}};
 }
+
 $('importPlan').onclick=()=>$('templateFile').click();
 $('templateFile').addEventListener('change',async e=>{
  const file=e.target.files[0];if(!file)return;
