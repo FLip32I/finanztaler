@@ -88,3 +88,5 @@
  .account-flow .sankey-scroll,.account-flow .sankey-scroll.items-view{height:440px;max-height:none;overflow:visible}
  .account-flow .sankey-scroll svg,.account-flow .sankey-scroll.items-view svg,.account-flow .sankey-scroll:not(.items-view) svg{width:100%;height:440px;max-height:440px;min-width:0}
 }
+
+.bp-back{display:flex;margin:22px 0 0;padding:0 4px}.bp .bp-back a{font-size:.95rem;font-weight:750;color:#1b6946;text-decoration:none}.bp .bp-back a:hover{text-decoration:underline}.bp .bp-back a:focus-visible{outline:3px solid #d8b247;outline-offset:4px}

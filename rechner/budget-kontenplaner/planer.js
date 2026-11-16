@@ -1,5 +1,4 @@
 'use strict';
-const KEY='finanztaler-budget-v2';
 const seed=()=>({income:2500,extra:0,groups:[{name:'Wohnen & Grundbedarf',items:[{name:'Miete & Nebenkosten',amount:950,period:'month'},{name:'Lebensmittel',amount:350,period:'month'},{name:'Mobilität',amount:150,period:'month',day:15}]},{name:'Konsum & Freizeit',items:[{name:'Freizeit & Hobbys',amount:150,period:'month'},{name:'Abonnements',amount:30,period:'month',day:3}]},{name:'Sparen & Rücklagen',items:[{name:'Sparrate',amount:400,period:'month'},{name:'Notgroschen',amount:100,period:'month'}]},{name:'Puffer & Sonstiges',items:[{name:'Ungeplante Ausgaben',amount:100,period:'month',day:15}]}]});
 let state=seed();let opened=new Set([0]);
 const $=id=>document.getElementById(id), euro=n=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(n), num=v=>Math.max(0,Number(v)||0), esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -16,8 +15,6 @@ document.addEventListener('input',e=>{const el=e.target;if(el.dataset.key){state
 document.addEventListener('change',e=>{if(e.target.dataset.field==='dueMonth'){const el=e.target;state.groups[+el.dataset.g].items[+el.dataset.j].dueMonth=+el.value;renderCashflow()}if(e.target.dataset.field==='period'){const el=e.target;state.groups[+el.dataset.g].items[+el.dataset.j].period=el.value;renderSummary()}});
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.toggle!==undefined){const i=+b.dataset.toggle;opened.has(i)?opened.delete(i):opened.add(i);renderGroups()}if(b.dataset.add!==undefined){const i=+b.dataset.add;state.groups[i].items.push({name:'Neue Position',amount:0,period:'month',day:1});opened.add(i);render()}if(b.dataset.delete){const [i,j]=b.dataset.delete.split(':').map(Number);state.groups[i].items.splice(j,1);render()}});
 function valid(s){return s&&Number.isFinite(s.income)&&Number.isFinite(s.extra)&&Array.isArray(s.groups)&&s.groups.length===4&&s.groups.every(g=>Array.isArray(g.items)&&g.items.length<200&&g.items.every(x=>typeof x.name==='string'&&Number.isFinite(x.amount)&&x.amount>=0&&['month','year'].includes(x.period)))}
-$('save').onclick=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));$('notice').textContent='Dein Plan wurde lokal in diesem Browser gespeichert.'}catch{$('notice').textContent='Speichern ist hier nicht verfügbar.'}};
-$('load').onclick=()=>{try{const s=JSON.parse(localStorage.getItem(KEY));if(!valid(s))throw Error();state=s;sync();$('notice').textContent='Gespeicherter Plan geladen.'}catch{$('notice').textContent='Kein gültiger gespeicherter Plan gefunden.'}};
 $('reset').onclick=()=>{if(confirm('Aktuelle Eingaben auf das Beispiel zurücksetzen?')){state=seed();opened=new Set([0]);sync();$('notice').textContent='Beispiel wiederhergestellt.'}};
 $('print').onclick=()=>window.print();
 $('csv').onclick=()=>{const rows=[['Kategorie','Position','Betrag','Zeitraum','Monatlich','Zahlungstag','Fälligkeitsmonat']];if(state.accountsEnabled)rows[0].push('Konto','Verwendung','Zahlungsart','Übertragstag');state.groups.forEach((g,i)=>g.items.forEach(x=>{const row=[g.name,x.name,x.amount,x.period==='year'?'Jährlich':'Monatlich',monthly(x),day(x.day||1),x.period==='year'?(x.dueMonth||1):''];if(state.accountsEnabled){const a=assignmentFor(x,i);row.push(accountName(a.id),a.mode==='saving'?'Sparen / Investieren':'Ausgabe',a.method,a.id==='giro'?'':a.transferDay)}rows.push(row)}));rows.push(['','Einnahmen',num(state.income)+num(state.extra)+extraSum(),'Monatlich','']);const blob=new Blob(['\uFEFF'+rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='finanztaler-budget.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
@@ -269,3 +266,40 @@ document.addEventListener('change',e=>{const el=e.target;if(el.dataset.editTrans
  }
  history.replaceState(null, '', location.pathname + location.search);
 })();
+
+function parseTemplateCSV(text){
+ const rows=[];let row=[],field='',quoted=false;
+ text=text.replace(/^\uFEFF/,'');
+ for(let i=0;i<text.length;i++){
+  const c=text[i];
+  if(c==='"'){if(quoted&&text[i+1]==='"'){field+='"';i++;}else quoted=!quoted;}
+  else if(c===';'&&!quoted){row.push(field);field='';}
+  else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(field);if(row.some(x=>x.trim()))rows.push(row);row=[];field='';}
+  else field+=c;
+ }
+ if(quoted)throw Error('CSV');
+ row.push(field);if(row.some(x=>x.trim()))rows.push(row);
+ if(rows.length<2||rows[0][0]!=='Kategorie'||rows[0][1]!=='Position')throw Error('CSV');
+ const next=seed();next.groups.forEach(g=>g.items=[]);let hasIncome=false;
+ const value=x=>{const n=Number(String(x).trim().replace(',','.'));if(!Number.isFinite(n)||n<0)throw Error('Betrag');return n;};
+ for(const row of rows.slice(1)){
+  if(row[0]===''&&row[1]==='Einnahmen'){next.income=value(row[2]);hasIncome=true;continue;}
+  const group=next.groups.find(g=>g.name===row[0]);if(!group)throw Error('Kategorie');
+  if(!['Jährlich','Monatlich'].includes(row[3]))throw Error('Zeitraum');
+  group.items.push({name:row[1],amount:value(row[2]),period:row[3]==='Jährlich'?'year':'month',day:day(row[5]||1),dueMonth:Math.max(1,Math.min(12,Number(row[6])||1))});
+ }
+ if(!hasIncome||!valid(next))throw Error('Vorlage');return next;
+}
+$('importPlan').onclick=()=>$('templateFile').click();
+$('templateFile').addEventListener('change',async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{
+  if(file.size>2000000)throw Error('Größe');
+  const text=await file.text();const next=file.name.toLowerCase().endsWith('.json')?JSON.parse(text):parseTemplateCSV(text);
+  if(!valid(next))throw Error('Vorlage');
+  if(!confirm('Aktuelle Eingaben durch die Vorlage ersetzen?'))return;
+  state=next;opened=new Set([0]);sync();
+  $('notice').textContent='Vorlage übernommen. Prüfe Beträge, Zahlungstage und Kontenzuordnung.';
+ }catch{$('notice').textContent='Vorlage konnte nicht gelesen werden. Nutze einen CSV-Export dieses Planers oder eine passende JSON-Datei.';}
+ finally{e.target.value='';}
+});
