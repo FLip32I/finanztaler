@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10342f">
+  <meta name="description" content="Kurse für Bitcoin, Ethereum, Gold und Silber auf einen Blick.">
+  <title>Marktdaten &amp; Indikatoren | Finanztaler</title>
+  <link rel="canonical" href="https://www.finanztaler.de/investieren/marktindikatoren/">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/script.js" defer></script>
+  <style>
+    .market-page { padding-block: 2rem 4rem; }
+    .market-intro { max-width: 46rem; }
+    .market-button {
+      background: #11603d;
+      border: 0;
+      border-radius: 12px;
+      color: white;
+      font: inherit;
+      font-weight: 700;
+      padding: .8rem 1.15rem;
+      cursor: pointer;
+    }
+    .market-button:focus-visible { outline: 2px solid #11603d; outline-offset: 4px; }
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 23rem), 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .market-card {
+      min-width: 0;
+      min-height: 7rem;
+      padding: 1rem;
+      border: 1px solid #d9e7dc;
+      border-radius: 18px;
+      background: white;
+    }
+    .market-card h2 { margin-top: 0; font-size: 1.15rem; }
+    .market-page [hidden] { display: none; }
+  </style>
+</head>
+<body data-root="../../" data-page="investieren/">
+  <div id="site-header"></div>
+  <main class="container market-page">
+    <a href="../">← Zurück zur Übersicht Investieren</a>
+    <h1>Marktdaten &amp; Indikatoren</h1>
+    <p class="market-intro">Bitcoin und Ethereum in EUR, Gold und Silber in USD je Feinunze. Die Kurse können je nach Datenfeed verzögert sein.</p>
+    <p class="market-intro" id="market-provider">Beim Laden der Kursanzeigen stellt dein Browser eine Verbindung zu TradingView her. Dabei werden Verbindungsdaten wie deine IP-Adresse übertragen. <a href="https://www.tradingview.com/privacy-policy/" target="_blank" rel="noopener noreferrer">Datenschutzhinweise von TradingView</a></p>
+    <button class="market-button" type="button" id="load-quotes" aria-describedby="market-provider" aria-controls="market-quotes" hidden>Aktuelle Werte laden</button>
+    <p id="market-status" role="status"></p>
+    <noscript><p>Aktiviere JavaScript, um die Kursanzeigen zu laden.</p></noscript>
+    <div class="market-grid" id="market-quotes">
+      <section class="market-card" data-symbol="COINBASE:BTCEUR">
+        <h2>Bitcoin</h2>
+        <div class="market-widget"></div>
+        <a href="https://www.tradingview.com/symbols/COINBASE-BTCEUR/" target="_blank" rel="noopener noreferrer nofollow">Bitcoin-Kurs bei TradingView</a>
+      </section>
+      <section class="market-card" data-symbol="COINBASE:ETHEUR">
+        <h2>Ethereum</h2>
+        <div class="market-widget"></div>
+        <a href="https://www.tradingview.com/symbols/COINBASE-ETHEUR/" target="_blank" rel="noopener noreferrer nofollow">Ethereum-Kurs bei TradingView</a>
+      </section>
+      <section class="market-card" data-symbol="OANDA:XAUUSD">
+        <h2>Gold</h2>
+        <div class="market-widget"></div>
+        <a href="https://www.tradingview.com/symbols/OANDA-XAUUSD/" target="_blank" rel="noopener noreferrer nofollow">Goldkurs bei TradingView</a>
+      </section>
+      <section class="market-card" data-symbol="OANDA:XAGUSD">
+        <h2>Silber</h2>
+        <div class="market-widget"></div>
+        <a href="https://www.tradingview.com/symbols/OANDA-XAGUSD/" target="_blank" rel="noopener noreferrer nofollow">Silberkurs bei TradingView</a>
+      </section>
+    </div>
+  </main>
+  <div id="site-footer"></div>
+  <script>
+    const loadQuotes = document.querySelector('#load-quotes');
+    const marketStatus = document.querySelector('#market-status');
+    const quoteCards = document.querySelectorAll('#market-quotes [data-symbol]');
+
+    loadQuotes.hidden = false;
+    loadQuotes.addEventListener('click', () => {
+      marketStatus.textContent = '';
+
+      quoteCards.forEach((card) => {
+        const container = document.createElement('div');
+        container.className = 'tradingview-widget-container';
+
+        const widget = document.createElement('div');
+        widget.className = 'tradingview-widget-container__widget';
+
+        const credit = document.createElement('div');
+        credit.className = 'tradingview-widget-copyright';
+        const sourceLink = card.querySelector('a').cloneNode(true);
+        sourceLink.textContent = card.querySelector('h2').textContent;
+        const trademark = document.createElement('span');
+        trademark.className = 'trademark';
+        trademark.textContent = ' von TradingView';
+        credit.append(sourceLink, trademark);
+
+        const embed = document.createElement('script');
+        embed.src = 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js';
+        embed.async = true;
+        embed.textContent = JSON.stringify({
+          symbol: card.dataset.symbol,
+          colorTheme: 'light',
+          isTransparent: true,
+          locale: 'de',
+          width: '100%'
+        });
+        embed.addEventListener('error', () => {
+          if (container.isConnected) {
+            marketStatus.textContent = 'Eine Kursanzeige konnte nicht geladen werden. Die Quellenlinks bleiben verfügbar.';
+          }
+        });
+
+        card.querySelector('.market-widget').replaceChildren(container);
+        container.append(widget, credit, embed);
+      });
+    });
+  </script>
+</body>
+</html>
