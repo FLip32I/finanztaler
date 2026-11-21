@@ -35,7 +35,7 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 .sc-help{position:relative;display:inline-flex;justify-content:center;align-items:center;width:19px;height:19px;border-radius:50%;background:#eef4f0;border:1px solid #c7d9cd;color:#426a52;font-size:12px;cursor:help}
 .sc-help:hover:after,.sc-help:focus-visible:after{content:attr(data-tip);position:absolute;left:0;bottom:25px;z-index:9;width:min(255px,70vw);padding:10px;background:#10342f;color:#fff;border-radius:8px;font-size:12px;line-height:1.45;font-weight:400;box-shadow:0 8px 18px #0002}
 .sc-check{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700;color:#143b32}
-.sc-check input{width:19px;height:19px;accent-color:#28694b}.sc-tax{padding:14px;background:#f4f8f3;border-radius:10px;margin-bottom:20px}
+.sc-tax .sc-check{min-height:44px;margin:0}.sc-tax .sc-field{padding-bottom:12px}.sc-check input{width:19px;height:19px;accent-color:#28694b}.sc-tax{padding:0 14px;background:#f5f9f4;border-radius:12px;margin-bottom:12px}
 .sc-tax-note{margin:9px 0 0;font-size:12px;color:#60766b;line-height:1.5}
 .sc-btn{width:100%;border:0;border-radius:10px;padding:15px;background:#10342f;color:#fff;font:inherit;font-weight:800;cursor:pointer}
 .sc-btn:hover{background:#266347}.sc-error{min-height:20px;color:#a52b2b;font-size:13px;margin:10px 0 0}
@@ -85,8 +85,8 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <div class="sc-field"><label for="sc-interest-interval">Zinsintervall <span class="sc-help" tabindex="0" data-tip="Wie oft Zinsen gutgeschrieben und mitverzinst werden.">?</span></label><div class="sc-box"><select id="sc-interest-interval"><option value="1">monatlich</option><option value="3">vierteljährlich</option><option value="6">halbjährlich</option><option value="12" selected>jährlich</option></select></div></div>
 <div class="sc-field" id="sc-rate-wrap"><label for="sc-rate">Zinssatz p. a. <span class="sc-help" tabindex="0" data-tip="Angenommener nominaler Jahreszinssatz vor Steuern.">?</span></label><div class="sc-box"><input id="sc-rate" inputmode="decimal" value="2,25"><span class="sc-unit">%</span></div></div>
 <div class="sc-field" id="sc-years-wrap"><label for="sc-years">Laufzeit <span class="sc-help" tabindex="0" data-tip="Laufzeit in Jahren; bei der Berechnung der Laufzeit wird auf volle Monate aufgerundet.">?</span></label><div class="sc-box"><input id="sc-years" inputmode="decimal" value="10"><span class="sc-unit">Jahre</span></div></div>
-<div class="sc-tax"><label class="sc-check" for="sc-tax"><span>Steuern mitberechnen?</span><input type="checkbox" id="sc-tax"></label><p class="sc-tax-note">Optional: vereinfachte deutsche Kapitalertragsteuer von 26,375 % auf gutgeschriebene Zinsen (inkl. Solidaritätszuschlag). Ohne Freibetrag, Kirchensteuer und Verlustverrechnung.</p></div>
-<div class="sc-tax"><label class="sc-check" for="sc-inflation"><span>Inflationsbereinigung anzeigen?</span><input type="checkbox" id="sc-inflation"></label><div class="sc-inflation-fields" id="sc-inflation-fields" hidden><div class="sc-field" style="margin:14px 0 0"><label for="sc-inflation-rate">Angenommene Inflation p. a. <span class="sc-help" tabindex="0" data-tip="Die angenommene jährliche Teuerungsrate. Sie verändert nicht die Sparberechnung, sondern nur die Kaufkraft des Endkapitals.">?</span></label><div class="sc-box"><input id="sc-inflation-rate" inputmode="decimal" value="2,00"><span class="sc-unit">%</span></div></div></div><p class="sc-tax-note">Optional: Zeigt, wie viel das Endkapital nach der Laufzeit in heutiger Kaufkraft wert wäre.</p></div>
+<div class="sc-tax"><label class="sc-check" for="sc-tax"><input type="checkbox" id="sc-tax"> Steuern berücksichtigen</label><div class="sc-field" id="sc-tax-fields" hidden style="margin:12px 0 0"><label for="sc-tax-rate">Steuersatz</label><div class="sc-box"><input id="sc-tax-rate" inputmode="decimal" value="26,375"><span class="sc-unit">%</span></div><p class="sc-tax-note">Standardwert: vereinfachte deutsche Kapitalertragsteuer von 26,375 % auf gutgeschriebene Zinsen (inkl. Solidaritätszuschlag). Ohne Freibetrag, Kirchensteuer und Verlustverrechnung.</p></div></div>
+<div class="sc-tax"><label class="sc-check" for="sc-inflation"><input type="checkbox" id="sc-inflation"> Inflation berücksichtigen</label><div class="sc-inflation-fields" id="sc-inflation-fields" hidden><div class="sc-field" style="margin:14px 0 0"><label for="sc-inflation-rate">Angenommene Inflation p. a. <span class="sc-help" tabindex="0" data-tip="Die angenommene jährliche Teuerungsrate. Sie verändert nicht die Sparberechnung, sondern nur die Kaufkraft des Endkapitals.">?</span></label><div class="sc-box"><input id="sc-inflation-rate" inputmode="decimal" value="2,00"><span class="sc-unit">%</span></div></div><p class="sc-tax-note">Zeigt, wie viel das Endkapital nach der Laufzeit in heutiger Kaufkraft wert wäre.</p></div></div>
 <button class="sc-btn" type="submit">Berechnen →</button><p class="sc-error" id="sc-error" role="alert" aria-live="polite"></p>
 </form></div>
 <div class="sc-card" aria-live="polite">
@@ -97,7 +97,7 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <div class="sc-legend"><span><i class="sc-dot"></i>Einzahlungen</span><span><i class="sc-dot green"></i>Vermögen</span></div>
 <svg id="sc-chart" class="sc-chart" viewBox="0 0 560 260" role="img" aria-label="Vermögensentwicklung nach Jahren"></svg>
 <details class="sc-details"><summary>Entwicklung nach Jahren anzeigen</summary><div class="sc-table-wrap"><table class="sc-table"><thead><tr><th>Jahr</th><th>Einzahlungen</th><th>Erträge</th><th>Vermögen</th></tr></thead><tbody id="sc-rows"></tbody></table></div></details>
-<p class="sc-note">Modellrechnung mit konstantem Zinssatz, Einzahlungen am Intervallende und Zinsgutschrift zum Intervallende. Zinsen werden unterjährig einfach abgegrenzt und bei Gutschrift kapitalisiert. Keine Gebühren oder Inflation. Keine Renditegarantie.</p>
+<p class="sc-note">Die Modellrechnung verwendet einen konstanten Zinssatz. Einzahlungen und Zinsgutschriften erfolgen jeweils am Ende des gewählten Intervalls. Unterjährig laufen Zinsen bis zur Gutschrift ohne Zinseszins auf. Ab der Gutschrift werden sie mitverzinst. Steuern und Inflation werden je nach Auswahl berücksichtigt. Gebühren bleiben unberücksichtigt. Keine Renditegarantie.</p>
 </div></div><p class="sc-note" style="margin-top:22px">← <a href="../">Zurück zur Rechnerübersicht</a></p></section>
 </main><div id="site-footer"></div>
 <script>
@@ -113,14 +113,14 @@ let capital=start,accrued=0,paid=start,rows=[{year:0,paid,total:start}],netRate=
 for(let m=1;m<=months;m++){
 accrued+=capital*netRate;
 if(m%payInterval===0){capital+=payment;paid+=payment}
-if(m%interestInterval===0){capital+=accrued*(tax?0.73625:1);accrued=0}
+if(m%interestInterval===0){capital+=accrued*(1-tax/100);accrued=0}
 if(withRows&&(m%12===0||m===months)){
-let total=capital+accrued*(tax?0.73625:1);
+let total=capital+accrued*(1-tax/100);
 rows.push({year:m/12,paid,total});
 }
 if(!Number.isFinite(capital)||capital>1e20)return {total:Infinity,paid,rows};
 }
-return {total:capital+accrued*(tax?0.73625:1),paid,rows};
+return {total:capital+accrued*(1-tax/100),paid,rows};
 }
 function findMinimum(target,fn,lo,hi,integer=false){
 if(fn(lo)>=target)return lo;
@@ -149,8 +149,9 @@ const mode=$('sc-mode').value,inputs={
 start:parse($('sc-start').value),payment:parse($('sc-payment').value),
 rate:parse($('sc-rate').value),years:parse($('sc-years').value),goal:parse($('sc-goal').value)
 };
-const pI=Number($('sc-pay-interval').value),iI=Number($('sc-interest-interval').value),tax=$('sc-tax').checked;
+const pI=Number($('sc-pay-interval').value),iI=Number($('sc-interest-interval').value),tax=$('sc-tax').checked?parse($('sc-tax-rate').value):0;
 const err=$('sc-error');err.textContent='';
+if(!Number.isFinite(tax)||tax<0||tax>100){err.textContent='Bitte einen Steuersatz zwischen 0 und 100 % eingeben.';return;}
 const inflationOn=$('sc-inflation').checked, inflationRate=parse($('sc-inflation-rate').value);
 if(inflationOn&&(!Number.isFinite(inflationRate)||inflationRate<=-100||inflationRate>100)){err.textContent='Bitte eine gültige Inflationsrate zwischen -100 % und 100 % eingeben.';return;}
 for(const [k,max] of [['start',1e12],['payment',1e10],['rate',100],['years',100],['goal',1e14]]){
@@ -192,6 +193,8 @@ chart(result.rows);
 }
 $('sc-mode').addEventListener('change',()=>{updateMode();calculate()});
 $('sc-form').addEventListener('submit',calculate);
+$('sc-tax').addEventListener('change',()=>{$('sc-tax-fields').hidden=!$('sc-tax').checked;calculate()});
+$('sc-tax-rate').addEventListener('change',calculate);
 $('sc-inflation').addEventListener('change',()=>{$('sc-inflation-fields').hidden=!$('sc-inflation').checked;calculate()});
 $('sc-inflation-rate').addEventListener('change',calculate);
 updateMode();calculate();
