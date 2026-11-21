@@ -14,17 +14,26 @@ const thoughts = [
   'Manchmal beginnt Mut mit einer ehrlichen Frage.',
   'Du darfst deine Meinung ändern, wenn du etwas dazulernst.'
 ];
-const wheels = document.querySelector('.wheels');
+const machine = document.querySelector('.machine');
 const output = document.querySelector('#thought');
 let remaining = [];
 let previous;
-document.querySelector('#pull').addEventListener('click', () => {
+let drawing = false;
+
+function draw() {
+  if (drawing) return;
+  drawing = true;
   if (!remaining.length) remaining = [...thoughts];
   const choices = remaining.filter(thought => thought !== previous);
   previous = choices[Math.floor(Math.random() * choices.length)];
   remaining.splice(remaining.indexOf(previous), 1);
-  output.textContent = previous;
-  wheels.classList.remove('spin');
-  void wheels.offsetWidth;
-  wheels.classList.add('spin');
-});
+  machine.classList.add('spinning');
+  const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 720;
+  window.setTimeout(() => {
+    output.textContent = '„' + previous + '“';
+    machine.classList.remove('spinning');
+    drawing = false;
+  }, duration);
+}
+
+machine.querySelectorAll('button').forEach(button => button.addEventListener('click', draw));

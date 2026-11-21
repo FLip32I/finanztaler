@@ -1,0 +1,22 @@
+.gauner {padding: 2rem 0 4rem; background: #fbf3e9;}
+.stage {max-width: 657px; margin: 2rem auto 0; text-align: center;}
+.stage h1 {margin: 0; color: #103528; font: bold clamp(2.6rem, 8vw, 4rem)/1.08 Georgia, serif;}
+.stage > p {margin: .75rem 0; color: #485044;}
+.machine {position: relative; container-type: inline-size; aspect-ratio: 657 / 416; background: url("automat.webp") center / 100% 100% no-repeat; mask-image: linear-gradient(to right,transparent,#000 5%,#000 95%,transparent), linear-gradient(to bottom,transparent,#000 2%,#000 94%,transparent); mask-composite: intersect;}
+.machine button {position: absolute; padding: 0; cursor: pointer; background: transparent; border: 0; touch-action: manipulation;}
+.machine button:focus-visible {outline: 3px solid #19619a; outline-offset: 2px;}
+.lever {left: 80.2%; top: 4%; width: 13%; height: 47%; border-radius: 35%;}
+.draw {left: 19%; top: 74.5%; width: 51%; height: 14%; color: #ffda87; font: bold 4.7cqw Georgia, serif; border-radius: 4rem; text-shadow: 0 1px 2px #142319;}
+.draw:active {transform: translateY(1px);}
+#thought {position: absolute; left: 14%; top: 52.4%; width: 59%; height: 17%; display: grid; place-items: center; color: #212e1c; font: italic bold clamp(14px,3.5cqw,23px)/1.13 Georgia, serif; text-wrap: balance;}
+.reels {position:absolute; display:flex; left:16.7%; top:17.1%; width:55.5%; height:30%; pointer-events:none;}
+.reels i {flex:1; border-radius:13%; opacity:0; background:linear-gradient(#926e44,#ffefcf 25%,#f8e9d4 74%,#a48869); overflow:hidden;}
+.reels i::after {content:'☼ ♡ ✧ ☼'; color:#a97924; display:block; font: 10cqw/1 Georgia,serif; width:100%; overflow-wrap:anywhere;}
+.spinning .reels i {animation: reel .48s both;}
+.spinning .reels i::after {animation: roll .15s linear infinite;}
+.spinning .reels i:nth-child(2) {animation-duration:.59s;}
+.spinning .reels i:nth-child(3) {animation-duration:.7s;}
+@keyframes roll {from {transform:translateY(-45%);} to {transform:translateY(0);}}
+@keyframes reel {0%,95% {opacity:1;} 100% {opacity:0;}}
+@media(max-width:390px){#thought {font-size:3.6cqw;}}
+@media(prefers-reduced-motion:reduce){.spinning .reels i,.spinning .reels i::after {animation:none;}}
