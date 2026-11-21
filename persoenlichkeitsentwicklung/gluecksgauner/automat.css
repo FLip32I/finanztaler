@@ -44,3 +44,11 @@
 .slot > h2,.slot > p {box-sizing:border-box;width:76%;margin-left:6.5%;margin-right:17.5%;text-align:center;}
 .slot > h2 {font-size:clamp(1.45rem,3vw,2rem);overflow-wrap:anywhere;text-wrap:balance;}
 .witz .draw {color:#ffda87;}
+
+/* Interior tint layers: keep the casing and the live text unchanged. */
+.reels::before {content:"";position:absolute;inset:0;border-radius:12%;pointer-events:none;z-index:2;}
+.thought::before {content:"";position:absolute;inset:-1px -1.2cqw;border-radius:2cqw;pointer-events:none;z-index:0;}
+.thought .quote-text {position:relative;z-index:1;}
+.mut .reels::before,.mut .thought::before {background:rgba(255,250,205,.22);mix-blend-mode:color;}
+.witz .reels::before,.witz .thought::before {background:rgba(73,65,73,.30);mix-blend-mode:multiply;}
+.witz .thought {color:#201d22;}
