@@ -34,7 +34,7 @@
 /* Only the painted machine changes colour; text keeps its contrast. */
 .witz h2 {color:#653e62;}
 .witz .machine {background:none;isolation:isolate;filter:none;}
-.witz .machine::before {content:"";position:absolute;inset:0;z-index:-1;background:url("automat.webp") center/100% 100% no-repeat;filter:url("farbfilter.svg#violett-gold");}
+.witz .machine::before {content:"";position:absolute;inset:0;z-index:-1;background:url("automat.webp") center/100% 100% no-repeat;filter:url("farbfilter.svg#grau-gold");}
 .witz .draw {color:#f4e0ed;text-shadow:0 1px 2px #352237;}
 .thought {box-sizing:border-box;padding:2px 5px;line-height:1.12;text-wrap:pretty;overflow-wrap:anywhere;}
 .thought .quote-text {display:block;width:100%;max-width:100%;margin:0;}
@@ -45,10 +45,8 @@
 .slot > h2 {font-size:clamp(1.45rem,3vw,2rem);overflow-wrap:anywhere;text-wrap:balance;}
 .witz .draw {color:#ffda87;}
 
-/* Interior tint layers: keep the casing and the live text unchanged. */
-.reels::before {content:"";position:absolute;inset:0;border-radius:12%;pointer-events:none;z-index:2;}
-.thought::before {content:"";position:absolute;inset:-1px -1.2cqw;border-radius:2cqw;pointer-events:none;z-index:0;}
-.thought .quote-text {position:relative;z-index:1;}
-.mut .reels::before,.mut .thought::before {background:rgba(255,250,205,.22);mix-blend-mode:color;}
-.witz .reels::before,.witz .thought::before {background:rgba(73,65,73,.30);mix-blend-mode:multiply;}
-.witz .thought {color:#201d22;}
+/* Gold / cream interiors for both machines; no rectangular tint overlays. */
+.reels::before,.thought::before {content:none!important;}
+.witz h2 {color:#4a4a46;}
+.witz .draw,.mut .draw {color:#ffda87;}
+.witz .thought,.mut .thought {color:#212e1c;background:transparent;}
