@@ -58,7 +58,7 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 .sc-target[hidden],.sc-field[hidden],.sc-inflation-fields[hidden],.sc-stat[hidden]{display:none}
 @media(max-width:880px){.sc-layout{grid-template-columns:1fr}}
 @media(max-width:480px){.sc-card{padding:18px}.sc-stat{padding:12px}}
-.method-help{margin:12px 0}.method-help summary{list-style:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#f4f8f3;color:#143b32;border:1px solid #abc4b8;font-weight:700;cursor:pointer}.method-help summary::-webkit-details-marker{display:none}.method-help summary:focus-visible{outline:2px solid #28694b;outline-offset:2px}
+.method-help{position:relative;display:flex;align-items:center;gap:6px;margin:12px 0;font-size:14px}.method-help button{display:inline-grid;place-items:center;padding:0;width:19px;height:19px;border-radius:50%;background:#eef4f0;border:1px solid #c7d9cd;color:#426a52;font-family:inherit;font-size:12px;font-weight:700;cursor:help}.method-help button:focus-visible{outline:2px solid #376b52;outline-offset:2px}.method-help [role=tooltip]{position:absolute;bottom:calc(100% + 6px);left:min(6rem,10%);z-index:9;box-sizing:border-box;width:min(294px,90%);padding:10px 12px;border-radius:9px;background:#10342f;color:white;font:normal 12px/1.5 sans-serif;box-shadow:0 5px 15px #0002}.method-help [hidden]{display:none}
 </style>
 <script type="text/plain" data-cookieconsent="marketing" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5554850334897452" crossorigin="anonymous"></script><link rel="canonical" href="https://www.finanztaler.de/rechner/sparrechner/">
 
@@ -97,8 +97,9 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <div class="sc-stat"><span>Zinserträge nach ggf. Steuern</span><strong id="sc-earned">–</strong></div></div>
 <div class="sc-legend"><span><i class="sc-dot"></i>Einzahlungen</span><span><i class="sc-dot green"></i>Vermögen</span></div>
 <svg id="sc-chart" class="sc-chart" viewBox="0 0 560 260" role="img" aria-label="Vermögensentwicklung nach Jahren"></svg>
+<div class="method-help"><strong>Modellrechnung</strong> <button type="button" aria-label="Hinweis zur Modellrechnung" aria-describedby="method-tip">?</button><span role="tooltip" id="method-tip" hidden>Die Modellrechnung verwendet einen konstanten Zinssatz. Einzahlungen und Zinsgutschriften erfolgen jeweils am Ende des gewählten Intervalls. Unterjährig laufen Zinsen bis zur Gutschrift ohne Zinseszins auf. Ab der Gutschrift werden sie mitverzinst. Steuern und Inflation werden je nach Auswahl berücksichtigt. Gebühren bleiben unberücksichtigt. Keine Renditegarantie.</span></div>
 <details class="sc-details"><summary>Entwicklung nach Jahren anzeigen</summary><div class="sc-table-wrap"><table class="sc-table"><thead><tr><th>Jahr</th><th>Einzahlungen</th><th>Erträge</th><th>Vermögen</th></tr></thead><tbody id="sc-rows"></tbody></table></div></details>
-<details class="method-help"><summary aria-label="Hinweis zur Modellrechnung">?</summary><p class="sc-note">Die Modellrechnung verwendet einen konstanten Zinssatz. Einzahlungen und Zinsgutschriften erfolgen jeweils am Ende des gewählten Intervalls. Unterjährig laufen Zinsen bis zur Gutschrift ohne Zinseszins auf. Ab der Gutschrift werden sie mitverzinst. Steuern und Inflation werden je nach Auswahl berücksichtigt. Gebühren bleiben unberücksichtigt. Keine Renditegarantie.</p></details>
+
 </div></div><p class="sc-note" style="margin-top:22px">← <a href="../">Zurück zur Rechnerübersicht</a></p></section>
 </main><div id="site-footer"></div>
 <script>
@@ -199,6 +200,20 @@ $('sc-tax-rate').addEventListener('change',calculate);
 $('sc-inflation').addEventListener('change',()=>{$('sc-inflation-fields').hidden=!$('sc-inflation').checked;calculate()});
 $('sc-inflation-rate').addEventListener('change',calculate);
 updateMode();calculate();
+})();
+</script>
+<script>
+(()=>{
+ const box=document.querySelector('.method-help'), button=box.querySelector('button'), tip=box.querySelector('[role=tooltip]');
+ let pinned=false;
+ function close(){pinned=false;tip.hidden=true;}
+ button.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse')tip.hidden=false;});
+ box.addEventListener('pointerleave',()=>{if(!pinned)tip.hidden=true;});
+ button.addEventListener('focus',()=>{tip.hidden=false;});
+ button.addEventListener('blur',close);
+ button.addEventListener('click',()=>{pinned=!pinned;tip.hidden=!pinned;});
+ document.addEventListener('pointerdown',event=>{if(!box.contains(event.target))close();});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape')close();});
 })();
 </script>
 </body></html>
