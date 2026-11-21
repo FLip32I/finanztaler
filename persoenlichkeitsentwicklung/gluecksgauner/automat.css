@@ -34,8 +34,13 @@
 /* Only the painted machine changes colour; text keeps its contrast. */
 .witz h2 {color:#653e62;}
 .witz .machine {background:none;isolation:isolate;filter:none;}
-.witz .machine::before {content:"";position:absolute;inset:0;z-index:-1;background:url("automat.webp") center/100% 100% no-repeat;filter:hue-rotate(145deg) saturate(.65);}
+.witz .machine::before {content:"";position:absolute;inset:0;z-index:-1;background:url("automat.webp") center/100% 100% no-repeat;filter:url("farbfilter.svg#violett-gold");}
 .witz .draw {color:#f4e0ed;text-shadow:0 1px 2px #352237;}
 .thought {box-sizing:border-box;padding:2px 5px;line-height:1.12;text-wrap:pretty;overflow-wrap:anywhere;}
 .thought .quote-text {display:block;width:100%;max-width:100%;margin:0;}
 .machine button:disabled {cursor:wait;}
+
+/* The painted body is left of the lever; centre headings on that body. */
+.slot > h2,.slot > p {box-sizing:border-box;width:76%;margin-left:6.5%;margin-right:17.5%;text-align:center;}
+.slot > h2 {font-size:clamp(1.45rem,3vw,2rem);overflow-wrap:anywhere;text-wrap:balance;}
+.witz .draw {color:#ffda87;}
