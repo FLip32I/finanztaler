@@ -1,0 +1,74 @@
+.gauner {padding: 2rem 0 4rem; background: var(--bg);}
+.stage {max-width: 657px; margin: 2rem auto 0; text-align: center;}
+.stage h1 {margin: 0; color: #103528; font: bold clamp(2.6rem, 8vw, 4rem)/1.08 Georgia, serif;}
+.stage > p {margin: .75rem 0; color: #485044;}
+.machine {position: relative; container-type: inline-size; aspect-ratio: 657 / 416; background: url("automat.webp") center / 100% 100% no-repeat; mask-image: linear-gradient(to right,transparent,#000 5%,#000 95%,transparent), linear-gradient(to bottom,transparent,#000 2%,#000 94%,transparent); mask-composite: intersect;}
+.machine button {position: absolute; padding: 0; cursor: pointer; background: transparent; border: 0; touch-action: manipulation;}
+.machine button:focus-visible {outline: 3px solid #19619a; outline-offset: 2px;}
+.lever {left: 80.2%; top: 4%; width: 13%; height: 47%; border-radius: 35%;}
+.draw {left: 19%; top: 74.5%; width: 51%; height: 14%; color: #ffda87; font: bold 4.7cqw Georgia, serif; border-radius: 4rem; text-shadow: 0 1px 2px #142319;}
+.draw:active {transform: translateY(1px);}
+.thought {position: absolute; left: 14%; top: 52.4%; width: 59%; height: 17%; display: grid; place-items: center; color: #212e1c; font: italic bold clamp(14px,3.5cqw,23px)/1.13 Georgia, serif; text-wrap: balance;}
+.reels {position:absolute; display:flex; left:16.7%; top:17.1%; width:55.5%; height:30%; pointer-events:none;}
+.reels i {flex:1; border-radius:13%; opacity:0; background:linear-gradient(#926e44,#ffefcf 25%,#f8e9d4 74%,#a48869); overflow:hidden;}
+.reels i::after {content:'☼ ♡ ✧ ☼'; color:#a97924; display:block; font: 10cqw/1 Georgia,serif; width:100%; overflow-wrap:anywhere;}
+.spinning .reels i {animation: reel .48s both;}
+.spinning .reels i::after {animation: roll .15s linear infinite;}
+.spinning .reels i:nth-child(2) {animation-duration:.59s;}
+.spinning .reels i:nth-child(3) {animation-duration:.7s;}
+@keyframes roll {from {transform:translateY(-45%);} to {transform:translateY(0);}}
+@keyframes reel {0%,95% {opacity:1;} 100% {opacity:0;}}
+@media(max-width:390px){.thought {font-size:3.6cqw;}}
+@media(prefers-reduced-motion:reduce){.spinning .reels i,.spinning .reels i::after {animation:none;}}
+
+.slots {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem;margin-top:2rem;}
+.slot {text-align:center;min-width:0;}
+.slot h2 {margin:0;font: bold 2rem Georgia,serif;color:#103528;}
+.slot p {margin:.45rem 0 1rem;}
+.witz h2 {color:#814522;}
+
+.ft-unified-back{display:inline-block;margin-top:32px;color:#11634e;font-weight:700;text-decoration:none;font-size:17px}
+.ft-unified-back:hover{text-decoration:underline}
+@media(max-width:840px){.slots{grid-template-columns:minmax(0,657px);justify-content:center;gap:2.5rem;}}
+
+/* Only the painted machine changes colour; text keeps its contrast. */
+.witz h2 {color:#653e62;}
+.witz .machine {background:none;isolation:isolate;filter:none;}
+.witz .machine::before {content:"";position:absolute;inset:0;z-index:-1;background:url("automat.webp") center/100% 100% no-repeat;filter:url("farbfilter.svg#grau-gold");}
+.witz .draw {color:#f4e0ed;text-shadow:0 1px 2px #352237;}
+.thought {box-sizing:border-box;padding:2px 5px;line-height:1.12;text-wrap:pretty;overflow-wrap:anywhere;}
+.thought .quote-text {display:block;width:100%;max-width:100%;margin:0;}
+.machine button:disabled {cursor:wait;}
+
+/* The painted body is left of the lever; centre headings on that body. */
+.slot > h2,.slot > p {box-sizing:border-box;width:76%;margin-left:6.5%;margin-right:17.5%;text-align:center;}
+.slot > h2 {font-size:clamp(1.45rem,3vw,2rem);overflow-wrap:anywhere;text-wrap:balance;}
+.witz .draw {color:#ffda87;}
+
+/* Gold / cream interiors for both machines; no rectangular tint overlays. */
+.reels::before,.thought::before {content:none!important;}
+.witz h2 {color:#4a4a46;}
+.witz .draw,.mut .draw {color:#ffda87;}
+.witz .thought,.mut .thought {color:#212e1c;background:transparent;}
+
+/* The lever artwork pivots around its socket inside the existing button. */
+@media (prefers-reduced-motion: no-preference) {
+  .machine {background-image:url("automat-ohne-hebel.webp");}
+  .witz .machine {background:none;}
+  .witz .machine::before {background-image:url("automat-ohne-hebel.webp");}
+  .machine .lever {left:81.4307%;top:4.3269%;width:9.5890%;height:33.1731%;}
+  .lever::before {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:url("hebel.webp") center / contain no-repeat;
+    transform-origin:15.87% 95.65%;
+    pointer-events:none;
+  }
+  .witz .lever::before {filter:url("farbfilter.svg#grau-gold");}
+  .spinning .lever::before {animation:hebelzug 620ms ease-in-out both;}
+  @keyframes hebelzug {
+    0%,100% {transform:none;}
+    42%,52% {transform:skewX(-9deg) scaleY(.27);}
+  }
+}
