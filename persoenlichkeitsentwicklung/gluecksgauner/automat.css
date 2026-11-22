@@ -2,7 +2,7 @@
 .stage {max-width: 657px; margin: 2rem auto 0; text-align: center;}
 .stage h1 {margin: 0; color: #103528; font: bold clamp(2.6rem, 8vw, 4rem)/1.08 Georgia, serif;}
 .stage > p {margin: .75rem 0; color: #485044;}
-.machine {position: relative; container-type: inline-size; aspect-ratio: 657 / 416; background: url("automat.webp") center / 100% 100% no-repeat; mask-image: linear-gradient(to right,transparent,#000 5%,#000 95%,transparent), linear-gradient(to bottom,transparent,#000 2%,#000 94%,transparent); mask-composite: intersect;}
+.machine {position: relative; container-type: inline-size; aspect-ratio: 657 / 416; background: url("automat.webp") center / 100% 100% no-repeat;}
 .machine button {position: absolute; padding: 0; cursor: pointer; background: transparent; border: 0; touch-action: manipulation;}
 .machine button:focus-visible {outline: 3px solid #19619a; outline-offset: 2px;}
 .lever {left: 80.2%; top: 4%; width: 13%; height: 47%; border-radius: 35%;}
@@ -50,3 +50,29 @@
 .witz h2 {color:#4a4a46;}
 .witz .draw,.mut .draw {color:#ffda87;}
 .witz .thought,.mut .thought {color:#212e1c;background:transparent;}
+
+/* Mask the painted body independently of the moving lever. */
+.machine, .witz .machine {background:none;isolation:isolate;}
+.machine::before, .witz .machine::before {
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:url("automat-ohne-hebel.webp") center / 100% 100% no-repeat;
+  mask:url("kontur.svg") center / 100% 100% no-repeat;
+}
+/* Both interiors share the same artwork, including the gold symbols and shadows. */
+.machine::after {
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:url("innen.webp") center / 100% 100% no-repeat;
+}
+.lever::before {
+  content:"";position:absolute;left:9.47%;top:.69%;width:73.76%;height:70.58%;
+  background:url("hebel.webp") center / 100% 100% no-repeat;
+  transform-origin:15.87% 95.65%;pointer-events:none;
+}
+.reels i {background:linear-gradient(#926e44,#f7f0e1 25%,#f7f0e1 74%,#a48869);}
+@media (prefers-reduced-motion:no-preference) {
+  .spinning .lever::before {animation:hebelzug 620ms ease-in-out both;}
+  @keyframes hebelzug {
+    0%,100% {transform:none;}
+    42%,52% {transform:skewX(-9deg) scaleY(.27);}
+  }
+}
