@@ -84,7 +84,7 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <div class="sc-field"><label for="sc-pay-interval">Sparintervall <span class="sc-help" tabindex="0" data-tip="Die Sparrate wird jeweils am Ende des gewählten Intervalls eingezahlt.">?</span></label><div class="sc-box"><select id="sc-pay-interval"><option value="1">monatlich</option><option value="3">vierteljährlich</option><option value="6">halbjährlich</option><option value="12">jährlich</option></select></div></div>
 <div class="sc-field" id="sc-payment-wrap"><label for="sc-payment">Sparrate <span class="sc-help" tabindex="0" data-tip="Betrag je Sparintervall, standardmäßig 100 € monatlich.">?</span></label><div class="sc-box"><input id="sc-payment" inputmode="decimal" value="100,00"><span class="sc-unit">€</span></div></div>
 <div class="sc-field"><label for="sc-interest-interval">Zinsintervall <span class="sc-help" tabindex="0" data-tip="Wie oft Zinsen gutgeschrieben und mitverzinst werden.">?</span></label><div class="sc-box"><select id="sc-interest-interval"><option value="1">monatlich</option><option value="3">vierteljährlich</option><option value="6">halbjährlich</option><option value="12" selected>jährlich</option></select></div></div>
-<div class="sc-field" id="sc-rate-wrap"><label for="sc-rate">Zinssatz p. a. <span class="sc-help" tabindex="0" data-tip="Angenommener nominaler Jahreszinssatz vor Steuern.">?</span></label><div class="sc-box"><input id="sc-rate" inputmode="decimal" value="2,25"><span class="sc-unit">%</span></div></div>
+<div class="sc-field" id="sc-rate-wrap"><label for="sc-rate">Zinssatz p. a. <span class="sc-help" tabindex="0" data-tip="Angenommener nominaler Jahreszinssatz vor Steuern.">?</span></label><div class="sc-box"><input id="sc-rate" inputmode="decimal" value="6,50"><span class="sc-unit">%</span></div></div>
 <div class="sc-field" id="sc-years-wrap"><label for="sc-years">Laufzeit <span class="sc-help" tabindex="0" data-tip="Laufzeit in Jahren; bei der Berechnung der Laufzeit wird auf volle Monate aufgerundet.">?</span></label><div class="sc-box"><input id="sc-years" inputmode="decimal" value="10"><span class="sc-unit">Jahre</span></div></div>
 <div class="sc-tax"><label class="sc-check" for="sc-tax"><input type="checkbox" id="sc-tax"> Steuern berücksichtigen</label><div class="sc-field" id="sc-tax-fields" hidden style="margin:12px 0 0"><label for="sc-tax-rate">Steuersatz</label><div class="sc-box"><input id="sc-tax-rate" inputmode="decimal" value="26,375"><span class="sc-unit">%</span></div><p class="sc-tax-note">Standardwert: vereinfachte deutsche Kapitalertragsteuer von 26,375 % auf gutgeschriebene Zinsen (inkl. Solidaritätszuschlag). Ohne Freibetrag, Kirchensteuer und Verlustverrechnung.</p></div></div>
 <div class="sc-tax"><label class="sc-check" for="sc-inflation"><input type="checkbox" id="sc-inflation"> Inflation berücksichtigen</label><div class="sc-inflation-fields" id="sc-inflation-fields" hidden><div class="sc-field" style="margin:14px 0 0"><label for="sc-inflation-rate">Angenommene Inflation p. a. <span class="sc-help" tabindex="0" data-tip="Die angenommene jährliche Teuerungsrate. Sie verändert nicht die Sparberechnung, sondern nur die Kaufkraft des Endkapitals.">?</span></label><div class="sc-box"><input id="sc-inflation-rate" inputmode="decimal" value="2,00"><span class="sc-unit">%</span></div></div><p class="sc-tax-note">Zeigt, wie viel das Endkapital nach der Laufzeit in heutiger Kaufkraft wert wäre.</p></div></div>
@@ -136,7 +136,11 @@ const svg=$('sc-chart'),W=560,H=260,L=70,R=16,T=14,B=37,w=W-L-R,h=H-T-B;
 const max=Math.max(1,...rows.map(r=>r.total))*1.08,x=i=>L+i/Math.max(1,rows.length-1)*w,y=v=>T+h-v/max*h;
 let s='';
 for(let i=0;i<=4;i++){const v=max*i/4,yy=y(v);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#e2ece3"/><text x="${L-9}" y="${yy+4}" font-size="11" text-anchor="end" fill="#678273">${compact.format(v)} €</text>`}
-for(const [key,color] of [['paid','#caa450'],['total','#3b8866']]){s+=`<polyline points="${rows.map((r,i)=>`${x(i)},${y(r[key])}`).join(' ')}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>`}
+const points=key=>rows.map((row,i)=>x(i)+','+y(row[key])).join(' ');
+const totalPoints=points('total');
+s+=`<polygon points="${L},${T+h} ${totalPoints} ${x(rows.length-1)},${T+h}" fill="#3b8866" fill-opacity=".13"/>
+<polyline points="${totalPoints}" fill="none" stroke="#3b8866" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="${points('paid')}" fill="none" stroke="#caa450" stroke-width="3" stroke-linejoin="round"/>`;
 for(const i of [...new Set([0,Math.floor((rows.length-1)/2),rows.length-1])])s+=`<text x="${x(i)}" y="${H-10}" font-size="12" text-anchor="middle" fill="#678273">${dec.format(rows[i].year)} J.</text>`;
 svg.innerHTML=s;
 }
@@ -200,6 +204,14 @@ $('sc-tax').addEventListener('change',()=>{$('sc-tax-fields').hidden=!$('sc-tax'
 $('sc-tax-rate').addEventListener('change',calculate);
 $('sc-inflation').addEventListener('change',()=>{$('sc-inflation-fields').hidden=!$('sc-inflation').checked;calculate()});
 $('sc-inflation-rate').addEventListener('change',calculate);
+const transfer = new URLSearchParams(location.hash.slice(1));
+const fields = ['start', 'payment', 'years', 'rate', 'interest-interval'];
+if (fields.every(field => transfer.has(field)) && ['1','3','6','12'].includes(transfer.get('interest-interval'))) {
+  $('sc-mode').value = 'end';
+  $('sc-pay-interval').value = '1';
+  for (const field of fields) $('sc-' + field).value = transfer.get(field);
+  history.replaceState(null, '', location.pathname + location.search);
+}
 updateMode();calculate();
 })();
 </script>
