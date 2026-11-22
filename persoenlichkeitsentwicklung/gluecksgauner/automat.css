@@ -34,7 +34,7 @@
 /* Only the painted machine changes colour; text keeps its contrast. */
 .witz h2 {color:#653e62;}
 .witz .machine {background:none;isolation:isolate;filter:none;}
-.witz .machine::before {content:"";position:absolute;inset:0;z-index:-1;background:url("automat.webp") center/100% 100% no-repeat;filter:url("farbfilter.svg#grau-gold");}
+.witz .machine::before {content:"";position:absolute;inset:0;z-index:-1;background:url("automat.webp") center/100% 100% no-repeat;}
 .witz .draw {color:#f4e0ed;text-shadow:0 1px 2px #352237;}
 .thought {box-sizing:border-box;padding:2px 5px;line-height:1.12;text-wrap:pretty;overflow-wrap:anywhere;}
 .thought .quote-text {display:block;width:100%;max-width:100%;margin:0;}
@@ -83,4 +83,14 @@
     0%,100% {transform:translate(0,0) scale(1);}
     44%,50% {transform:translate(19.5%,35.6%) scale(1.08);}
   }
+}
+
+.witz .machine::before {background-image:url("demotivationsgauner.webp");}
+.thought {
+  top:53%;height:16%;display:flex;align-items:center;justify-content:center;
+  text-align:center;overflow:hidden;
+}
+.thought .quote-text {
+  flex:none;min-width:0;line-height:1.12;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
 }

@@ -15,14 +15,14 @@ document.querySelectorAll('.machine').forEach(machine => {
     const availableWidth = output.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
     if (availableHeight <= 0 || availableWidth <= 0) return;
     // Reset on every resize so the font grows again on wider screens.
-    let low = 6, high = Math.min(23, Math.max(14, machine.clientWidth * .035));
+    let low = 1, high = Math.min(23, Math.max(14, machine.clientWidth * .035));
     for (let i = 0; i < 12; i++) {
       const middle = (low + high) / 2;
       text.style.fontSize = middle + 'px';
-      if (text.getBoundingClientRect().height <= availableHeight - 1 && text.scrollWidth <= availableWidth + 1) low = middle;
+      if (text.getBoundingClientRect().height <= availableHeight - 1 && text.scrollWidth <= availableWidth) low = middle;
       else high = middle;
     }
-    text.style.fontSize = low.toFixed(2) + 'px';
+    text.style.fontSize = (Math.floor(low * 100) / 100) + 'px';
   }
   function show(value) {text.textContent = '„' + value + '“';fit();}
   show(startspruch);
