@@ -31,7 +31,7 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-</head>
+<style>.ft-unified-notice{background:#edf6ee;border-radius:18px;padding:12px 18px;color:#103c35;line-height:1.45;font-size:14px} .rl-method{margin-top:24px;background:white;border:1px solid #dfe7df;border-radius:20px;padding:clamp(18px,3vw,28px);font-size:14px;line-height:1.7}.rl-method summary{cursor:pointer;font-weight:700;font-size:16px}</style></head>
 <body data-root="../../" data-page="rechner/">
 <div id="site-header"></div>
 <main><section class="page-hero"><div class="container"><span class="eyebrow"><a href="../">Rechner</a> / Rentenlückenrechner</span><h1>Rentenlückenrechner</h1><p class="lead">Was fehlt dir später zum Leben – und wie viel musst du heute zurücklegen, um diese Lücke zu schließen?</p></div></section>
@@ -64,7 +64,12 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <div class="rl-result primary" id="rl-saving-box" hidden><span>Erforderliche monatliche Sparrate ab heute</span><strong id="rl-saving">–</strong><small id="rl-saving-note"></small></div>
 <div class="rl-metrics" id="rl-saving-metrics" hidden><div class="rl-result"><span>Eigene Einzahlungen inkl. Startkapital</span><strong id="rl-contributions">–</strong></div><div class="rl-result"><span>Modellierter Wertzuwachs</span><strong id="rl-growth">–</strong></div></div></div>
 <div id="rl-chart-wrap" hidden><hr class="rl-divider"><h3>Kapitalaufbau bis zur Rente</h3><div class="rl-legend"><span><b class="gold"></b>Einzahlungen</span><span><b></b>Vermögen</span></div><svg id="rl-chart" class="rl-chart" viewBox="0 0 520 230" role="img" aria-label="Kapitalentwicklung bis zum Rentenbeginn"></svg></div>
-<p class="rl-disclaimer">Die Ergebnisse sind Modellrechnungen, keine individuelle Renten- oder Steuerberatung. Keine Gebühren, Steuern auf Kapitalerträge oder Wertschwankungen berücksichtigt. Die gesetzliche Rente ist nur näherungsweise netto geschätzt; Rentenanpassungen, Rentenrecht und tatsächliche Abzüge können abweichen.</p></aside></div><p class="rl-info" style="margin-top:20px"><a href="../">← Zurück zur Rechnerübersicht</a></p></section></main><div id="site-footer"></div>
+</aside></div><p class="ft-unified-notice" id="calculationDisclaimer"><strong>Hinweis:</strong> Die Ergebnisse dienen der unverbindlichen Orientierung. Trotz sorgfältiger Erstellung und Prüfung übernehmen wir keine Gewähr für die Richtigkeit, Vollständigkeit oder Aktualität der Berechnungen.</p><details class="rl-method"><summary>Berechnungsgrundlage &amp; Hinweise</summary>
+<p><strong>Monatliche Rentenlücke.</strong> Bis zum Rentenbeginn wächst dein heutiger Bedarf mit der angenommenen Inflation und deine angegebene Bruttorente mit der gewählten Rentenanpassung. Nach den eingetragenen Abzügen ergibt sich die geschätzte Nettorente. Liegt sie unter deinem künftigen Bedarf, ist die Differenz deine monatliche Rentenlücke.</p>
+<p><strong>Kapitalbedarf.</strong> Während der Entnahmephase steigt dein Bedarf mit der Inflation weiter. Die geschätzte Nettorente bleibt im Modell konstant. Bei Kapitalverzehr rechnet der Rechner jede monatliche Lücke mit der angenommenen Rendite auf den Rentenbeginn zurück und addiert die Beträge. Bei Kapitalerhalt berücksichtigt er zusätzlich das gewünschte Endvermögen, wahlweise nominal oder inflationsbereinigt. Die eingestellte Entnahmerate begrenzt die anfängliche Jahresentnahme im Verhältnis zum Startvermögen.</p>
+<p><strong>Monatliche Sparrate.</strong> Der Rechner ermittelt, wie viel dein vorhandenes Vermögen bei der angenommenen Rendite bis zum Rentenbeginn wert wäre. Den fehlenden Betrag decken gleich hohe Einzahlungen am Monatsende. Reicht das hochgerechnete Vermögen aus, beträgt die erforderliche Sparrate null.</p>
+<p>Die Rechnung berücksichtigt weder Gebühren noch Steuern auf Kapitalerträge oder Wertschwankungen. Die Nettorente ist eine Schätzung. Künftige Rentenanpassungen und tatsächliche Abzüge können abweichen.</p></details>
+<p class="rl-info" style="margin-top:20px"><a href="../">← Zurück zur Rechnerübersicht</a></p></section></main><div id="site-footer"></div>
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id), euro=new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}), compact=new Intl.NumberFormat('de-DE',{notation:'compact',maximumFractionDigits:1});
