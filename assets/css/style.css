@@ -21,3 +21,11 @@
 /* Finanzrechner: kompakte, vollstaendig sichtbare Kachelicons */
 .rechner-card-icon{display:block;width:180px;height:150px;max-width:100%;object-fit:contain;object-position:center;margin:0 auto 6px;flex-shrink:0}
 @media(max-width:600px){.rechner-card-icon{width:145px;height:120px}}
+
+@media (max-width:600px) {
+  #themen .card[href="persoenlichkeitsentwicklung/"] .home-card-icon img {
+    width:130px;
+    height:130px;
+    object-fit:contain;
+  }
+}

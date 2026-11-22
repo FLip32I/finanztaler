@@ -63,16 +63,24 @@
   content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:url("innen.webp") center / 100% 100% no-repeat;
 }
-.lever::before {
+.lever::before, .lever::after {
   content:"";position:absolute;left:9.47%;top:.69%;width:73.76%;height:70.58%;
   background:url("hebel.webp") center / 100% 100% no-repeat;
   transform-origin:15.87% 95.65%;pointer-events:none;
 }
 .reels i {background:linear-gradient(#926e44,#f7f0e1 25%,#f7f0e1 74%,#a48869);}
+/* Split the original artwork so only the shaft foreshortens. */
+.lever::before {clip-path:polygon(0 35%,63% 35%,37% 100%,0 100%);}
+.lever::after {clip-path:ellipse(43% 19.9% at 51% 21.5%);transform-origin:51% 21.5%;}
 @media (prefers-reduced-motion:no-preference) {
-  .spinning .lever::before {animation:hebelzug 620ms ease-in-out both;}
-  @keyframes hebelzug {
-    0%,100% {transform:none;}
-    42%,52% {transform:skewX(-9deg) scaleY(.27);}
+  .spinning .lever::before {animation:shaft-pull 590ms cubic-bezier(.45,0,.35,1);}
+  .spinning .lever::after {animation:knob-pull 590ms cubic-bezier(.45,0,.35,1);}
+  @keyframes shaft-pull {
+    0%,100% {transform:matrix(1,0,0,1,0,0);}
+    44%,50% {transform:matrix(1,0,-.12,.52,0,0);}
+  }
+  @keyframes knob-pull {
+    0%,100% {transform:translate(0,0) scale(1);}
+    44%,50% {transform:translate(19.5%,35.6%) scale(1.08);}
   }
 }
