@@ -136,11 +136,7 @@ const svg=$('sc-chart'),W=560,H=260,L=70,R=16,T=14,B=37,w=W-L-R,h=H-T-B;
 const max=Math.max(1,...rows.map(r=>r.total))*1.08,x=i=>L+i/Math.max(1,rows.length-1)*w,y=v=>T+h-v/max*h;
 let s='';
 for(let i=0;i<=4;i++){const v=max*i/4,yy=y(v);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#e2ece3"/><text x="${L-9}" y="${yy+4}" font-size="11" text-anchor="end" fill="#678273">${compact.format(v)} €</text>`}
-const points=key=>rows.map((row,i)=>x(i)+','+y(row[key])).join(' ');
-const totalPoints=points('total');
-s+=`<polygon points="${L},${T+h} ${totalPoints} ${x(rows.length-1)},${T+h}" fill="#3b8866" fill-opacity=".13"/>
-<polyline points="${totalPoints}" fill="none" stroke="#3b8866" stroke-width="3" stroke-linejoin="round"/>
-<polyline points="${points('paid')}" fill="none" stroke="#caa450" stroke-width="3" stroke-linejoin="round"/>`;
+for(const [key,color] of [['paid','#caa450'],['total','#3b8866']]){s+=`<polyline points="${rows.map((r,i)=>`${x(i)},${y(r[key])}`).join(' ')}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>`}
 for(const i of [...new Set([0,Math.floor((rows.length-1)/2),rows.length-1])])s+=`<text x="${x(i)}" y="${H-10}" font-size="12" text-anchor="middle" fill="#678273">${dec.format(rows[i].year)} J.</text>`;
 svg.innerHTML=s;
 }
