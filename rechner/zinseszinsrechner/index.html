@@ -36,7 +36,7 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<style>.ft-unified-notice{background:#edf6ee;border-radius:18px;padding:12px 18px;color:#103c35;line-height:1.45;font-size:14px}</style></head>
+<style>.ft-unified-notice{background:#edf6ee;border-radius:18px;padding:12px 18px;color:#103c35;line-height:1.45;font-size:14px}</style><style>#z-transfer{display:block;width:fit-content;max-width:100%;min-height:0;margin:8px 0 0;padding:7px 12px;font-size:.85rem;line-height:1.25;background:#edf6ee;color:#103c35;border:1px solid #cbded1;border-radius:8px}#z-transfer:hover{background:#deeddf}</style></head>
 <body data-root="../../" data-page="rechner/"><div id="site-header"></div>
 <main><section class="page-hero"><div class="container"><span class="eyebrow"><a href="../">Rechner</a> / Zinseszinsrechner</span><h1>Zinseszinsrechner</h1><p class="lead">Erfahre, wie sich dein Geld durch regelmäßiges Sparen und den Zinseszinseffekt entwickeln kann.</p></div></section>
 <section class="container zc"><div class="z-grid">
@@ -48,11 +48,12 @@ gtag('config','G-TYXJ3CPX1T',{allow_google_signals:false,allow_ad_personalizatio
 <div class="z-field"><label for="z-interval">Zinsintervall <span class="z-help" tabindex="0" data-tip="Wie oft die angefallenen Zinsen dem Kapital gutgeschrieben und anschließend mitverzinst werden.">?</span></label><div class="z-input"><select id="z-interval"><option value="1">monatlich</option><option value="3">vierteljährlich</option><option value="6">halbjährlich</option><option value="12" selected>jährlich</option></select></div></div>
 
 
-<button class="z-submit" type="submit">Berechnen →</button><p class="z-error" id="z-error" role="alert" aria-live="polite"></p>
+<button class="z-submit" type="submit">Berechnen →</button>
+<button type="button" class="z-submit" id="z-transfer">Werte in Sparrechner überführen →</button><p class="z-error" id="z-error" role="alert" aria-live="polite"></p>
 </form></div>
 <div class="z-panel" id="z-result" aria-live="polite"><h2>Dein Ergebnis</h2><div class="z-summary"><div class="z-stat main"><span>Voraussichtliches Endkapital</span><strong id="z-total">–</strong></div><div class="z-stat"><span>Eigene Einzahlungen</span><strong id="z-paid">–</strong></div><div class="z-stat"><span>Zinserträge</span><strong id="z-interest">–</strong></div></div><div class="z-legend"><span><i class="z-dot"></i> Einzahlungen</span><span><i class="z-dot growth"></i> Vermögen</span></div><svg class="z-chart" id="z-chart" viewBox="0 0 560 260" role="img" aria-label="Diagramm zur Vermögensentwicklung"></svg><div class="method-help"><strong>Modellrechnung</strong> <button type="button" aria-label="Hinweis zur Modellrechnung" aria-describedby="method-tip">?</button><span role="tooltip" id="method-tip" hidden>Die Modellrechnung verwendet einen konstanten Zinssatz. Einzahlungen und Zinsgutschriften erfolgen jeweils am Ende des gewählten Intervalls. Unterjährig laufen Zinsen bis zur Gutschrift ohne Zinseszins auf. Ab der Gutschrift werden sie mitverzinst. Steuern, Inflation und Gebühren bleiben unberücksichtigt. Keine Renditegarantie.</span></div>
 <details class="z-details"><summary>Entwicklung nach Jahren anzeigen</summary><div class="z-table-wrap"><table class="z-table"><thead><tr><th>Jahr</th><th>Einzahlungen</th><th>Zinsen</th><th>Vermögen</th></tr></thead><tbody id="z-rows"></tbody></table></div></details></div>
-</div><button type="button" class="z-submit" id="z-transfer">Werte in Sparrechner überführen →</button>
+</div>
 <p class="ft-unified-notice" id="calculationDisclaimer"><strong>Hinweis:</strong> Die Ergebnisse dienen der unverbindlichen Orientierung. Trotz sorgfältiger Erstellung und Prüfung übernehmen wir keine Gewähr für die Richtigkeit, Vollständigkeit oder Aktualität der Berechnungen.</p>
 <p class="z-note" style="margin-top:22px">← <a href="../" style="text-decoration:underline">Zurück zur Rechnerübersicht</a></p></section></main><div id="site-footer"></div>
 <script>
